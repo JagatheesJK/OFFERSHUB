@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AddBusinessActivity">
+
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/base_toolbar"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/shopTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shop Name"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/shopNameEd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="shop name"
+                android:padding="12dp"
+                android:background="@drawable/bg_rounded_stroke"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/shopTxt"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/addressTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/shopNameEd"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/shopAddressEd"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:hint="Address"
+                android:gravity="top"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@drawable/bg_rounded_stroke"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/addressTxt"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/locationTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/shopAddressEd"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/mapImg"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:src="@drawable/map_img"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/locationTxt"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/locationEd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="location"
+                android:gravity="top"
+                android:padding="12dp"
+                android:clickable="false"
+                android:editable="false"
+                android:background="@drawable/bg_rounded_stroke"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/mapImg"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/categoryTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/locationEd"/>
+
+            <com.skydoves.powerspinner.PowerSpinnerView
+                android:id="@+id/categorySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="Select category"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14.5sp"
+                app:spinner_arrow_gravity="end"
+                app:spinner_arrow_padding="8dp"
+                app:spinner_divider_color="@color/grey"
+                app:spinner_divider_show="true"
+                app:spinner_divider_size="0.4dp"
+                app:spinner_item_array="@array/category"
+                app:spinner_item_height="46dp"
+                android:background="@drawable/bg_rounded_solid_white"
+                android:backgroundTint="@color/red"
+                app:spinner_popup_animation="dropdown"
+                app:spinner_popup_background="@drawable/bg_bottom_rounded"
+                app:spinner_popup_elevation="4dp"
+                app:spinner_selected_item_background="@color/darkRed"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/categoryTxt"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/mobileTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mobile"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/categorySpinner"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/mobileEd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mobile"
+                android:gravity="top"
+                android:padding="12dp"
+                android:inputType="phone"
+                android:background="@drawable/bg_rounded_stroke"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/mobileTxt"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/shopImgTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shop Image"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/mobileEd"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/shopImgCard"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:gravity="top"
+                android:padding="12dp"
+                android:inputType="phone"
+                android:elevation="0dp"
+                app:cardElevation="0dp"
+                android:background="@drawable/bg_rounded_stroke"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/shopImgTxt">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@drawable/bg_rounded_solid_white"
+                    android:backgroundTint="@color/grey">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/shopImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/shopAddImg"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:srcCompat="@drawable/ic_add"
+                        android:padding="14dp"
+                        android:background="@drawable/circle_white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_rounded_solid_white"
+                android:backgroundTint="@color/red"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintTop_toBottomOf="@+id/shopImgCard"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

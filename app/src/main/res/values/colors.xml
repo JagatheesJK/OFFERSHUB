@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#E53935</color>
+    <color name="purple_500">#F44336</color>
+    <color name="purple_700">#E53935</color>
+    <color name="teal_200">#E65100</color>
+    <color name="teal_700">#B3E53935</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <item name="colorPrimary" type="color">#E53935</item>
+    <item name="colorAccent" type="color">#F44336</item>
+    <item name="colorPrimaryDark" type="color">#C62828</item>
+    <item name="colorPromo" type="color">#E53935</item>
+    <item name="colorFeatured" type="color">#1565C0</item>
+    <item name="colorUpcomingEvent" type="color">#E65100</item>
+    <item name="colorPrimaryTransparent" type="color">#B3E53935</item>
+
+    <item name="tab_colorDarkIcon" type="color">#891313</item>
+    <item name="tab_colorActiveIcon" type="color">#FFFFFF</item>
+
+
+    <item name="red" type="color">#F44336</item>
+    <item name="darkRed" type="color">#D82E22</item>
+    <item name="green" type="color">#157f1f</item>
+    <item name="grey" type="color">#A8A8A8</item>
+</resources>
