@@ -77,4 +77,10 @@ public class HomeFragment extends Fragment {
             return labels.length;
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("Business");
+    }
 }

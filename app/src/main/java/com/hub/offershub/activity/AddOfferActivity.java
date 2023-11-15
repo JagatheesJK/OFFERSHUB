@@ -37,7 +37,7 @@ public class AddOfferActivity extends BaseActivity implements PermissionListener
         binding = ActivityAddOfferBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbarLayout.toolbarTitle.setText(""+AddOfferActivity.class.getSimpleName());
+        binding.toolbarLayout.toolbarTitle.setText("AddOffer");
         binding.toolbarLayout.toolbarBack.setOnClickListener(v -> {
             finish();
         });

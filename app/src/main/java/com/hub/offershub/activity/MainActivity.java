@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.hub.offershub.R;
 import com.hub.offershub.databinding.ActivityMainBinding;
+import com.hub.offershub.fragment.BookingListFragment;
 import com.hub.offershub.fragment.HomeFragment;
 import com.hub.offershub.fragment.OfferListFragment;
 import com.hub.offershub.fragment.ShopDetailsFragment;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShopDetailsFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
 
@@ -55,8 +56,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = new HomeFragment();
         } else if (id == R.id.nav_offer) {
             fragment = new OfferListFragment();
+        } else if (id == R.id.nav_settings) {
+            fragment = new ShopDetailsFragment();
         } else {
-
+            fragment = new BookingListFragment();
         }
 
         if (fragment != null) {

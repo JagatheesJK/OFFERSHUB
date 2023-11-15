@@ -37,7 +37,7 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
         binding = ActivityAddBusinessBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbarLayout.toolbarTitle.setText(""+AddBusinessActivity.class.getSimpleName());
+        binding.toolbarLayout.toolbarTitle.setText("AddBusiness");
         binding.toolbarLayout.toolbarBack.setOnClickListener(v -> {
             finish();
         });

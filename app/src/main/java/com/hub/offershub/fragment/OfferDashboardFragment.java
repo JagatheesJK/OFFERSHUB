@@ -3,10 +3,7 @@ package com.hub.offershub.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -24,20 +22,18 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.hub.offershub.R;
-import com.hub.offershub.databinding.FragmentShopDetailsBinding;
+import com.hub.offershub.databinding.FragmentOfferDashboardBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopDetailsFragment extends Fragment {
+public class OfferDashboardFragment extends Fragment {
 
-    private FragmentShopDetailsBinding binding;
-    private String[] labels = new String[]{"Shop Dashboard", "Offer Dashboard"};
+    private FragmentOfferDashboardBinding binding;
 
-    public static ShopDetailsFragment newInstance() {
-        ShopDetailsFragment fragment = new ShopDetailsFragment();
+    public static OfferDashboardFragment newInstance() {
+        OfferDashboardFragment fragment = new OfferDashboardFragment();
         return fragment;
     }
 
@@ -45,47 +41,11 @@ public class ShopDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentShopDetailsBinding.inflate(getLayoutInflater());
-        init();
-//        barChart();
-//        pieChart();
-//        lineChart();
-
-        new TabLayoutMediator(binding.tabLayout, binding.pager, (tab, position) -> {
-            tab.setText(labels[position]);
-        }).attach();
-
-        binding.pager.setCurrentItem(0, false);
-
+        binding = FragmentOfferDashboardBinding.inflate(getLayoutInflater());
+        multipleBarChart();
+        pieChart();
+        lineChart();
         return binding.getRoot();
-    }
-
-    private void init() {
-        binding.pager.setAdapter(new ViewPagerFragmentAdapter(getActivity()));
-    }
-
-    private class ViewPagerFragmentAdapter extends FragmentStateAdapter {
-
-        public ViewPagerFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
-            super(fragmentActivity);
-        }
-
-        @NonNull
-        @Override
-        public Fragment createFragment(int position) {
-            switch (position) {
-                case 0:
-                    return new ShopDashboardFragment();
-                case 1:
-                    return new OfferDashboardFragment();
-            }
-            return new ActiveBusinessFragment();
-        }
-
-        @Override
-        public int getItemCount() {
-            return labels.length;
-        }
     }
 
     private void barChart() {
@@ -96,7 +56,7 @@ public class ShopDetailsFragment extends Fragment {
         entries.add(new BarEntry(4, 50));
 
         BarDataSet barDataSet = new BarDataSet(entries, "Label");
-        barDataSet.setColor(Color.BLUE);
+        barDataSet.setColor(Color.BLUE, Color.RED);
 
         BarData barData = new BarData(barDataSet);
         binding.barChart.setData(barData);
@@ -149,9 +109,38 @@ public class ShopDetailsFragment extends Fragment {
         binding.lineChart.invalidate();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().setTitle("Dashboard");
+    private void multipleBarChart() {
+        ArrayList<BarEntry> entries1 = new ArrayList<>();
+        entries1.add(new BarEntry(1, 40));
+        entries1.add(new BarEntry(2, 30));
+        entries1.add(new BarEntry(3, 25));
+
+        ArrayList<BarEntry> entries2 = new ArrayList<>();
+        entries2.add(new BarEntry(1, 10));
+        entries2.add(new BarEntry(2, 20));
+        entries2.add(new BarEntry(3, 15));
+
+        BarDataSet dataSet1 = new BarDataSet(entries1, "Dataset 1");
+        dataSet1.setColor(Color.BLUE);
+
+        BarDataSet dataSet2 = new BarDataSet(entries2, "Dataset 2");
+        dataSet2.setColor(Color.GREEN);
+
+        BarData barData = new BarData(dataSet1, dataSet2);
+        binding.barChart.setData(barData);
+
+        // Customize X-axis
+        XAxis xAxis = binding.barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                return String.valueOf((int) value); // Format the X-axis labels as needed
+            }
+        });
+
+        // Customize Y-axis
+        YAxis yAxisRight = binding.barChart.getAxisRight();
+        yAxisRight.setEnabled(false); // Disable the right Y-axis
     }
 }

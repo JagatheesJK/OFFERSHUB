@@ -28,13 +28,19 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
     @NonNull
     @Override
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_business_list_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_list_layout, parent, false);
         return new BookViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-
+        BookModel model = list.get(position);
+        if (model != null) {
+            holder.offerNameTxt.setText(""+model.offerName);
+            holder.userNameTxt.setText(""+model.userName);
+            holder.userMobileTxt.setText(""+model.userMobile);
+            holder.bookingDateTxt.setText(""+model.bookingDate);
+        }
     }
 
     @Override
