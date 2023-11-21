@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "OFFERSHUB"
 include ':app'
+include ':mylibrary'
