@@ -5,11 +5,14 @@ import static com.hub.offershub.utils.Constants.GALLERY_REQUEST_CODE;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,17 +22,25 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.hub.offershub.R;
+import com.hub.offershub.adapter.ImageAdapter;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityAddBusinessBinding;
+import com.hub.offershub.listener.ImageChooseListener;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.compress.CompressImage;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AddBusinessActivity extends BaseActivity implements PermissionListener {
+public class AddBusinessActivity extends BaseActivity implements PermissionListener,
+        ImageChooseListener {
 
     private ActivityAddBusinessBinding binding;
+    private List<Uri> selectedImages = new ArrayList<>();
+    private ImageAdapter imageAdapter;
+    private GridLayoutManager gridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +53,27 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
             finish();
         });
 
+        setUpRecycler();
+
         binding.shopImgCard.setOnClickListener(v -> {
+            Log.e("Check_test", "shopImgCard");
             getPermission(this);
         });
 
 
+    }
+
+    private void setUpRecycler() {
+        gridLayoutManager = new GridLayoutManager(this, 3);
+        imageAdapter = new ImageAdapter(selectedImages, AddBusinessActivity.this);
+        binding.shopImgRecycler.setLayoutManager(gridLayoutManager);
+        binding.shopImgRecycler.setAdapter(imageAdapter);
+        setNotifyData();
+    }
+
+    private void setNotifyData() {
+        binding.shopImgRecycler.getRecycledViewPool().clear();
+        imageAdapter.notifyDataSetChanged();
     }
 
     private File file;
@@ -83,7 +110,21 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
                 }
             } else if (requestCode == GALLERY_REQUEST_CODE) {
                 if (data != null) {
-                    Uri uri = data.getData();
+                    binding.shopAddImg.setVisibility(View.GONE);
+                    binding.shopImgRecycler.setVisibility(View.VISIBLE);
+                    if (data.getClipData() != null) {
+                        // Multiple images selected
+                        int count = data.getClipData().getItemCount();
+                        for (int i = 0; i < count; i++) {
+                            Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                            // Handle each selected image URI
+                            if (selectedImages.size() > 3)
+                                selectedImages.clear();
+                            selectedImages.add(imageUri);
+                            setNotifyData();
+                        }
+                    }
+                    /*Uri uri = data.getData();
                     if (uri != null) {
                         String path = getPath(AddBusinessActivity.this, uri);
                         if (path != null) {
@@ -113,7 +154,7 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
                         }
                     } else {
                         Toast.makeText(AddBusinessActivity.this, "uri is null", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                 } else {
                     Toast.makeText(AddBusinessActivity.this, "data is null", Toast.LENGTH_SHORT).show();
                 }
@@ -144,5 +185,10 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onImageChoose() {
+        getPermission(this);
     }
 }

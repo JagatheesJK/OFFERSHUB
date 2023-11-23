@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     android:layout_margin="28dp"
     android:padding="28dp"
-    tools:context=".activity.SignActivity">
+    tools:context=".activity.RegisterActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
         app:srcCompat="@drawable/splash_backgound"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -21,12 +22,12 @@
         android:id="@+id/signInTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign In"
+        android:text="SignUp"
         android:textSize="24dp"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@+id/img"/>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -34,31 +35,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="to continue to shop"
-        android:textSize="11dp"
         android:textAlignment="center"
         android:layout_marginTop="4dp"
         app:layout_constraintTop_toBottomOf="@id/signInTxt"/>
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/mobileEd"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/detailsLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter the mobile"
-        android:textAlignment="center"
-        android:inputType="phone"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/continueTxt"/>
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/continueTxt">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/regNameEd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the name"
+            android:textAlignment="center"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/mobileEd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the mobile"
+            android:textAlignment="center"
+            android:inputType="phone"
+            android:layout_marginTop="18dp"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/nextLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/mobileEd">
+        app:layout_constraintTop_toBottomOf="@+id/detailsLinear">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/nxtBtn"
@@ -69,40 +82,5 @@
             android:background="@color/red"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/registerTxt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="or Register"
-        android:textSize="15dp"
-        android:textColor="@color/black"
-        android:textAlignment="center"
-        android:layout_marginTop="14dp"
-        app:layout_constraintTop_toBottomOf="@+id/nextLinear"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Terms of use"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Privacy &amp; Policy"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

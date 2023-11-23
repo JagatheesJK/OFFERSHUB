@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void enterDelay() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+            Intent i = new Intent(SplashActivity.this, SignActivity.class);
             startActivity(i);
             finish();
         }, 3500);

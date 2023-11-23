@@ -64,7 +64,7 @@ public class ShopDashboardFragment extends Fragment {
        // multipleBarChart();
         //newMultipleBarChart();
         //pieChart();
-        //newPieChart();
+        newPieChart();
 
         newMultipleBarChart();
         //lineChart();
@@ -106,8 +106,8 @@ public class ShopDashboardFragment extends Fragment {
     }
 
     private void newPieChart() {
-        AnyChartView anyChartView = binding.anyChartView;
-        anyChartView.setProgressBar(binding.progressBar);
+        AnyChartView chart1 = new AnyChartView(requireContext());
+        chart1.setProgressBar(binding.progressBar);
 
         Pie pie = AnyChart.pie();
 
@@ -140,8 +140,10 @@ public class ShopDashboardFragment extends Fragment {
                 .position("center-bottom")
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER);*/
-
-        anyChartView.setChart(pie);
+        pie.draw(true);
+//        anyChartView.setVisibility(View.VISIBLE);
+        chart1.setChart(pie);
+        binding.anyChartView.addView(chart1);
     }
 
     private void lineChart() {
@@ -173,8 +175,9 @@ public class ShopDashboardFragment extends Fragment {
     }
 
     private void newLineChart() {
-        AnyChartView anyChartView = binding.lineChart1;
-        anyChartView.setProgressBar(binding.lineProgressBar);
+        AnyChartView chart1 = new AnyChartView(requireContext());
+//        AnyChartView anyChartView = binding.lineChart1;
+        chart1.setProgressBar(binding.lineProgressBar);
 
         Cartesian cartesian = AnyChart.line();
 
@@ -267,11 +270,16 @@ public class ShopDashboardFragment extends Fragment {
         cartesian.legend().fontSize(13d);
         cartesian.legend().padding(0d, 0d, 10d, 0d);
 
-        anyChartView.setChart(cartesian);
+        cartesian.draw(true);
+//        anyChartView.setVisibility(View.VISIBLE);
+        chart1.setChart(cartesian);
+        binding.lineChart1.addView(chart1);
     }
 
     private void newMultipleBarChart() {
-        binding.anyChartView.setProgressBar(binding.progressBar);
+        AnyChartView chart1 = new AnyChartView(requireContext());
+//        binding.anyChartView1.addView(chart1);
+        chart1.setProgressBar(binding.progressBar);
 
         Cartesian cartesian = AnyChart.column();
 
@@ -309,7 +317,10 @@ public class ShopDashboardFragment extends Fragment {
         cartesian.xAxis(0).title("Product");
         cartesian.yAxis(0).title("Revenue");
 
-        binding.anyChartView.setChart(cartesian);
+        cartesian.draw(true);
+        binding.anyChartView1.setVisibility(View.VISIBLE);
+        chart1.setChart(cartesian);
+        binding.anyChartView1.addView(chart1);
     }
 
     private void multipleBarChart() {

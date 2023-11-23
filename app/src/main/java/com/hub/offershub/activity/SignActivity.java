@@ -23,5 +23,9 @@ public class SignActivity extends AppCompatActivity {
         binding.nxtBtn.setOnClickListener(v -> {
             startActivity(new Intent(SignActivity.this, MainActivity.class));
         });
+
+        binding.registerTxt.setOnClickListener(v -> {
+            startActivity(new Intent(SignActivity.this, RegisterActivity.class));
+        });
     }
 }
