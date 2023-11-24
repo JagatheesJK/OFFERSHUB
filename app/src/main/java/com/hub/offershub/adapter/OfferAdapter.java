@@ -46,7 +46,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             holder.offerNameTxt.setText(""+model.offerName);
             holder.offerDescTxt.setText(""+model.offerDesc);
             holder.offerType.setText("Type : "+model.offerType);
-            holder.offerPrice.setText("Price : "+model.offerPrice);
+            holder.offerPrice.setText(""+model.offerPrice);
             holder.offerSwitch.setChecked(model.offerToggle);
             commonMethods.imageLoaderView(ctx, holder.offerImg, model.offerImage);
         }

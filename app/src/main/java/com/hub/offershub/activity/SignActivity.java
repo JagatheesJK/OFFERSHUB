@@ -21,7 +21,7 @@ public class SignActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.nxtBtn.setOnClickListener(v -> {
-            startActivity(new Intent(SignActivity.this, MainActivity.class));
+            startActivity(new Intent(SignActivity.this, OtpActivity.class));
         });
 
         binding.registerTxt.setOnClickListener(v -> {

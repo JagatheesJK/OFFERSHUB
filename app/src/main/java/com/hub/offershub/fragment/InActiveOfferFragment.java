@@ -59,7 +59,7 @@ public class InActiveOfferFragment extends Fragment {
     }
 
     private void init() {
-        list.add(new OfferModel("JK", "adsavssav", "Fashion", "878", "https://img.freepik.com/free-vector/cartoon-style-cafe-front-shop-view_134830-697.jpg?size=626&ext=jpg&ga=GA1.1.1880011253.1699574400&semt=ais", false));
+        list.add(new OfferModel("JK", "adsavssav", "Fashion", "878", "https://img.freepik.com/premium-vector/sale-15-off-special-offer-discount-banner-design-template_579179-1052.jpg", false));
     }
 
     private void setListener() {

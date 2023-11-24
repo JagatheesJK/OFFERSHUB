@@ -60,5 +60,7 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:4.13.0"
     // Chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    // OTP
+    implementation 'io.github.chaosleung:pinview:1.4.4'
 
 }

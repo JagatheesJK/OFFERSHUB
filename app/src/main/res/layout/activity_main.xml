@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:openDrawer="start"
     android:id="@+id/drawerLayout"
+    android:background="@color/grey_light"
     tools:context=".activity.MainActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
