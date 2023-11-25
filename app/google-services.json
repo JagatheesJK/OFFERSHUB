@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "591654296693",
+    "project_id": "offershub-3e0a5",
+    "storage_bucket": "offershub-3e0a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591654296693:android:dea62ef4b35196818aac3c",
+        "android_client_info": {
+          "package_name": "com.hub.offershub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCV6QDTpR5lJmJBouRCY8FcdHambiJsuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

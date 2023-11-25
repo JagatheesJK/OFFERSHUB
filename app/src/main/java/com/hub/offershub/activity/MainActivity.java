@@ -14,12 +14,14 @@ import android.view.Gravity;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.hub.offershub.AppApplication;
 import com.hub.offershub.R;
 import com.hub.offershub.databinding.ActivityMainBinding;
 import com.hub.offershub.fragment.BookingListFragment;
 import com.hub.offershub.fragment.HomeFragment;
 import com.hub.offershub.fragment.OfferListFragment;
 import com.hub.offershub.fragment.ShopDetailsFragment;
+import com.hub.offershub.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -58,8 +60,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = new OfferListFragment();
         } else if (id == R.id.nav_settings) {
             fragment = new ShopDetailsFragment();
-        } else {
+        } else if (id == R.id.nav_booking_details) {
             fragment = new BookingListFragment();
+        } else  {
+            Utils.logout(MainActivity.this, AppApplication.getInstance().prefsHelper);
+
         }
 
         if (fragment != null) {

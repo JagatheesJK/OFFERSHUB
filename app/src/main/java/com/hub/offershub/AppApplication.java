@@ -7,15 +7,25 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.hub.offershub.activity.OtpActivity;
+
 public class AppApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
+    public PrefsHelper prefsHelper;
+    static AppApplication app;
+
+    public static AppApplication getInstance() {
+        return app;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        app = this;
         init();
     }
 
     private void init() {
+        prefsHelper = new PrefsHelper(AppApplication.this);
 
     }
 

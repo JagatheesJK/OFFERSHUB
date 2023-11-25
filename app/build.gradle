@@ -2,9 +2,26 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/Users/moorthy/Moorthy-Projects/DJ Projects/OFFERSHUB/keystore/key.jks')
+            storePassword '123456'
+            keyPassword '123456'
+            keyAlias 'offershub'
+        }
+        release {
+            storeFile file('/Users/moorthy/Moorthy-Projects/DJ Projects/OFFERSHUB/keystore/key.jks')
+            storePassword '123456'
+            keyAlias 'offershub'
+            keyPassword '123456'
+        }
+    }
     namespace 'com.hub.offershub'
     compileSdk 34
 
@@ -19,9 +36,15 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -62,5 +85,30 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // OTP
     implementation 'io.github.chaosleung:pinview:1.4.4'
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+
+
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation("com.google.firebase:firebase-analytics")
+    implementation 'com.google.firebase:firebase-auth:19.4.0'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
+    implementation 'com.google.firebase:firebase-messaging:23.1.0'
+    implementation 'com.google.firebase:firebase-database:20.0.4'
+    implementation 'com.google.firebase:firebase-storage:20.0.1'
+    implementation 'com.firebaseui:firebase-ui-database:6.0.2'
+    implementation 'com.google.firebase:firebase-analytics:20.1.2'
+    implementation 'com.google.firebase:firebase-crashlytics:18.4.0'
+    implementation 'com.google.firebase:firebase-dynamic-links:21.0.1'
+    implementation 'com.google.firebase:firebase-perf:20.0.6'
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.amitshekhar.android:android-networking:1.0.0'
+
+
 
 }
