@@ -12,14 +12,16 @@ import android.view.ViewGroup;
 
 import com.hub.offershub.R;
 import com.hub.offershub.adapter.BusinessAdapter;
+import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentActiveBusinessBinding;
+import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActiveBusinessFragment extends Fragment {
+public class ActiveBusinessFragment extends BaseFragment implements CommonListener {
 
     private FragmentActiveBusinessBinding binding;
     private List<BusinessModel> list = new ArrayList<>();
@@ -65,7 +67,7 @@ public class ActiveBusinessFragment extends Fragment {
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.businessRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new BusinessAdapter(getActivity(), list);
+        adapter = new BusinessAdapter(getActivity(), list, this);
         binding.businessRecycler.setAdapter(adapter);
         setNotify();
     }
@@ -73,5 +75,14 @@ public class ActiveBusinessFragment extends Fragment {
     private void setNotify() {
         binding.businessRecycler.getRecycledViewPool().clear();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemSelected(Object obj) {
+        loadFragment(new ShopDetailsFragment());
+        /*getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.Layout_container, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();*/
     }
 }

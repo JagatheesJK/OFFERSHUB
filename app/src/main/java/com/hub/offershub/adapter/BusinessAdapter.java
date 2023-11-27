@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hub.offershub.R;
+import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 
@@ -19,9 +20,11 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
 
     private List<BusinessModel> list;
     private Context ctx;
+    private CommonListener listener;
 
-    public BusinessAdapter(Context context, List<BusinessModel> list) {
+    public BusinessAdapter(Context context, List<BusinessModel> list, CommonListener listener) {
         this.list = list;
+        this.listener = listener;
         ctx = context;
     }
 
@@ -39,6 +42,10 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             holder.businessNameTxt.setText(""+model.businessName);
             holder.addressTxt.setText(""+model.businessAddress);
             holder.categoryTxt.setText(""+model.businessCategory);
+
+            holder.itemView.setOnClickListener(v -> {
+                listener.onItemSelected(model);
+            });
         }
     }
 

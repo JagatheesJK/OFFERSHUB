@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.hub.offershub.R;
 import com.hub.offershub.activity.AddBusinessActivity;
 import com.hub.offershub.adapter.PagerAdapter;
 import com.hub.offershub.databinding.FragmentHomeBinding;
@@ -81,6 +82,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle("Business");
+        getActivity().setTitle(getString(R.string.app_name));
     }
 }

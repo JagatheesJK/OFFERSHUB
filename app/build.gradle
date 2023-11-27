@@ -10,13 +10,15 @@ plugins {
 android {
     signingConfigs {
         debug {
-            storeFile file('/Users/moorthy/Moorthy-Projects/DJ Projects/OFFERSHUB/keystore/key.jks')
+            storeFile file('/Users/jagathees/Jaga/DJ Projects/OFFERSHUB/keystore/key.jks')
+//            storeFile file('/Users/moorthy/Moorthy-Projects/DJ Projects/OFFERSHUB/keystore/key.jks')
             storePassword '123456'
             keyPassword '123456'
             keyAlias 'offershub'
         }
         release {
-            storeFile file('/Users/moorthy/Moorthy-Projects/DJ Projects/OFFERSHUB/keystore/key.jks')
+            storeFile file('/Users/jagathees/Jaga/DJ Projects/OFFERSHUB/keystore/key.jks')
+//            storeFile file('/Users/moorthy/Moorthy-Projects/DJ Projects/OFFERSHUB/keystore/key.jks')
             storePassword '123456'
             keyAlias 'offershub'
             keyPassword '123456'

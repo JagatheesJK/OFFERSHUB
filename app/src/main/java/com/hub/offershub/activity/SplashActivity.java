@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
     private void enterDelay() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             String userId = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID,"");
-            if(userId !="") {
+            /*if(userId !="") {
                 Intent i = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(i);
                 finish();
@@ -41,7 +41,11 @@ public class SplashActivity extends AppCompatActivity {
                 Intent i = new Intent(SplashActivity.this, SignActivity.class);
                 startActivity(i);
                 finish();
-            }
+            }*/
+
+            Intent i = new Intent(SplashActivity.this, TestMainActivity2.class);
+            startActivity(i);
+            finish();
         }, 3500);
     }
 }
