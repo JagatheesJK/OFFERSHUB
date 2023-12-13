@@ -1,40 +1,32 @@
 package com.hub.offershub.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.hub.offershub.AppApplication;
 import com.hub.offershub.R;
 import com.hub.offershub.databinding.FragmentShopDetailsBinding;
+import com.hub.offershub.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ShopDetailsFragment extends Fragment {
+public class ShopDetailsFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentShopDetailsBinding binding;
     private String[] labels = new String[]{"Shop Dashboard", "Offer Dashboard"};
+    private DrawerLayout drawerLayout;
 
     public static ShopDetailsFragment newInstance() {
         ShopDetailsFragment fragment = new ShopDetailsFragment();
@@ -47,9 +39,6 @@ public class ShopDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentShopDetailsBinding.inflate(getLayoutInflater());
         init();
-//        barChart();
-//        pieChart();
-//        lineChart();
 
         new TabLayoutMediator(binding.tabLayout, binding.pager, (tab, position) -> {
             tab.setText(labels[position]);
@@ -62,6 +51,16 @@ public class ShopDetailsFragment extends Fragment {
 
     private void init() {
         binding.pager.setAdapter(new ViewPagerFragmentAdapter(getActivity()));
+
+        /*drawerLayout = binding.drawerLayout;
+
+        binding.navView.setNavigationItemSelectedListener(this);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, binding.toolbar, R.string.nav_open,
+                R.string.nav_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, new OfferListFragment()).commit();
+        binding.navView.setCheckedItem(R.id.nav_home);*/
     }
 
     private class ViewPagerFragmentAdapter extends FragmentStateAdapter {
@@ -88,70 +87,38 @@ public class ShopDetailsFragment extends Fragment {
         }
     }
 
-    private void barChart() {
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(1, 40));
-        entries.add(new BarEntry(2, 30));
-        entries.add(new BarEntry(3, 25));
-        entries.add(new BarEntry(4, 50));
-
-        BarDataSet barDataSet = new BarDataSet(entries, "Label");
-        barDataSet.setColor(Color.BLUE);
-
-        BarData barData = new BarData(barDataSet);
-        binding.barChart.setData(barData);
-        binding.barChart.invalidate();
-    }
-
-    private void pieChart() {
-        List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(30f, "Category A"));
-        entries.add(new PieEntry(20f, "Category B"));
-        entries.add(new PieEntry(50f, "Category C"));
-
-        PieDataSet dataSet = new PieDataSet(entries, "Pie Chart");
-        dataSet.setColors(Color.BLUE, Color.GREEN, Color.RED);
-
-        PieData data = new PieData(dataSet);
-
-        binding.pieChart.setData(data);
-        binding.pieChart.getDescription().setEnabled(false);
-        binding.pieChart.setCenterText("Pie Chart");
-        binding.pieChart.animateY(1000);
-        binding.pieChart.invalidate();
-    }
-
-    private void lineChart() {
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(1, 40));
-        entries.add(new Entry(2, 30));
-        entries.add(new Entry(3, 25));
-        entries.add(new Entry(4, 50));
-
-        LineDataSet dataSet = new LineDataSet(entries, "Label");
-        dataSet.setColor(getResources().getColor(R.color.colorPrimary));
-        dataSet.setValueTextColor(getResources().getColor(R.color.colorPrimaryDark));
-
-        LineData lineData = new LineData(dataSet);
-        binding.lineChart.setData(lineData);
-
-        // Customize X-axis
-        XAxis xAxis = binding.lineChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return String.valueOf((int) value);
-            }
-        });
-
-        binding.lineChart.invalidate();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         getActivity().setTitle("Dashboard");
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Fragment fragment = null;
+        if (id == R.id.nav_home) {
+            fragment = new HomeFragment();
+        } else if (id == R.id.nav_offer) {
+            fragment = new OfferListFragment();
+        } else if (id == R.id.nav_shop_dash) {
+            fragment = new ShopDashboardFragment();
+        } else if (id == R.id.nav_offer_dash) {
+            fragment = new OfferDashboardFragment();
+        } else if (id == R.id.nav_booking_details) {
+            fragment = new BookingListFragment();
+        } else  {
+            Utils.logout(getActivity(), AppApplication.getInstance().prefsHelper);
+
+        }
+
+        if (fragment != null) {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.fragment_container, fragment);
+            transaction.commit();
+        }
+        binding.drawerLayout.closeDrawer(Gravity.START);
+        return true;
     }
 }

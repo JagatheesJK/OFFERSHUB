@@ -1,19 +1,23 @@
 package com.hub.offershub.model;
 
-public class OfferModel {
-    public String offerName;
-    public String offerDesc;
-    public String offerType;
-    public String offerPrice;
-    public String offerImage;
-    public boolean offerToggle;
+import java.util.List;
 
-    public OfferModel(String offerName, String offerDesc, String offerType, String offerPrice, String offerImage, boolean offerToggle) {
-        this.offerName = offerName;
-        this.offerDesc = offerDesc;
-        this.offerType = offerType;
-        this.offerPrice = offerPrice;
-        this.offerImage = offerImage;
-        this.offerToggle = offerToggle;
+public class OfferModel {
+    public String status;
+    public String message;
+    public List<Data> data;
+
+    public static class Data {
+        public String offer_id;
+        public String offer_name;
+        public String offer_desc;
+        public String image_url;
+        public String offer_type;
+        public String offer_type_name;
+        public String amount;
+        public String original_amount;
+        public String offer_amount;
+        public String offer_percentage;
+        public String flat_percentage;
     }
 }

@@ -11,10 +11,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hub.offershub.R;
-import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.listener.OfferListener;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.CommonMethods;
 
@@ -22,13 +20,15 @@ import java.util.List;
 
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> {
 
-    private List<OfferModel> list;
+    private List<OfferModel.Data> list;
     private Context ctx;
     private CommonMethods commonMethods;
+    private OfferListener listener;
 
-    public OfferAdapter(Context context, List<OfferModel> list) {
+    public OfferAdapter(Context context, List<OfferModel.Data> list, OfferListener listener) {
         this.list = list;
         ctx = context;
+        this.listener = listener;
         commonMethods = new CommonMethods();
     }
 
@@ -41,14 +41,18 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        OfferModel model = list.get(position);
+        OfferModel.Data model = list.get(position);
         if (model != null) {
-            holder.offerNameTxt.setText(""+model.offerName);
-            holder.offerDescTxt.setText(""+model.offerDesc);
-            holder.offerType.setText("Type : "+model.offerType);
-            holder.offerPrice.setText(""+model.offerPrice);
-            holder.offerSwitch.setChecked(model.offerToggle);
-            commonMethods.imageLoaderView(ctx, holder.offerImg, model.offerImage);
+            holder.offerNameTxt.setText(""+model.offer_name);
+            holder.offerDescTxt.setText(""+model.offer_desc);
+            holder.offerType.setText("Type : "+model.offer_type_name);
+            holder.offerPrice.setText(""+model.offer_amount);
+//            holder.offerSwitch.setChecked(model.offerToggle);
+            commonMethods.imageLoaderView(ctx, holder.offerImg, model.image_url);
+
+            holder.itemView.setOnClickListener(v -> {
+                listener.onOfferSelect();
+            });
         }
     }
 

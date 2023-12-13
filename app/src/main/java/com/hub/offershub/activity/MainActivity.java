@@ -54,18 +54,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         Fragment fragment = null;
-        if (id == R.id.nav_home) {
+        /*if (id == R.id.nav_home) {
             fragment = new HomeFragment();
         } else if (id == R.id.nav_offer) {
             fragment = new OfferListFragment();
-        } else if (id == R.id.nav_settings) {
+        } else if (id == R.id.nav_shop_dash) {
             fragment = new ShopDetailsFragment();
         } else if (id == R.id.nav_booking_details) {
             fragment = new BookingListFragment();
         } else  {
             Utils.logout(MainActivity.this, AppApplication.getInstance().prefsHelper);
 
-        }
+        }*/
 
         if (fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

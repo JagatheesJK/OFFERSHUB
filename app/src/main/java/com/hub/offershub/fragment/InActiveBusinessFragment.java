@@ -2,9 +2,7 @@ package com.hub.offershub.fragment;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +16,17 @@ import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InActiveBusinessFragment extends BaseFragment implements CommonListener {
 
     private FragmentInActiveBusinessBinding binding;
-    private List<BusinessModel> list = new ArrayList<>();
+    private List<BusinessModel.Data> list = new ArrayList<>();
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
     private BusinessAdapter adapter;
+    private int page_no = 0;
 
     public static InActiveBusinessFragment newInstance() {
         InActiveBusinessFragment fragment = new InActiveBusinessFragment();
@@ -40,18 +41,18 @@ public class InActiveBusinessFragment extends BaseFragment implements CommonList
         init();
         setListener();
         setUpRecycler();
-        binding.swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                binding.swipeRefresh.setRefreshing(false);
-            }
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+            list.clear();
+            page_no = 0;
+            binding.swipeRefresh.setRefreshing(false);
+            commonViewModel.getInActiveShops(makeRequest());
         });
         return binding.getRoot();
     }
 
     private void init() {
-        list.add(new BusinessModel("JK", "adsavssav", "Cloth"));
-        list.add(new BusinessModel("JK", "adsavssav", "Cloth"));
+        commonViewModel.getInActiveShops(makeRequest());
+        getInActiveData();
     }
 
     private void setListener() {
@@ -73,6 +74,40 @@ public class InActiveBusinessFragment extends BaseFragment implements CommonList
 
     @Override
     public void onItemSelected(Object obj) {
+        loadFragment(new ShopDetailsFragment());
+    }
 
+    private void getInActiveData() {
+        commonViewModel.getMutableInActiveBusiness().observe(getViewLifecycleOwner(), businessModel -> {
+            if (businessModel != null) {
+                if(businessModel.status.equals("success")) {
+                    if (businessModel.data != null) {
+                        binding.empty.emptyConstraint.setVisibility(View.GONE);
+                        binding.businessRecycler.setVisibility(View.VISIBLE);
+                        list.addAll(businessModel.data);
+                        setNotify();
+                    } else {
+                        binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                        binding.businessRecycler.setVisibility(View.GONE);
+                    }
+                } else {
+                    binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                    binding.businessRecycler.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private Map<String, Object> makeRequest() {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shopownerid", 1);
+        return requestData;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (commonViewModel != null)
+            commonViewModel.getMutableInActiveBusiness().removeObservers(this);
     }
 }

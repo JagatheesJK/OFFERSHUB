@@ -1,24 +1,15 @@
 package com.hub.offershub.retrofit;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.model.OfferModel;
 
-import java.util.List;
 import java.util.Map;
 
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
-import retrofit2.http.Query;
 
 public interface API {
 
@@ -31,6 +22,30 @@ public interface API {
     @Headers("Content-Type: application/json")
     @POST("loginShopOwner")
     Call<JsonElement> loginShopOwner(
+            @Body Map<String, Object> body
+    );
+
+    @Headers("Content-Type: application/json")
+    @POST("getActiveShops")
+    Call<BusinessModel> getActiveShops(
+            @Body Map<String, Object> body
+    );
+
+    @Headers("Content-Type: application/json")
+    @POST("getInactiveShops")
+    Call<BusinessModel> getInactiveShops(
+            @Body Map<String, Object> body
+    );
+
+    @Headers("Content-Type: application/json")
+    @POST("getActiveOffers")
+    Call<OfferModel> getActiveOffers(
+            @Body Map<String, Object> body
+    );
+
+    @Headers("Content-Type: application/json")
+    @POST("getInactiveOffers")
+    Call<OfferModel> getInActiveOffers(
             @Body Map<String, Object> body
     );
 

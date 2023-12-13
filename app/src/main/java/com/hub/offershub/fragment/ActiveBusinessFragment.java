@@ -2,15 +2,11 @@ package com.hub.offershub.fragment;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.hub.offershub.R;
 import com.hub.offershub.adapter.BusinessAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentActiveBusinessBinding;
@@ -19,14 +15,17 @@ import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ActiveBusinessFragment extends BaseFragment implements CommonListener {
 
     private FragmentActiveBusinessBinding binding;
-    private List<BusinessModel> list = new ArrayList<>();
+    private List<BusinessModel.Data> list = new ArrayList<>();
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
     private BusinessAdapter adapter;
+    private int page_no = 0;
 
     public static ActiveBusinessFragment newInstance(String tag) {
         ActiveBusinessFragment fragment = new ActiveBusinessFragment();
@@ -43,21 +42,19 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
         setListener();
         setUpRecycler();
 
-        binding.swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                binding.swipeRefresh.setRefreshing(false);
-            }
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+            list.clear();
+            page_no = 0;
+            binding.swipeRefresh.setRefreshing(false);
+            commonViewModel.getActiveShops(makeRequest());
         });
 
         return binding.getRoot();
     }
 
     private void init() {
-        list.add(new BusinessModel("JK", "adsavssav", "Cloth"));
-        list.add(new BusinessModel("JK", "adsavssav", "Cloth"));
-        list.add(new BusinessModel("JK", "adsavssav", "Cloth"));
-        list.add(new BusinessModel("JK", "adsavssav", "Cloth"));
+        commonViewModel.getActiveShops(makeRequest());
+        getActiveData();
     }
 
     private void setListener() {
@@ -79,10 +76,40 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
 
     @Override
     public void onItemSelected(Object obj) {
-        loadFragment(new ShopDetailsFragment());
-        /*getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.Layout_container, nextFrag, "findThisFragment")
-                .addToBackStack(null)
-                .commit();*/
+        loadFragment(new OfferListFragment());
+    }
+
+    private void getActiveData() {
+        commonViewModel.getMutableActiveBusiness().observe(getViewLifecycleOwner(), businessModel -> {
+            if (businessModel != null) {
+                if(businessModel.status.equals("success")) {
+                    if (businessModel.data != null) {
+                        binding.empty.emptyConstraint.setVisibility(View.GONE);
+                        binding.businessRecycler.setVisibility(View.VISIBLE);
+                        list.addAll(businessModel.data);
+                        setNotify();
+                    } else {
+                        binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                        binding.businessRecycler.setVisibility(View.GONE);
+                    }
+                } else {
+                    binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                    binding.businessRecycler.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private Map<String, Object> makeRequest() {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shopownerid", 1);
+        return requestData;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (commonViewModel != null)
+            commonViewModel.getMutableActiveBusiness().removeObservers(this);
     }
 }

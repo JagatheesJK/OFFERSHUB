@@ -11,18 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hub.offershub.R;
 import com.hub.offershub.listener.CommonListener;
-import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 
 import java.util.List;
 
 public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHolder> {
 
-    private List<BusinessModel> list;
+    private List<BusinessModel.Data> list;
     private Context ctx;
     private CommonListener listener;
 
-    public BusinessAdapter(Context context, List<BusinessModel> list, CommonListener listener) {
+    public BusinessAdapter(Context context, List<BusinessModel.Data> list, CommonListener listener) {
         this.list = list;
         this.listener = listener;
         ctx = context;
@@ -37,11 +36,11 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BusinessModel model = list.get(position);
+        BusinessModel.Data model = list.get(position);
         if (model != null) {
-            holder.businessNameTxt.setText(""+model.businessName);
-            holder.addressTxt.setText(""+model.businessAddress);
-            holder.categoryTxt.setText(""+model.businessCategory);
+            holder.businessNameTxt.setText(""+model.shop_name);
+            holder.addressTxt.setText(""+model.address1);
+            holder.categoryTxt.setText(""+model.categoryname);
 
             holder.itemView.setOnClickListener(v -> {
                 listener.onItemSelected(model);

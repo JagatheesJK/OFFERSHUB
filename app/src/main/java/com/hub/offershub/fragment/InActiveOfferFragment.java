@@ -2,30 +2,31 @@ package com.hub.offershub.fragment;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hub.offershub.R;
 import com.hub.offershub.adapter.OfferAdapter;
-import com.hub.offershub.databinding.FragmentInActiveBusinessBinding;
+import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentInActiveOfferBinding;
+import com.hub.offershub.listener.OfferListener;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class InActiveOfferFragment extends Fragment {
+public class InActiveOfferFragment extends BaseFragment implements OfferListener {
 
     FragmentInActiveOfferBinding binding;
-    private List<OfferModel> list = new ArrayList<>();
+    private List<OfferModel.Data> list = new ArrayList<>();
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
     private OfferAdapter adapter;
+    private int page_no = 0;
 
     public static InActiveOfferFragment newInstance() {
         InActiveOfferFragment fragment = new InActiveOfferFragment();
@@ -48,18 +49,19 @@ public class InActiveOfferFragment extends Fragment {
         setListener();
         setUpRecycler();
 
-        binding.swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                binding.swipeRefresh.setRefreshing(false);
-            }
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+            list.clear();
+            page_no = 0;
+            binding.swipeRefresh.setRefreshing(false);
+            commonViewModel.getInActiveOffers(makeRequest());
         });
 
         return binding.getRoot();
     }
 
     private void init() {
-        list.add(new OfferModel("JK", "adsavssav", "Fashion", "878", "https://img.freepik.com/premium-vector/sale-15-off-special-offer-discount-banner-design-template_579179-1052.jpg", false));
+        commonViewModel.getInActiveOffers(makeRequest());
+        getInActiveOffersData();
     }
 
     private void setListener() {
@@ -69,7 +71,7 @@ public class InActiveOfferFragment extends Fragment {
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.offerRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new OfferAdapter(getActivity(), list);
+        adapter = new OfferAdapter(getActivity(), list, this);
         binding.offerRecycler.setAdapter(adapter);
         setNotify();
     }
@@ -77,5 +79,44 @@ public class InActiveOfferFragment extends Fragment {
     private void setNotify() {
         binding.offerRecycler.getRecycledViewPool().clear();
         adapter.notifyDataSetChanged();
+    }
+
+    private void getInActiveOffersData() {
+        commonViewModel.getMutableInActiveOffers().observe(getViewLifecycleOwner(), offerModel -> {
+            if (offerModel != null) {
+                if(offerModel.status.equals("success")) {
+                    if (offerModel.data != null) {
+                        binding.empty.emptyConstraint.setVisibility(View.GONE);
+                        binding.offerRecycler.setVisibility(View.VISIBLE);
+                        list.addAll(offerModel.data);
+                        setNotify();
+                    } else {
+                        binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                        binding.offerRecycler.setVisibility(View.GONE);
+                    }
+                } else {
+                    binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                    binding.offerRecycler.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private Map<String, Object> makeRequest() {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shop_id", 1);
+        return requestData;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (commonViewModel != null)
+            commonViewModel.getMutableInActiveOffers().removeObservers(this);
+    }
+
+    @Override
+    public void onOfferSelect() {
+        loadFragment(new ShopDetailsFragment());
     }
 }

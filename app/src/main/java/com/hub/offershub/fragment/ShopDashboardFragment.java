@@ -22,25 +22,12 @@ import com.chart.all.anychart.core.cartesian.series.Column;
 import com.chart.all.anychart.core.cartesian.series.Line;
 import com.chart.all.anychart.data.Mapping;
 import com.chart.all.anychart.data.Set;
-import com.chart.all.anychart.enums.Align;
 import com.chart.all.anychart.enums.Anchor;
 import com.chart.all.anychart.enums.HoverMode;
-import com.chart.all.anychart.enums.LegendLayout;
 import com.chart.all.anychart.enums.MarkerType;
 import com.chart.all.anychart.enums.Position;
 import com.chart.all.anychart.enums.TooltipPositionMode;
 import com.chart.all.anychart.graphics.vector.Stroke;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.hub.offershub.R;
 import com.hub.offershub.databinding.FragmentShopDashboardBinding;
 
 import java.util.ArrayList;
