@@ -110,6 +110,6 @@ public class ActiveOfferFragment extends BaseFragment implements OfferListener {
 
     @Override
     public void onOfferSelect() {
-        loadFragment(new ShopDetailsFragment());
+//        loadFragment(new ShopDetailsFragment());
     }
 }

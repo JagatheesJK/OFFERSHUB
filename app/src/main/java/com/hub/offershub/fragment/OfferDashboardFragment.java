@@ -61,111 +61,11 @@ public class OfferDashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOfferDashboardBinding.inflate(getLayoutInflater());
-//        multipleBarChart();
-//        pieChart();
-//        lineChart();
-
         newPieChart();
         newMultipleBarChart();
         newLineChart();
         return binding.getRoot();
     }
-
-    /*private void barChart() {
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(1, 40));
-        entries.add(new BarEntry(2, 30));
-        entries.add(new BarEntry(3, 25));
-        entries.add(new BarEntry(4, 50));
-
-        BarDataSet barDataSet = new BarDataSet(entries, "Label");
-        barDataSet.setColor(Color.BLUE, Color.RED);
-
-        BarData barData = new BarData(barDataSet);
-        binding.barChart.setData(barData);
-        binding.barChart.invalidate();
-    }
-
-    private void pieChart() {
-        List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(30f, "Category A"));
-        entries.add(new PieEntry(20f, "Category B"));
-        entries.add(new PieEntry(50f, "Category C"));
-
-        PieDataSet dataSet = new PieDataSet(entries, "Pie Chart");
-        dataSet.setColors(Color.BLUE, Color.GREEN, Color.RED);
-
-        PieData data = new PieData(dataSet);
-
-        binding.pieChart.setData(data);
-        binding.pieChart.getDescription().setEnabled(false);
-        binding.pieChart.setCenterText("Pie Chart");
-        binding.pieChart.animateY(1000);
-        binding.pieChart.invalidate();
-    }
-
-    private void lineChart() {
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(1, 40));
-        entries.add(new Entry(2, 30));
-        entries.add(new Entry(3, 25));
-        entries.add(new Entry(4, 50));
-
-        LineDataSet dataSet = new LineDataSet(entries, "Label");
-        dataSet.setColor(getResources().getColor(R.color.colorPrimary));
-        dataSet.setValueTextColor(getResources().getColor(R.color.colorPrimaryDark));
-
-        LineData lineData = new LineData(dataSet);
-        binding.lineChart.setData(lineData);
-
-        // Customize X-axis
-        XAxis xAxis = binding.lineChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return String.valueOf((int) value);
-            }
-        });
-
-        binding.lineChart.invalidate();
-    }
-
-    private void multipleBarChart() {
-        ArrayList<BarEntry> entries1 = new ArrayList<>();
-        entries1.add(new BarEntry(1, 40));
-        entries1.add(new BarEntry(2, 30));
-        entries1.add(new BarEntry(3, 25));
-
-        ArrayList<BarEntry> entries2 = new ArrayList<>();
-        entries2.add(new BarEntry(1, 10));
-        entries2.add(new BarEntry(2, 20));
-        entries2.add(new BarEntry(3, 15));
-
-        BarDataSet dataSet1 = new BarDataSet(entries1, "Dataset 1");
-        dataSet1.setColor(Color.BLUE);
-
-        BarDataSet dataSet2 = new BarDataSet(entries2, "Dataset 2");
-        dataSet2.setColor(Color.GREEN);
-
-        BarData barData = new BarData(dataSet1, dataSet2);
-        binding.barChart.setData(barData);
-
-        // Customize X-axis
-        XAxis xAxis = binding.barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getAxisLabel(float value, AxisBase axis) {
-                return String.valueOf((int) value); // Format the X-axis labels as needed
-            }
-        });
-
-        // Customize Y-axis
-        YAxis yAxisRight = binding.barChart.getAxisRight();
-        yAxisRight.setEnabled(false); // Disable the right Y-axis
-    }*/
 
     private void newPieChart() {
         AnyChartView chart1 = new AnyChartView(requireContext());

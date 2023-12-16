@@ -34,23 +34,24 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Uri imageUri = imageList.get(position);
-        // Load and display the image using Glide, Picasso, or another image loading library
-        // For simplicity, you can set the image URI directly to an ImageView
-        holder.imageView.setImageURI(imageUri);
+        if (imageUri != null) {
+            holder.imageView.setImageURI(imageUri);
+        }
 
-        /*holder.imageView.setOnClickListener(v -> {
+        holder.imageView.setOnClickListener(v -> {
             imageChooseListener.onImageChoose();
-        });*/
+        });
 
         holder.deleteImg.setOnClickListener(v -> {
             imageList.remove(position);
+            imageChooseListener.onImageRemove(imageList.size());
             notifyDataSetChanged();
         });
     }
 
     @Override
     public int getItemCount() {
-        return (imageList.size() < 3) ? imageList.size() : 3;
+        return (imageList.size() <= 2) ? imageList.size() : 3;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

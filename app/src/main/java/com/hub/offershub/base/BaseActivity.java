@@ -101,6 +101,32 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void getAllPermission(PermissionListener listener) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            PermissionX.init(BaseActivity.this)
+                    .permissions(Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                    .request((allGranted, grantedList, deniedList) -> {
+                        if (allGranted) {
+                            listener.onPermissionGranted();
+                        } else {
+                            listener.onPermissionDenied();
+                        }
+                    });
+        } else {
+            PermissionX.init(BaseActivity.this)
+                    .permissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                    .request((allGranted, grantedList, deniedList) -> {
+                        if (allGranted) {
+                            listener.onPermissionGranted();
+                        } else {
+                            listener.onPermissionDenied();
+                        }
+                    });
+        }
+    }
+
     public Uri cameraUri;
     public void chooseImageDialog() {
         final Dialog dialog = new Dialog(BaseActivity.this);

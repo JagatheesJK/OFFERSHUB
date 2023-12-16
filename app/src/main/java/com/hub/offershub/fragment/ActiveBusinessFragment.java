@@ -1,5 +1,6 @@
 package com.hub.offershub.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.hub.offershub.activity.DashActivity;
 import com.hub.offershub.adapter.BusinessAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentActiveBusinessBinding;
@@ -77,6 +80,8 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
     @Override
     public void onItemSelected(Object obj) {
         loadFragment(new OfferListFragment());
+        Intent i = new Intent(getActivity(), DashActivity.class);
+        startActivity(i);
     }
 
     private void getActiveData() {
@@ -84,6 +89,8 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
             if (businessModel != null) {
                 if(businessModel.status.equals("success")) {
                     if (businessModel.data != null) {
+                        if (page_no == 0)
+                            list.clear();
                         binding.empty.emptyConstraint.setVisibility(View.GONE);
                         binding.businessRecycler.setVisibility(View.VISIBLE);
                         list.addAll(businessModel.data);

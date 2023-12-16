@@ -14,6 +14,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@+id/toolbarLayout"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -75,8 +76,8 @@
                 android:gravity="center"
                 android:hint="Select category"
                 android:padding="10dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="14.5sp"
                 app:spinner_arrow_gravity="end"
                 app:spinner_arrow_padding="8dp"
@@ -86,11 +87,11 @@
                 app:spinner_item_array="@array/category"
                 app:spinner_item_height="46dp"
                 android:background="@drawable/bg_rectangle"
-                android:backgroundTint="@color/red"
+                app:spinner_arrow_tint="@color/black"
                 app:spinner_popup_animation="dropdown"
                 app:spinner_popup_background="@drawable/bg_bottom_rounded"
                 app:spinner_popup_elevation="4dp"
-                app:spinner_selected_item_background="@color/darkRed"
+                app:spinner_selected_item_background="@color/grey_light"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/categoryTxt"/>
 
@@ -109,10 +110,7 @@
                 android:hint="Address 1"
                 android:gravity="top"
                 android:singleLine="true"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/addressTxt"/>
@@ -132,10 +130,7 @@
                 android:hint="Address 2"
                 android:singleLine="true"
                 android:gravity="top"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/address2Txt"/>
@@ -155,10 +150,7 @@
                 android:hint="City"
                 android:singleLine="true"
                 android:gravity="top"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/cityTxt"/>
@@ -178,10 +170,7 @@
                 android:hint="State"
                 android:singleLine="true"
                 android:gravity="top"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/stateTxt"/>
@@ -202,10 +191,7 @@
                 android:singleLine="true"
                 android:inputType="phone"
                 android:gravity="top"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/pincodeTxt"/>
@@ -226,35 +212,18 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/locationTxt" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/locationEd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="location"
-                android:singleLine="true"
-                android:gravity="top"
-                android:padding="12dp"
-                android:clickable="false"
-                android:editable="false"
-                android:background="@drawable/bg_rectangle"
-                android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/mapImg"/>
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/shopImgTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Shop Image"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/locationEd"/>
+                app:layout_constraintTop_toBottomOf="@+id/mapImg"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/shopImgCard"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:gravity="top"
-                android:padding="12dp"
-                android:inputType="phone"
                 android:elevation="0dp"
                 app:cardElevation="0dp"
                 android:background="@drawable/bg_rectangle"
@@ -262,6 +231,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/shopImgTxt">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/shopConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"

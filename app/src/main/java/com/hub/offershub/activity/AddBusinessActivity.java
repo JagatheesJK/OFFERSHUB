@@ -12,6 +12,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,15 +27,12 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -58,9 +57,10 @@ import com.permissionx.guolindev.PermissionX;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class AddBusinessActivity extends BaseActivity implements PermissionListener,
-        ImageChooseListener, OnMapReadyCallback {
+public class AddBusinessActivity extends BaseActivity implements View.OnClickListener, PermissionListener,
+        ImageChooseListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private ActivityAddBusinessBinding binding;
     private List<Uri> selectedImages = new ArrayList<>();
@@ -85,15 +85,16 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
             finish();
         });
 
+        setListener();
         setMap();
         setUpRecycler();
+    }
 
-        binding.shopImgCard.setOnClickListener(v -> {
-            Log.e("Check_test", "shopImgCard");
-            getPermission(this);
-        });
-
-
+    private void setListener() {
+        binding.shopImgCard.setOnClickListener(this);
+        binding.shopAddImg.setOnClickListener(this);
+        binding.shopImgRecycler.setOnClickListener(this);
+        binding.shopConstraint.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
@@ -148,11 +149,16 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
                     if (data.getClipData() != null) {
                         // Multiple images selected
                         int count = data.getClipData().getItemCount();
-                        for (int i = 0; i < count; i++) {
+                        int totalSize = 0;
+                        if (count <= 2)
+                            totalSize = count;
+                        else
+                            totalSize = 3;
+                        for (int i = 0; i < totalSize; i++) {
                             Uri imageUri = data.getClipData().getItemAt(i).getUri();
                             // Handle each selected image URI
-                            if (selectedImages.size() > 3)
-                                selectedImages.clear();
+//                            if (selectedImages.size() > 3)
+//                                selectedImages.clear();
                             selectedImages.add(imageUri);
                             setNotifyData();
                         }
@@ -223,6 +229,14 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
     @Override
     public void onImageChoose() {
         getPermission(this);
+    }
+
+    @Override
+    public void onImageRemove(int size) {
+        if (size == 0) {
+            binding.shopAddImg.setVisibility(View.VISIBLE);
+            binding.shopImgRecycler.setVisibility(View.GONE);
+        }
     }
 
     private void setMap() {
@@ -300,18 +314,10 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMapClickListener(this);
 
         PermissionX.init(AddBusinessActivity.this)
                 .permissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -331,19 +337,15 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
                             @Override
                             public void onSuccess(Location location) {
                                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
                                 if (marker != null) {
                                     marker.remove();
                                 }
                                 markerOptions = new MarkerOptions();
                                 markerOptions.title(""+location.getLatitude()+", "+location.getLongitude());
-                                markerOptions.draggable(true);
+//                                markerOptions.draggable(true);
                                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                                 markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
                                 marker = mMap.addMarker(markerOptions);
-
-
-//                                mMap.addMarker(new MarkerOptions().position(latLng));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
                             }
                         });
@@ -352,37 +354,6 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
 
                     }
                 });
-
-        if (mMap != null) {
-            mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                @Override
-                public void onMarkerDrag(@NonNull Marker marker) {
-
-                }
-
-                @Override
-                public void onMarkerDragEnd(@NonNull Marker marker) {
-                    try {
-                        LatLng markerPosition = marker.getPosition();
-                        Log.e("Check_Location", "Lat : "+markerPosition.latitude);
-                        Log.e("Check_Location", "Long : "+markerPosition.longitude);
-                        binding.locationEd.setText(""+markerPosition.latitude+", "+markerPosition.longitude);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onMarkerDragStart(@NonNull Marker marker) {
-
-                }
-            });
-        }
-
-        /*// Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
     }
 
     void initApiClient() {
@@ -408,5 +379,50 @@ public class AddBusinessActivity extends BaseActivity implements PermissionListe
                 .build();
         mGoogleApiClient.connect();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+    }
+
+    @Override
+    public void onMapClick(@NonNull LatLng latLng) {
+        if (marker != null) {
+            marker.remove();
+        }
+
+        markerOptions.title(""+latLng.latitude+", "+latLng.longitude);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        markerOptions.position(new LatLng(latLng.latitude, latLng.longitude));
+        marker = mMap.addMarker(markerOptions);
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+
+        Log.e("Check_Location", "Lat : "+latLng.latitude);
+        Log.e("Check_Location", "Long : "+latLng.longitude);
+    }
+
+    String addressText;
+    private String getLocation(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(AddBusinessActivity.this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            Address address = addresses.get(0);
+            addressText = address.getAddressLine(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return addressText;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.shopImgRecycler:
+            case R.id.shopImgCard:
+            case R.id.shopAddImg:
+            case R.id.shopConstraint:
+                Log.e("Check_test", "shopImgCard");
+                getPermission(this);
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.hub.offershub.activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -9,16 +8,16 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.hub.offershub.R;
+import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityTestMain2Binding;
 import com.hub.offershub.fragment.AccountFragment;
 import com.hub.offershub.fragment.HomeFragment;
-import com.hub.offershub.fragment.NewHomeFragment;
 import com.hub.offershub.fragment.NotifyFragment;
+import com.hub.offershub.listener.PermissionListener;
 
-public class TestMainActivity2 extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
+public class TestMainActivity2 extends BaseActivity implements NavigationBarView.OnItemSelectedListener, PermissionListener {
 
     private ActivityTestMain2Binding binding;
 
@@ -28,6 +27,7 @@ public class TestMainActivity2 extends AppCompatActivity implements NavigationBa
         binding = ActivityTestMain2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
+        getAllPermission(this);
         init();
     }
 
@@ -68,6 +68,15 @@ public class TestMainActivity2 extends AppCompatActivity implements NavigationBa
     @Override
     public void onResume() {
         super.onResume();
-        setTitle("Booking Details");
+    }
+
+    @Override
+    public void onPermissionGranted() {
+
+    }
+
+    @Override
+    public void onPermissionDenied() {
+
     }
 }
