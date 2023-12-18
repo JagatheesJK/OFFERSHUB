@@ -44,15 +44,22 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.hub.offershub.AppApplication;
+import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
+import com.hub.offershub.adapter.AmenityAdapter;
 import com.hub.offershub.adapter.ImageAdapter;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityAddBusinessBinding;
 import com.hub.offershub.listener.ImageChooseListener;
 import com.hub.offershub.listener.PermissionListener;
+import com.hub.offershub.model.AddShopDataRequestBody;
+import com.hub.offershub.model.Amenity;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.compress.CompressImage;
 import com.permissionx.guolindev.PermissionX;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -73,7 +80,10 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
     private Marker marker;
     private MarkerOptions markerOptions;
     private static final int REQUEST_CHECK_SETTINGS = 111;
+    AmenityAdapter adapter;
+    List<Amenity.AmenityItem> amenities = new ArrayList<>();
 
+    double latitude,longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +95,17 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             finish();
         });
 
+        binding.amenitiesrecyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // Set number of columns to 3
+
+
+        adapter = new AmenityAdapter(amenities);
+        binding.amenitiesrecyclerView.setAdapter(adapter);
+
+        // Get selected amenity IDs
+        //List<Integer> selectedIds = adapter.getSelectedAmenityIds();
+        commonViewModel.getMasterAmenities();
+        getAmenitiesData();
+        getAddShopData();
         setListener();
         setMap();
         setUpRecycler();
@@ -95,6 +116,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         binding.shopAddImg.setOnClickListener(this);
         binding.shopImgRecycler.setOnClickListener(this);
         binding.shopConstraint.setOnClickListener(this);
+        binding.addShopSubmit.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
@@ -110,6 +132,35 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         imageAdapter.notifyDataSetChanged();
     }
 
+    private void getAmenitiesData() {
+        commonViewModel.getMutableAmenity().observeForever( amenity -> {
+            if (amenity != null) {
+                if(amenity.getStatus().equals("success")) {
+                    amenities.addAll(amenity.getData());
+                    adapter.notifyDataSetChanged();
+                } else {
+
+                }
+            }
+        });
+    }
+
+    private void getAddShopData() {
+        commonViewModel.getMutableAddShop().observeForever( jsonObject -> {
+            if (jsonObject != null) {
+                try {
+                    if(jsonObject.getString("status").equals("success")) {
+                        Toast.makeText(this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
     private File file;
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -313,7 +364,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
-
+    LatLng latLng;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -336,7 +387,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                         }).addOnSuccessListener(new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
-                                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                latLng = new LatLng(location.getLatitude(), location.getLongitude());
                                 if (marker != null) {
                                     marker.remove();
                                 }
@@ -394,6 +445,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
 
+        latitude = latLng.latitude;
+        longitude = latLng.longitude;
         Log.e("Check_Location", "Lat : "+latLng.latitude);
         Log.e("Check_Location", "Long : "+latLng.longitude);
     }
@@ -420,6 +473,23 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             case R.id.shopConstraint:
                 Log.e("Check_test", "shopImgCard");
                 getPermission(this);
+                break;
+            case R.id.addShopSubmit:
+                AddShopDataRequestBody addShopDataRequestBody = new AddShopDataRequestBody();
+                addShopDataRequestBody.shopownerid = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID,0);
+                addShopDataRequestBody.shopname = ""+binding.shopNameEd.getText().toString();
+                addShopDataRequestBody.mobile = Long.parseLong(binding.mobileEd.getText().toString());
+                addShopDataRequestBody.upi = "static@ici";
+                addShopDataRequestBody.shopamenities=adapter.getSelectedAmenityIds();
+                addShopDataRequestBody.address1 = ""+binding.shopAddressEd.getText().toString();
+                addShopDataRequestBody.address2 = ""+binding.shopAddress2Ed.getText().toString();
+                addShopDataRequestBody.city = ""+binding.cityEd.getText().toString();
+                addShopDataRequestBody.state = ""+binding.stateEd.getText().toString();
+                addShopDataRequestBody.pincode = ""+binding.pincodeEd.getText().toString();
+                addShopDataRequestBody.categoryid = 1;
+                addShopDataRequestBody.latitude = latLng.latitude;
+                addShopDataRequestBody.longitude = latLng.longitude;
+                commonViewModel.getAddShop(addShopDataRequestBody);
                 break;
             default:
                 break;

@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hub.offershub.AppApplication;
+import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.activity.DashActivity;
 import com.hub.offershub.adapter.BusinessAdapter;
 import com.hub.offershub.base.BaseFragment;
@@ -109,7 +111,7 @@ public class InActiveBusinessFragment extends BaseFragment implements CommonList
 
     private Map<String, Object> makeRequest() {
         Map<String, Object> requestData = new HashMap<>();
-        requestData.put("shopownerid", 1);
+        requestData.put("shopownerid", AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID));
         return requestData;
     }
 

@@ -26,10 +26,12 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.hub.offershub.R;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.utils.compress.CompressImage;
+import com.hub.offershub.viewmodel.CommonViewModel;
 import com.permissionx.guolindev.PermissionX;
 
 import java.io.File;
@@ -37,6 +39,8 @@ import java.io.File;
 public class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
+
+    public CommonViewModel commonViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +50,8 @@ public class BaseActivity extends AppCompatActivity {
 
     private void init() {
         progressDialog = new ProgressDialog(BaseActivity.this);
+        commonViewModel = new ViewModelProvider(BaseActivity.this).get(CommonViewModel.class);
+
     }
 
     public static String getPath(Context context, Uri uri) {

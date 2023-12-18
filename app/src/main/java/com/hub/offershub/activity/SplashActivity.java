@@ -32,20 +32,20 @@ public class SplashActivity extends AppCompatActivity {
 
     private void enterDelay() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            String userId = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID,"");
-            /*if(userId !="") {
-                Intent i = new Intent(SplashActivity.this, MainActivity.class);
+            int userId = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID,0);
+            if(userId !=0) {
+                Intent i = new Intent(SplashActivity.this, TestMainActivity2.class);
                 startActivity(i);
                 finish();
             } else {
                 Intent i = new Intent(SplashActivity.this, SignActivity.class);
                 startActivity(i);
                 finish();
-            }*/
+            }
 
-            Intent i = new Intent(SplashActivity.this, TestMainActivity2.class);
+           /* Intent i = new Intent(SplashActivity.this, TestMainActivity2.class);
             startActivity(i);
-            finish();
+            finish();*/
         }, 3500);
     }
 }

@@ -25,6 +25,7 @@ import com.hub.offershub.retrofit.API;
 import com.hub.offershub.retrofit.RetrofitClient;
 import com.hub.offershub.base.Constants;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -150,7 +151,7 @@ public class OtpActivity extends BaseActivity {
             Call<JsonElement> call;
             Map<String, Object> requestData = new HashMap<>();
             requestData.put("name",name);
-            requestData.put("mobile",mobile);
+            requestData.put("mobile",Long.parseLong(mobile));
             requestData.put("device_token",device_token);
             if(isRegister) {
                 call = apiInterface.registerShopOwner(requestData);
@@ -162,12 +163,14 @@ public class OtpActivity extends BaseActivity {
                 public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
                     try {
                         if (response.body() != null) {
+                            Log.e("Check_Moorthy","res" +response.body().toString());
                             JSONObject root = new JSONObject(response.body().toString());
                             if(root.getString("status").equals(Constants.API_SUCCESS) ){
-                                JSONObject data = new JSONObject(root.getString("data"));
-                                AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.ID,data.getString("id"));
+                                JSONArray dataArray = root.getJSONArray("data");
+                                JSONObject data = dataArray.getJSONObject(0);
+                                AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.ID,data.getInt("id"));
                                 AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.NAME,data.getString("name"));
-                                AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.MOBILE,data.getString("mobile"));
+                                AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.MOBILE,data.getLong("mobile"));
                                 Intent i = new Intent(OtpActivity.this, MainActivity.class);
                                 startActivity(i);
                                 finish();
@@ -176,7 +179,7 @@ public class OtpActivity extends BaseActivity {
                             }
                         }
                     } catch (Exception e) {
-
+                        Log.e("Check_Moorthy","res" +response.body().toString());
                     }
                 }
 
