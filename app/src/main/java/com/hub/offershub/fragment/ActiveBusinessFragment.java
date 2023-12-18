@@ -79,9 +79,14 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
 
     @Override
     public void onItemSelected(Object obj) {
-        loadFragment(new OfferListFragment());
+//        loadFragment(new OfferListFragment());
         Intent i = new Intent(getActivity(), DashActivity.class);
         startActivity(i);
+    }
+
+    @Override
+    public void onItemRemoved(Object obj) {
+
     }
 
     private void getActiveData() {

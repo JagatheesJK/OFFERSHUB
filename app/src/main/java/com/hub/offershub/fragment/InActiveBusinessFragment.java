@@ -1,5 +1,6 @@
 package com.hub.offershub.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hub.offershub.activity.DashActivity;
 import com.hub.offershub.adapter.BusinessAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentInActiveBusinessBinding;
@@ -74,7 +76,14 @@ public class InActiveBusinessFragment extends BaseFragment implements CommonList
 
     @Override
     public void onItemSelected(Object obj) {
-        loadFragment(new ShopDetailsFragment());
+//        loadFragment(new ShopDetailsFragment());
+        Intent i = new Intent(getActivity(), DashActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public void onItemRemoved(Object obj) {
+
     }
 
     private void getInActiveData() {

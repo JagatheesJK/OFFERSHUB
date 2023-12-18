@@ -76,8 +76,8 @@
                 android:gravity="center"
                 android:hint="Select type"
                 android:padding="10dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="14.5sp"
                 app:spinner_arrow_gravity="end"
                 app:spinner_arrow_padding="8dp"
@@ -87,11 +87,11 @@
                 app:spinner_item_array="@array/offer_type"
                 app:spinner_item_height="46dp"
                 android:background="@drawable/bg_rectangle"
-                android:backgroundTint="@color/red"
+                app:spinner_arrow_tint="@color/black"
                 app:spinner_popup_animation="dropdown"
                 app:spinner_popup_background="@drawable/bg_bottom_rounded"
                 app:spinner_popup_elevation="4dp"
-                app:spinner_selected_item_background="@color/darkRed"
+                app:spinner_selected_item_background="@color/grey_light"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/offerTypeTxt"/>
 
@@ -142,6 +142,14 @@
                     android:gravity="center"
                     android:background="@drawable/bg_rounded_solid_white"
                     android:backgroundTint="@color/grey_light">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/offerImgRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/offerImg"

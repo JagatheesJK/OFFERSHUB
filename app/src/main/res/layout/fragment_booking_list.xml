@@ -14,7 +14,7 @@
             android:id="@+id/bookingRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/item_business_list_layout"/>
+            tools:listitem="@layout/item_book_list_layout"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

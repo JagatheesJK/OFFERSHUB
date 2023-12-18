@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,6 +54,12 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             holder.itemView.setOnClickListener(v -> {
                 listener.onOfferSelect();
             });
+
+            holder.deleteLinear.setOnClickListener(v -> {
+                list.remove(model);
+                notifyDataSetChanged();
+                listener.onOfferRemove();
+            });
         }
     }
 
@@ -66,6 +73,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         AppCompatTextView offerType, offerPrice;
         AppCompatImageView offerImg;
         SwitchCompat offerSwitch;
+        LinearLayoutCompat  editLinear, deleteLinear;
         public ViewHolder(View v) {
             super(v);
             offerNameTxt = v.findViewById(R.id.offerNameTxt);
@@ -74,6 +82,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             offerPrice = v.findViewById(R.id.offerPrice);
             offerImg = v.findViewById(R.id.offerImg);
             offerSwitch = v.findViewById(R.id.offerSwitch);
+            editLinear = v.findViewById(R.id.editLinear);
+            deleteLinear = v.findViewById(R.id.deleteLinear);
         }
     }
 }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,9 +42,16 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             holder.businessNameTxt.setText(""+model.shop_name);
             holder.addressTxt.setText(""+model.address1);
             holder.categoryTxt.setText(""+model.categoryname);
+            holder.rateTxt.setText(""+model.total_rate+" ("+model.avg_rating+")");
 
             holder.itemView.setOnClickListener(v -> {
                 listener.onItemSelected(model);
+            });
+
+            holder.deleteImg.setOnClickListener(v -> {
+                list.remove(model);
+                notifyDataSetChanged();
+                listener.onItemRemoved(model);
             });
         }
     }
@@ -55,12 +63,16 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView businessNameTxt, addressTxt;
-        AppCompatTextView categoryTxt;
+        AppCompatTextView categoryTxt, rateTxt;
+        AppCompatImageView editImg, deleteImg;
         public ViewHolder(View v) {
             super(v);
             businessNameTxt = v.findViewById(R.id.businessNameTxt);
             addressTxt = v.findViewById(R.id.addressTxt);
             categoryTxt = v.findViewById(R.id.categoryTxt);
+            rateTxt = v.findViewById(R.id.rateTxt);
+            editImg = v.findViewById(R.id.editImg);
+            deleteImg = v.findViewById(R.id.deleteImg);
         }
     }
 }

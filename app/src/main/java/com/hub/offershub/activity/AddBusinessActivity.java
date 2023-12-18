@@ -80,7 +80,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         binding = ActivityAddBusinessBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbarLayout.toolbarTitle.setText("AddBusiness");
+        binding.toolbarLayout.toolbarTitle.setText("Add Business");
         binding.toolbarLayout.toolbarBack.setOnClickListener(v -> {
             finish();
         });
