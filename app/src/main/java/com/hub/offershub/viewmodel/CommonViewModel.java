@@ -36,6 +36,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<OfferModel> mutableActiveOffers = new MutableLiveData<>();
     private final MutableLiveData<OfferModel> mutableInActiveOffers = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableaddShop = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableDeleteShop = new MutableLiveData<>();
     private final MutableLiveData<Amenity> mutableAmenity = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
@@ -239,6 +240,47 @@ public class CommonViewModel extends AndroidViewModel {
 
     }
 
+    public void getDeleteShop(Map<String, Object> requestData) {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.deleteShop(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableDeleteShop.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableDeleteShop.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.execute();
+    }
 
     public void getMasterAmenities() {
         new AsyncTask<String, String, String>() {
@@ -296,6 +338,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<JSONObject> getMutableAddShop() {
         return mutableaddShop;
+    }
+
+    public MutableLiveData<JSONObject> getMutableDeleteShop() {
+        return mutableDeleteShop;
     }
 
     public MutableLiveData<OfferModel> getMutableInActiveOffers() {

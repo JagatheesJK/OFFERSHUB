@@ -49,8 +49,6 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             });
 
             holder.deleteImg.setOnClickListener(v -> {
-                list.remove(model);
-                notifyDataSetChanged();
                 listener.onItemRemoved(model);
             });
         }
@@ -59,6 +57,11 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void removeData(BusinessModel.Data model) {
+        list.remove(model);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

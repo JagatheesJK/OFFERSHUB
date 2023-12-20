@@ -57,6 +57,9 @@ public interface API {
     @POST("addShops")
     Call<JsonElement> addShops(@Body AddShopDataRequestBody requestBody);
 
+    @POST("deleteShop")
+    Call<JsonElement> deleteShop(@Body Map<String, Object> body);
+
     @GET("getMasterAmenities")
     Call<Amenity> getMasterAmenities();
 }

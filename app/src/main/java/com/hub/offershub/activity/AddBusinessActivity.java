@@ -57,6 +57,7 @@ import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.compress.CompressImage;
+import com.hub.offershub.utils.custommap.WorkaroundMapFragment;
 import com.permissionx.guolindev.PermissionX;
 
 import org.json.JSONException;
@@ -83,7 +84,6 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
     AmenityAdapter adapter;
     List<Amenity.AmenityItem> amenities = new ArrayList<>();
 
-    double latitude,longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -296,6 +296,13 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 .findFragmentById(R.id.mapImg);
         mapFragment.getMapAsync(this);
         initApiClient();
+
+        ((WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapImg)).setListener(new WorkaroundMapFragment.OnTouchListener() {
+            @Override
+            public void onTouch() {
+                binding.nestedView.requestDisallowInterceptTouchEvent(true);
+            }
+        });
     }
 
     private void mapInit() {
@@ -364,11 +371,25 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
-    LatLng latLng;
+
+    private LatLng latLng;
+    private double currentLat, currentLong;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMapClickListener(this);
+
+        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                LatLng midLatLng = googleMap.getCameraPosition().target;
+                if (marker != null) {
+                    marker.setPosition(midLatLng);
+                    currentLat = marker.getPosition().latitude;
+                    currentLong = marker.getPosition().longitude;
+                }
+            }
+        });
 
         PermissionX.init(AddBusinessActivity.this)
                 .permissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -379,6 +400,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                             return;
                         }
                         mMap.setMyLocationEnabled(true);
+                        googleMap.getUiSettings().setZoomControlsEnabled(true);
+                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 1000, null);
                         fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
@@ -445,8 +468,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
 
-        latitude = latLng.latitude;
-        longitude = latLng.longitude;
+        currentLat = latLng.latitude;
+        currentLong = latLng.longitude;
         Log.e("Check_Location", "Lat : "+latLng.latitude);
         Log.e("Check_Location", "Long : "+latLng.longitude);
     }

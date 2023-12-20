@@ -9,10 +9,6 @@
         android:visible="false"/>
 
     <item
-        android:id="@+id/nav_offer"
-        android:title="Offer" />
-
-    <item
         android:id="@+id/nav_shop_dash"
         android:title="Shop Dashboard" />
 
@@ -21,11 +17,11 @@
         android:title="Offer Dashboard" />
 
     <item
-        android:id="@+id/nav_booking_details"
-        android:title="Booking Details" />
+        android:id="@+id/nav_offer"
+        android:title="Offer" />
 
     <item
-        android:id="@+id/nav_logout"
-        android:title="Logout" />
+        android:id="@+id/nav_booking_details"
+        android:title="Booking Details" />
 
 </menu>

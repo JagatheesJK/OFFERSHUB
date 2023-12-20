@@ -73,7 +73,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         AppCompatTextView offerType, offerPrice;
         AppCompatImageView offerImg;
         SwitchCompat offerSwitch;
-        LinearLayoutCompat  editLinear, deleteLinear;
+        LinearLayoutCompat editLinear, deleteLinear;
         public ViewHolder(View v) {
             super(v);
             offerNameTxt = v.findViewById(R.id.offerNameTxt);

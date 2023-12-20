@@ -171,7 +171,7 @@ public class OtpActivity extends BaseActivity {
                                 AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.ID,data.getInt("id"));
                                 AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.NAME,data.getString("name"));
                                 AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.MOBILE,data.getLong("mobile"));
-                                Intent i = new Intent(OtpActivity.this, MainActivity.class);
+                                Intent i = new Intent(OtpActivity.this, TestMainActivity2.class);
                                 startActivity(i);
                                 finish();
                             } else {

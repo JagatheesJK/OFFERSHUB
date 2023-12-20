@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
@@ -18,6 +19,8 @@ import com.hub.offershub.databinding.FragmentActiveBusinessBinding;
 import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +63,7 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
     private void init() {
         commonViewModel.getActiveShops(makeRequest());
         getActiveData();
+        getDeleteData();
     }
 
     private void setListener() {
@@ -86,9 +90,11 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
         startActivity(i);
     }
 
+    BusinessModel.Data deleteModel;
     @Override
     public void onItemRemoved(Object obj) {
-
+        deleteModel = (BusinessModel.Data) obj;
+        commonViewModel.getDeleteShop(makeDeleteRequest(deleteModel.id));
     }
 
     private void getActiveData() {
@@ -114,16 +120,41 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
         });
     }
 
+    private void getDeleteData() {
+        commonViewModel.getMutableDeleteShop().observe(getViewLifecycleOwner(), jsonObject -> {
+            if (jsonObject != null) {
+                try {
+                    if(jsonObject.getString("status").equals("success")) {
+                        adapter.removeData(deleteModel);
+                        Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else {
+
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
     private Map<String, Object> makeRequest() {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("shopownerid", AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID));
         return requestData;
     }
 
+    private Map<String, Object> makeDeleteRequest(String shopID) {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shop_id", shopID);
+        return requestData;
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (commonViewModel != null)
+        if (commonViewModel != null) {
             commonViewModel.getMutableActiveBusiness().removeObservers(this);
+            commonViewModel.getMutableDeleteShop().removeObservers(this);
+        }
     }
 }

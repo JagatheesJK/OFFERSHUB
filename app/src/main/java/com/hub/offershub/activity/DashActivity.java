@@ -36,7 +36,7 @@ public class DashActivity extends AppCompatActivity implements NavigationView.On
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new OfferListFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShopDetailsFragment()).commit();
             binding.navBar.setCheckedItem(R.id.nav_offer);
         }
     }
@@ -53,14 +53,14 @@ public class DashActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         switch (item.getItemId()) {
-            case R.id.nav_offer:
-                fragment = new OfferListFragment();
-                break;
             case R.id.nav_shop_dash:
                 fragment = new ShopDetailsFragment();
                 break;
             case R.id.nav_offer_dash:
                 fragment = new OfferDashboardFragment();
+                break;
+            case R.id.nav_offer:
+                fragment = new OfferListFragment();
                 break;
             case R.id.nav_booking_details:
                 fragment = new BookingListFragment();
