@@ -16,11 +16,11 @@
             android:layout_height="match_parent"
             tools:listitem="@layout/item_business_list_layout"/>
 
-        <include
-            android:visibility="gone"
-            android:id="@+id/empty"
-            layout="@layout/fragment_empty_list"/>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <include
+        android:visibility="gone"
+        android:id="@+id/empty"
+        layout="@layout/fragment_empty_list"/>
 
 </FrameLayout>

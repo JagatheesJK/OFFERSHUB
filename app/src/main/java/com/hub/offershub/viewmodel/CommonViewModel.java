@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hub.offershub.PrefsHelper;
@@ -46,6 +47,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableDeleteShop = new MutableLiveData<>();
     private final MutableLiveData<Amenity> mutableAmenity = new MutableLiveData<>();
     private final MutableLiveData<CategoryResponse> mutableCategory = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableDeleteOffer = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -53,6 +55,7 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
     public void getActiveShops(Map<String, Object> requestData) {
+        Log.e("Check_JK", "getActiveShops");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
@@ -67,6 +70,7 @@ public class CommonViewModel extends AndroidViewModel {
                 call.enqueue(new Callback<BusinessModel>() {
                     @Override
                     public void onResponse(@NonNull Call<BusinessModel> call, @NonNull Response<BusinessModel> response) {
+                        Log.e("Check_JK", "getActiveShops onResponse : "+new Gson().toJson(response.body()));
                         if (response.body() != null) {
                             mutableActiveBusiness.postValue(response.body());
                         } else
@@ -75,7 +79,7 @@ public class CommonViewModel extends AndroidViewModel {
 
                     @Override
                     public void onFailure(@NonNull Call<BusinessModel> call, @NonNull Throwable t) {
-                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                        Log.e("Check_JK", "getActiveShops Error Message : " + t.getMessage());
                     }
                 });
                 return null;
@@ -91,6 +95,7 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
     public void getInActiveShops(Map<String, Object> requestData) {
+        Log.e("Check_JK", "getInActiveShops");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
@@ -105,6 +110,7 @@ public class CommonViewModel extends AndroidViewModel {
                 call.enqueue(new Callback<BusinessModel>() {
                     @Override
                     public void onResponse(@NonNull Call<BusinessModel> call, @NonNull Response<BusinessModel> response) {
+                        Log.e("Check_JK", "getInActiveShops onResponse : "+new Gson().toJson(response.body()));
                         if (response.body() != null) {
                             mutableInActiveBusiness.postValue(response.body());
                         } else
@@ -113,7 +119,7 @@ public class CommonViewModel extends AndroidViewModel {
 
                     @Override
                     public void onFailure(@NonNull Call<BusinessModel> call, @NonNull Throwable t) {
-                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                        Log.e("Check_JK", "getInActiveShops Error Message : " + t.getMessage());
                     }
                 });
                 return null;
@@ -167,6 +173,7 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
     public void getInActiveOffers(Map<String, Object> requestData) {
+        Log.e("Check_JK", "getInActiveOffers ID : "+requestData.get("shop_id"));
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
@@ -181,6 +188,7 @@ public class CommonViewModel extends AndroidViewModel {
                 call.enqueue(new Callback<OfferModel>() {
                     @Override
                     public void onResponse(@NonNull Call<OfferModel> call, @NonNull Response<OfferModel> response) {
+                        Log.e("Check_JK", "getInActiveOffers onResponse : "+new Gson().toJson(response.body()));
                         if (response.body() != null) {
                             mutableInActiveOffers.postValue(response.body());
                         } else
@@ -189,7 +197,7 @@ public class CommonViewModel extends AndroidViewModel {
 
                     @Override
                     public void onFailure(@NonNull Call<OfferModel> call, @NonNull Throwable t) {
-                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                        Log.e("Check_JK", "getInActiveOffers Error Message : " + t.getMessage());
                     }
                 });
                 return null;
@@ -269,6 +277,7 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
     public void getDeleteShop(Map<String, Object> requestData) {
+        Log.e("Check_JK", "getDeleteShop ID : "+requestData.get("shop_id"));
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
@@ -283,6 +292,7 @@ public class CommonViewModel extends AndroidViewModel {
                 call.enqueue(new Callback<JsonElement>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JK", "getDeleteShop onResponse : "+response.body().toString());
                         if (response.body() != null) {
                             try {
                                 JSONObject root = new JSONObject(response.body().toString());
@@ -296,7 +306,7 @@ public class CommonViewModel extends AndroidViewModel {
 
                     @Override
                     public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
-                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                        Log.e("Check_JK", "getDeleteShop Error Message : " + t.getMessage());
                     }
                 });
                 return null;
@@ -346,6 +356,48 @@ public class CommonViewModel extends AndroidViewModel {
             }
         }.execute();
 
+    }
+
+    public void getDeleteOffer(Map<String, Object> requestData) {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.deleteOffer(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableDeleteOffer.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableDeleteOffer.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.execute();
     }
 
     public void getCategory(PrefsHelper prefsHelper) {
@@ -417,6 +469,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<CategoryResponse> getMutableCategory() {
         return mutableCategory;
+    }
+
+    public MutableLiveData<JSONObject> getMutableDeleteOffer() {
+        return mutableDeleteOffer;
     }
 
     public void showDialog() {

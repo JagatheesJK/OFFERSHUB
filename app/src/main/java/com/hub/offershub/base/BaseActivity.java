@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hub.offershub.R;
 import com.hub.offershub.listener.PermissionListener;
+import com.hub.offershub.utils.CommonMethods;
 import com.hub.offershub.utils.compress.CompressImage;
 import com.hub.offershub.viewmodel.CommonViewModel;
 import com.permissionx.guolindev.PermissionX;
@@ -41,6 +42,7 @@ public class BaseActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     public CommonViewModel commonViewModel;
+    public CommonMethods commonMethods;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class BaseActivity extends AppCompatActivity {
     private void init() {
         progressDialog = new ProgressDialog(BaseActivity.this);
         commonViewModel = new ViewModelProvider(BaseActivity.this).get(CommonViewModel.class);
-
+        commonMethods = new CommonMethods();
     }
 
     public static String getPath(Context context, Uri uri) {

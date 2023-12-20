@@ -86,4 +86,7 @@ public interface API {
 
     @GET("categoryListWithCount")
     Call<CategoryResponse> getCategory();
+
+    @POST("deleteOffer")
+    Call<JsonElement> deleteOffer(@Body Map<String, Object> body);
 }

@@ -2,5 +2,6 @@ package com.hub.offershub.listener;
 
 public interface OfferListener {
     void onOfferSelect();
-    void onOfferRemove();
+    void onOfferEdit(Object obj);
+    void onOfferRemove(Object obj);
 }

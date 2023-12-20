@@ -22,9 +22,11 @@ public class OfferListFragment extends Fragment {
 
     private FragmentOfferListBinding binding;
     private String[] labels = new String[]{"Active", "In-Active"};
+    private static String shopID;
 
-    public static OfferListFragment newInstance() {
+    public static OfferListFragment newInstance(String shop_id) {
         OfferListFragment fragment = new OfferListFragment();
+        shopID = shop_id;
         return fragment;
     }
 
@@ -62,9 +64,9 @@ public class OfferListFragment extends Fragment {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return new ActiveOfferFragment();
+                    return ActiveOfferFragment.newInstance(shopID);
                 case 1:
-                    return new InActiveOfferFragment();
+                    return InActiveOfferFragment.newInstance(shopID);
             }
             return new ActiveBusinessFragment();
         }

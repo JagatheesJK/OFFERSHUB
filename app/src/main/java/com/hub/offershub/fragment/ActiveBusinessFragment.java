@@ -5,13 +5,16 @@ import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
+import com.hub.offershub.R;
 import com.hub.offershub.activity.DashActivity;
 import com.hub.offershub.adapter.BusinessAdapter;
 import com.hub.offershub.base.BaseFragment;
@@ -27,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ActiveBusinessFragment extends BaseFragment implements CommonListener {
+public class ActiveBusinessFragment extends BaseFragment implements View.OnClickListener, CommonListener {
 
     private FragmentActiveBusinessBinding binding;
     private List<BusinessModel.Data> list = new ArrayList<>();
@@ -67,7 +70,7 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
     }
 
     private void setListener() {
-
+        binding.empty.reloadBtn.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
@@ -85,9 +88,15 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
 
     @Override
     public void onItemSelected(Object obj) {
-//        loadFragment(new OfferListFragment());
+        BusinessModel.Data model = (BusinessModel.Data) obj;
         Intent i = new Intent(getActivity(), DashActivity.class);
+        i.putExtra("model", model);
         startActivity(i);
+    }
+
+    @Override
+    public void onItemEdited(Object obj) {
+        Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
     }
 
     BusinessModel.Data deleteModel;
@@ -155,6 +164,17 @@ public class ActiveBusinessFragment extends BaseFragment implements CommonListen
         if (commonViewModel != null) {
             commonViewModel.getMutableActiveBusiness().removeObservers(this);
             commonViewModel.getMutableDeleteShop().removeObservers(this);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.reloadBtn:
+                commonViewModel.getActiveShops(makeRequest());
+                break;
+            default:
+                break;
         }
     }
 }

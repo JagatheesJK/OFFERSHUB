@@ -3,25 +3,35 @@ package com.hub.offershub.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 import com.hub.offershub.R;
+import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityDashBinding;
 import com.hub.offershub.fragment.BookingListFragment;
 import com.hub.offershub.fragment.OfferDashboardFragment;
 import com.hub.offershub.fragment.OfferListFragment;
 import com.hub.offershub.fragment.ShopDetailsFragment;
+import com.hub.offershub.model.BusinessModel;
 
-public class DashActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class DashActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActivityDashBinding binding;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private BusinessModel.Data model;
+
+    private CircleImageView navUserImg;
+    private AppCompatTextView userNameTxt, userDesTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +41,33 @@ public class DashActivity extends AppCompatActivity implements NavigationView.On
 
         setSupportActionBar(binding.toolbar);
         binding.navBar.setNavigationItemSelectedListener(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.nav_open,
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.nav_open,
                 R.string.nav_close);
-        binding.drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        binding.drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShopDetailsFragment()).commit();
             binding.navBar.setCheckedItem(R.id.nav_offer);
+        }
+        View headerView = binding.navBar.getHeaderView(0);
+        navUserImg = headerView.findViewById(R.id.userImg);
+        userNameTxt = headerView.findViewById(R.id.userNameTxt);
+        userDesTxt = headerView.findViewById(R.id.userDesTxt);
+
+        init();
+    }
+
+    private void init() {
+        model = getIntent().getParcelableExtra("model");
+
+        initUI();
+    }
+
+    private void initUI() {
+        if (model != null) {
+            userNameTxt.setText(""+model.shop_name);
+            userDesTxt.setText(""+model.city);
+            commonMethods.imageCircle(DashActivity.this, navUserImg, model.image_url);
         }
     }
 
@@ -60,7 +90,7 @@ public class DashActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new OfferDashboardFragment();
                 break;
             case R.id.nav_offer:
-                fragment = new OfferListFragment();
+                fragment = OfferListFragment.newInstance(model.id);
                 break;
             case R.id.nav_booking_details:
                 fragment = new BookingListFragment();

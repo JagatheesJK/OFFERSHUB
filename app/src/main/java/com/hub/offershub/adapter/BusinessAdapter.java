@@ -48,6 +48,10 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
                 listener.onItemSelected(model);
             });
 
+            holder.editImg.setOnClickListener(v -> {
+                listener.onItemEdited(model);
+            });
+
             holder.deleteImg.setOnClickListener(v -> {
                 listener.onItemRemoved(model);
             });

@@ -56,9 +56,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             });
 
             holder.deleteLinear.setOnClickListener(v -> {
-                list.remove(model);
-                notifyDataSetChanged();
-                listener.onOfferRemove();
+                listener.onOfferRemove(model);
             });
         }
     }
@@ -66,6 +64,11 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void removeData(OfferModel.Data model) {
+        list.remove(model);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

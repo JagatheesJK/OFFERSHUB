@@ -17,7 +17,7 @@ public class CommonMethods {
     }
 
     public void imageCircle(Context context, CircleImageView imageView, String imageUrl){
-        Glide.with(context.getApplicationContext()).load(imageUrl).thumbnail(0.4f).centerCrop().diskCacheStrategy(ALL).into(imageView);
+        Glide.with(context.getApplicationContext()).load(imageUrl).thumbnail(0.4f).error(R.drawable.def_logo).centerCrop().diskCacheStrategy(ALL).into(imageView);
     }
 
     public void imageLoaderView(Context context, AppCompatImageView imageView, String imageUrl) {

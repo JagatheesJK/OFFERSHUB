@@ -1,5 +1,6 @@
 package com.hub.offershub.utils;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,5 +19,9 @@ public class Utils {
         Intent intent = new Intent(context, SignActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    public static int dpToPx(Activity activity, float dp) {
+        return (int) (dp * activity.getResources().getDisplayMetrics().density + 0.5f);
     }
 }

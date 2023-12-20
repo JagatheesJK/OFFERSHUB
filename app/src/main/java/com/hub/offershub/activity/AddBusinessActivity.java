@@ -21,8 +21,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -54,7 +54,6 @@ import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.adapter.AmenityAdapter;
-import com.hub.offershub.adapter.CategoryAdapter;
 import com.hub.offershub.adapter.ImageAdapter;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityAddBusinessBinding;
@@ -62,20 +61,19 @@ import com.hub.offershub.listener.ImageChooseListener;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
-import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.Utils;
 import com.hub.offershub.utils.compress.CompressImage;
 import com.hub.offershub.utils.custommap.WorkaroundMapFragment;
 import com.permissionx.guolindev.PermissionX;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.PowerSpinnerView;
+import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
+import com.skydoves.powerspinner.SpinnerAnimation;
 
 import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -129,11 +127,19 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setListener() {
+        binding.mainLayout.setOnClickListener(this);
         binding.shopImgCard.setOnClickListener(this);
         binding.shopAddImg.setOnClickListener(this);
         binding.shopImgRecycler.setOnClickListener(this);
         binding.shopConstraint.setOnClickListener(this);
         binding.addShopSubmit.setOnClickListener(this);
+        binding.categorySpinner.setSpinnerOutsideTouchListener(new OnSpinnerOutsideTouchListener() {
+            @Override
+            public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
+                if (binding.categorySpinner.isShowing())
+                    binding.categorySpinner.dismiss();
+            }
+        });
     }
     Integer selectedValue;
     private void setUpRecycler() {
@@ -147,6 +153,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         // Convert the data to a list of strings (keys)
         List<String> spinnerItems = new ArrayList<>(AppApplication.getInstance().prefsHelper.getCategory().keySet());
 
+        binding.categorySpinner.setSpinnerPopupAnimation(SpinnerAnimation.DROPDOWN);
+        binding.categorySpinner.setSpinnerPopupMaxHeight(Utils.dpToPx(AddBusinessActivity.this, 300));
         // Create an adapter and set it to the PowerSpinner
         binding.categorySpinner.setItems(spinnerItems);
 
@@ -154,7 +162,6 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         binding.categorySpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<String>() {
             @Override
             public void onItemSelected(int position, @Nullable String item, int spinnerIndex, String t1) {
-
                 // Handle item selection, you can get the corresponding value from the HashMap
                 Map<String, Integer> categoryMap = AppApplication.getInstance().prefsHelper.getCategory();
                 if (categoryMap != null) {
@@ -166,9 +173,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         });
-
-
-           }
+    }
 
     private void setNotifyData() {
         binding.shopImgRecycler.getRecycledViewPool().clear();
@@ -367,56 +372,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(getApplicationContext())
                 .checkLocationSettings(builder.build());
-        result.addOnCompleteListener(task -> {
-            /*try {
-                LocationSettingsResponse response = task.getResult(ApiException.class);
-                if (ActivityCompat.checkSelfPermission(AddBusinessActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(AddBusinessActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddBusinessActivity.this, "Error " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-                        if (marker != null) {
-                            marker.remove();
-                        }
-                        markerOptions = new MarkerOptions();
-                        markerOptions.title("" + location.getLatitude() + ", " + location.getLongitude());
-                        markerOptions.draggable(true);
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                        markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
-                        marker = mMap.addMarker(markerOptions);
-
-//                        mMap.addMarker(new MarkerOptions().position(latLng));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-                        binding.locationEd.setText(""+location.getLatitude()+", "+location.getLongitude());
-                    }
-                });
-            } catch (ApiException e) {
-                switch (e.getStatusCode()) {
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            ResolvableApiException resolvable = (ResolvableApiException) e;
-                            resolvable.startResolutionForResult(
-                                    AddBusinessActivity.this,
-                                    REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException exception) {
-                            // Ignore the error.
-                        } catch (ClassCastException exception) {
-                            // Ignore, should be an impossible error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        break;
-                }
-            }*/
-        });
+        result.addOnCompleteListener(task -> {});
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
@@ -539,6 +495,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.mainLayout:
+                break;
             case R.id.shopImgRecycler:
             case R.id.shopImgCard:
             case R.id.shopAddImg:
