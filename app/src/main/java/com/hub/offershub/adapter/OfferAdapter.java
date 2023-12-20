@@ -55,6 +55,10 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 listener.onOfferSelect();
             });
 
+            holder.editLinear.setOnClickListener(v -> {
+                listener.onOfferEdit(model);
+            });
+
             holder.deleteLinear.setOnClickListener(v -> {
                 listener.onOfferRemove(model);
             });
