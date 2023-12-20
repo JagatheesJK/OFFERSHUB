@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -48,6 +49,7 @@ import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.adapter.AmenityAdapter;
+import com.hub.offershub.adapter.CategoryAdapter;
 import com.hub.offershub.adapter.ImageAdapter;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityAddBusinessBinding;
@@ -55,17 +57,23 @@ import com.hub.offershub.listener.ImageChooseListener;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
+import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.utils.Constants;
+import com.hub.offershub.utils.Utils;
 import com.hub.offershub.utils.compress.CompressImage;
 import com.hub.offershub.utils.custommap.WorkaroundMapFragment;
 import com.permissionx.guolindev.PermissionX;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.PowerSpinnerView;
 
 import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class AddBusinessActivity extends BaseActivity implements View.OnClickListener, PermissionListener,
         ImageChooseListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
@@ -125,7 +133,33 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         binding.shopImgRecycler.setLayoutManager(gridLayoutManager);
         binding.shopImgRecycler.setAdapter(imageAdapter);
         setNotifyData();
-    }
+
+        Log.e("Check_Spinner","Size "+AppApplication.getInstance().prefsHelper.getCategory().size());
+        // Convert the data to a list of strings (keys)
+        List<String> spinnerItems = new ArrayList<>(AppApplication.getInstance().prefsHelper.getCategory().keySet());
+
+        // Create an adapter and set it to the PowerSpinner
+        binding.categorySpinner.setItems(spinnerItems);
+
+        // Set an item selection listener if needed
+        binding.categorySpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<String>() {
+            @Override
+            public void onItemSelected(int position, @Nullable String item, int spinnerIndex, String t1) {
+
+                // Handle item selection, you can get the corresponding value from the HashMap
+                Map<String, Integer> categoryMap = AppApplication.getInstance().prefsHelper.getCategory();
+                if (categoryMap != null) {
+                    Integer selectedValue = categoryMap.get(t1);
+                    if (selectedValue != null) {
+                        // Do something with the selected value
+                        Log.e("Check_Spinner", "selectedValue " + selectedValue);
+                    }
+                }
+            }
+        });
+
+
+           }
 
     private void setNotifyData() {
         binding.shopImgRecycler.getRecycledViewPool().clear();

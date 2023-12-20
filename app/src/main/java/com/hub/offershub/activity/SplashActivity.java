@@ -14,10 +14,13 @@ import com.hub.offershub.R;
 import com.hub.offershub.animation.Animation;
 import com.hub.offershub.databinding.ActivitySplashBinding;
 import com.hub.offershub.utils.WindowUtils;
+import com.hub.offershub.viewmodel.CommonViewModel;
 
 public class SplashActivity extends AppCompatActivity {
 
     ActivitySplashBinding binding;
+
+    CommonViewModel commonViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,8 @@ public class SplashActivity extends AppCompatActivity {
         WindowUtils.hideWindowStatusBar(getWindow());
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        commonViewModel = new CommonViewModel(AppApplication.getInstance());
+        commonViewModel.getCategory(AppApplication.getInstance().prefsHelper);
 
         Animation.startZoomEffect(binding.splashImg);
         enterDelay();
@@ -42,10 +47,6 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-
-           /* Intent i = new Intent(SplashActivity.this, TestMainActivity2.class);
-            startActivity(i);
-            finish();*/
         }, 3500);
     }
 }

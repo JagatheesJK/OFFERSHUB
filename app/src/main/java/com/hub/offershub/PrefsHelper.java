@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hub.offershub.model.CategoryResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +30,7 @@ public class PrefsHelper {
     public static final String NAME = "name";
     public static final String MOBILE = "mobile";
     public static final String DEVICE_TOKEN = "device_token";
+    public static final String CATEGORY = "category";
 
 
     public static PrefsHelper getPrefsHelper(Context context) {
@@ -74,6 +76,14 @@ public class PrefsHelper {
         editor.commit();
     }
 
+    public void saveSettings(String key, Object array) {
+        Gson gson = new Gson();
+        String jsonValue = gson.toJson(array);
+
+        editor.putString(key, jsonValue);
+        editor.commit();
+    }
+
     public String getPref(String key) {
         return String.valueOf(sharedPreferences.getAll().get(key));
     }
@@ -95,5 +105,34 @@ public class PrefsHelper {
     public void clearAllPref() {
         editor.clear();
         editor.commit();
+    }
+
+    public Map<String, Integer> getCategory() {
+        if (sharedPreferences.contains(CATEGORY)) {
+            String jsonValue = sharedPreferences.getString(CATEGORY, null);
+            Gson gson = new Gson();
+            Type type = new TypeToken < List < CategoryResponse.Category >> () {}.getType();
+
+            Map<String, Integer> data = new HashMap<>();
+            List<CategoryResponse.Category> categoryList =gson.fromJson(jsonValue, type);
+            // Populate the HashMap with Category objects
+            for (CategoryResponse.Category category : categoryList) {
+                data.put(category.getCategoryName(), category.getId());
+            }
+
+            return data;
+        } else
+            return null;
+    }
+
+    public List<CategoryResponse.Category> getCategories() {
+        if (sharedPreferences.contains(CATEGORY)) {
+            String jsonValue = sharedPreferences.getString(CATEGORY, null);
+            Gson gson = new Gson();
+            Type type = new TypeToken < List < CategoryResponse.Category >> () {}.getType();
+
+            return gson.fromJson(jsonValue, type);
+        } else
+            return null;
     }
 }

@@ -10,9 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.retrofit.API;
 import com.hub.offershub.retrofit.RetrofitClient;
@@ -38,6 +40,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableaddShop = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableDeleteShop = new MutableLiveData<>();
     private final MutableLiveData<Amenity> mutableAmenity = new MutableLiveData<>();
+    private final MutableLiveData<CategoryResponse> mutableCategory = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -320,6 +323,45 @@ public class CommonViewModel extends AndroidViewModel {
 
     }
 
+    public void getCategory(PrefsHelper prefsHelper) {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<CategoryResponse> call = apiInterface.getCategory();
+                call.enqueue(new Callback<CategoryResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<CategoryResponse> call, @NonNull Response<CategoryResponse> response) {
+                        if (response.body() != null) {
+                            prefsHelper.saveSettings(PrefsHelper.CATEGORY, response.body().getData());
+                            mutableCategory.postValue(response.body());
+                        } else
+                            mutableCategory.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<CategoryResponse> call, @NonNull Throwable t) {
+                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.execute();
+
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -346,6 +388,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<OfferModel> getMutableInActiveOffers() {
         return mutableInActiveOffers;
+    }
+
+    public MutableLiveData<CategoryResponse> getMutableCategory() {
+        return mutableCategory;
     }
 
     public void showDialog() {

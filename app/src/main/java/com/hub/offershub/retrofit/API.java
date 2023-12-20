@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.OfferModel;
 
 import java.util.Map;
@@ -62,4 +63,7 @@ public interface API {
 
     @GET("getMasterAmenities")
     Call<Amenity> getMasterAmenities();
+
+    @GET("categoryListWithCount")
+    Call<CategoryResponse> getCategory();
 }
