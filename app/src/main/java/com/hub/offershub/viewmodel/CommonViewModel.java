@@ -23,8 +23,13 @@ import com.hub.offershub.utils.loading.MyProgressDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -199,7 +204,7 @@ public class CommonViewModel extends AndroidViewModel {
 
     }
 
-    public void getAddShop(AddShopDataRequestBody addShopDataRequestBody) {
+    public void getAddShop(AddShopDataRequestBody addShopDataRequestBody, MultipartBody.Part multipartBody) {
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
@@ -210,7 +215,27 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected String doInBackground(String... strings) {
                 API apiInterface = RetrofitClient.getApiClient().create(API.class);
-                Call<JsonElement> call = apiInterface.addShops(addShopDataRequestBody);
+                List<MultipartBody.Part> arrayOfParts = new ArrayList<>();
+                for (int i = 0; i < addShopDataRequestBody.shopamenities.size(); i++) {
+                    String partName = "shopamenities[" + i + "]";
+                    String partValue = String.valueOf(addShopDataRequestBody.shopamenities.get(i));
+                    arrayOfParts.add(MultipartBody.Part.createFormData(partName, partValue));
+                }
+                Call<JsonElement> call = apiInterface.addShops(multipartBody,
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.shopownerid),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.shopname),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.mobile),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.upi),
+                        arrayOfParts,
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.address1),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.address2),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.city),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.state),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.pincode),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.categoryid),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.latitude),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.longitude)
+                        );
                 call.enqueue(new Callback<JsonElement>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {

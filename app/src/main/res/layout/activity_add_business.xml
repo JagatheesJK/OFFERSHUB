@@ -63,12 +63,32 @@
                 app:layout_constraintTop_toBottomOf="@+id/mobileTxt"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/upiTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="UPI"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/mobileEd"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/upiEd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="UPI id"
+                android:gravity="top"
+                android:padding="12dp"
+                android:inputType="text"
+                android:background="@drawable/bg_rectangle"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/upiTxt"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/categoryTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Category"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/mobileEd"/>
+                app:layout_constraintTop_toBottomOf="@+id/upiEd"/>
 
             <com.skydoves.powerspinner.PowerSpinnerView
                 android:id="@+id/categorySpinner"

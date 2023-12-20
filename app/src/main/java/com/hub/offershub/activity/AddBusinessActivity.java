@@ -9,14 +9,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -45,6 +48,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
@@ -74,6 +79,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class AddBusinessActivity extends BaseActivity implements View.OnClickListener, PermissionListener,
         ImageChooseListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
@@ -126,7 +135,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         binding.shopConstraint.setOnClickListener(this);
         binding.addShopSubmit.setOnClickListener(this);
     }
-
+    Integer selectedValue;
     private void setUpRecycler() {
         gridLayoutManager = new GridLayoutManager(this, 3);
         imageAdapter = new ImageAdapter(selectedImages, AddBusinessActivity.this);
@@ -149,7 +158,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 // Handle item selection, you can get the corresponding value from the HashMap
                 Map<String, Integer> categoryMap = AppApplication.getInstance().prefsHelper.getCategory();
                 if (categoryMap != null) {
-                    Integer selectedValue = categoryMap.get(t1);
+                    selectedValue = categoryMap.get(t1);
                     if (selectedValue != null) {
                         // Do something with the selected value
                         Log.e("Check_Spinner", "selectedValue " + selectedValue);
@@ -208,7 +217,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                         Toast.makeText(AddBusinessActivity.this, "Please Select file below 5MB", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    compressImage();
+                   // compressImage();
                     showProgress(getString(R.string.please_wait));
                     binding.shopAddImg.setVisibility(View.GONE);
                     Glide.with(AddBusinessActivity.this).load(file).listener(new RequestListener<Drawable>() {
@@ -244,6 +253,12 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                             // Handle each selected image URI
 //                            if (selectedImages.size() > 3)
 //                                selectedImages.clear();
+                            if (imageUri != null) {
+                                String path = getPath(AddBusinessActivity.this, imageUri);
+                                if (path != null) {
+                                    file = new File(path);
+                                }
+                            }
                             selectedImages.add(imageUri);
                             setNotifyData();
                         }
@@ -528,28 +543,70 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             case R.id.shopImgCard:
             case R.id.shopAddImg:
             case R.id.shopConstraint:
-                Log.e("Check_test", "shopImgCard");
                 getPermission(this);
                 break;
             case R.id.addShopSubmit:
-                AddShopDataRequestBody addShopDataRequestBody = new AddShopDataRequestBody();
-                addShopDataRequestBody.shopownerid = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID,0);
-                addShopDataRequestBody.shopname = ""+binding.shopNameEd.getText().toString();
-                addShopDataRequestBody.mobile = Long.parseLong(binding.mobileEd.getText().toString());
-                addShopDataRequestBody.upi = "static@ici";
-                addShopDataRequestBody.shopamenities=adapter.getSelectedAmenityIds();
-                addShopDataRequestBody.address1 = ""+binding.shopAddressEd.getText().toString();
-                addShopDataRequestBody.address2 = ""+binding.shopAddress2Ed.getText().toString();
-                addShopDataRequestBody.city = ""+binding.cityEd.getText().toString();
-                addShopDataRequestBody.state = ""+binding.stateEd.getText().toString();
-                addShopDataRequestBody.pincode = ""+binding.pincodeEd.getText().toString();
-                addShopDataRequestBody.categoryid = 1;
-                addShopDataRequestBody.latitude = latLng.latitude;
-                addShopDataRequestBody.longitude = latLng.longitude;
-                commonViewModel.getAddShop(addShopDataRequestBody);
+                if(file != null) {
+                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
+                            RequestBody.create(MediaType.parse("multipart/form-data"), file));
+                    AddShopDataRequestBody addShopDataRequestBody = new AddShopDataRequestBody();
+                    addShopDataRequestBody.shopownerid = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);
+                    addShopDataRequestBody.shopname = "" + binding.shopNameEd.getText().toString();
+                    addShopDataRequestBody.mobile = Long.parseLong(binding.mobileEd.getText().toString());
+                    addShopDataRequestBody.upi = "" + binding.upiEd.getText().toString();
+                    addShopDataRequestBody.shopamenities = adapter.getSelectedAmenityIds();
+                    addShopDataRequestBody.address1 = "" + binding.shopAddressEd.getText().toString();
+                    addShopDataRequestBody.address2 = "" + binding.shopAddress2Ed.getText().toString();
+                    addShopDataRequestBody.city = "" + binding.cityEd.getText().toString();
+                    addShopDataRequestBody.state = "" + binding.stateEd.getText().toString();
+                    addShopDataRequestBody.pincode = "" + binding.pincodeEd.getText().toString();
+                    addShopDataRequestBody.categoryid = selectedValue;
+                    addShopDataRequestBody.latitude = latLng.latitude;
+                    addShopDataRequestBody.longitude = latLng.longitude;
+
+                     commonViewModel.getAddShop(addShopDataRequestBody,filePart);
+                }
+               /* for (int i = 0; i < adapter.getSelectedAmenityIds().size(); i++) {
+                   Log.e("Check_test","i "+adapter.getSelectedAmenityIds().get(i));
+                }*/
+
                 break;
             default:
                 break;
         }
+    }
+
+    public static String getPath(Context context, Uri uri) {
+        // just some safety built in
+        Cursor cursor = null;
+        if (uri == null) {
+            return null;
+        }
+        // java.io.FileNotFoundException: Failed to validate: content://media/external/images/media/1000021058 -- BY SAMU(1.2.5)
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        try {
+            String[] projection = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(uri, projection, null, null, null);
+            if (cursor != null) {
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                return cursor.getString(column_index);
+            }
+        }catch (Exception e){
+            FirebaseCrashlytics.getInstance().recordException(e);
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        // java.io.FileNotFoundException: Failed to validate: content://media/external/images/media/1000021058 -- BY SAMU(1.2.5)
+        // this is our fallback here
+        if(uri.isAbsolute())
+            return uri.getPath();
+        else
+            return null;
     }
 }

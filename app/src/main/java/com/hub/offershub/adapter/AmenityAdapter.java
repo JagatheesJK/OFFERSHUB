@@ -1,5 +1,6 @@
 package com.hub.offershub.adapter;
 
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,8 +50,10 @@ public class AmenityAdapter extends RecyclerView.Adapter<AmenityAdapter.ViewHold
             super(itemView);
             checkBox = itemView.findViewById(R.id.checkboxAmenity);
 
-            itemView.setOnClickListener(v -> {
+            checkBox.setOnClickListener(v -> {
                 int position = getAdapterPosition();
+                Log.e("Check_toggle","position 1"+position);
+
                 if (position != RecyclerView.NO_POSITION) {
                     toggleSelection(position);
                 }
