@@ -5,6 +5,7 @@ import static com.hub.offershub.utils.Constants.GALLERY_REQUEST_CODE;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -20,6 +21,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -492,6 +494,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         return addressText;
     }
 
+    boolean isAllFieldsChecked = false;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -504,29 +507,35 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 getPermission(this);
                 break;
             case R.id.addShopSubmit:
-                if(file != null) {
-                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
-                            RequestBody.create(MediaType.parse("multipart/form-data"), file));
-                    AddShopDataRequestBody addShopDataRequestBody = new AddShopDataRequestBody();
-                    addShopDataRequestBody.shopownerid = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);
-                    addShopDataRequestBody.shopname = "" + binding.shopNameEd.getText().toString();
-                    addShopDataRequestBody.mobile = Long.parseLong(binding.mobileEd.getText().toString());
-                    addShopDataRequestBody.upi = "" + binding.upiEd.getText().toString();
-                    addShopDataRequestBody.shopamenities = adapter.getSelectedAmenityIds();
-                    addShopDataRequestBody.address1 = "" + binding.shopAddressEd.getText().toString();
-                    addShopDataRequestBody.address2 = "" + binding.shopAddress2Ed.getText().toString();
-                    addShopDataRequestBody.city = "" + binding.cityEd.getText().toString();
-                    addShopDataRequestBody.state = "" + binding.stateEd.getText().toString();
-                    addShopDataRequestBody.pincode = "" + binding.pincodeEd.getText().toString();
-                    addShopDataRequestBody.categoryid = selectedValue;
-                    addShopDataRequestBody.latitude = latLng.latitude;
-                    addShopDataRequestBody.longitude = latLng.longitude;
+                isAllFieldsChecked = CheckAllFields();
 
-                     commonViewModel.getAddShop(addShopDataRequestBody,filePart);
+                if (isAllFieldsChecked) {
+                    if (adapter.getSelectedAmenityIds().size() == 0) {
+                        Toast.makeText(this, "Choose amenity", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if(file != null) {
+                            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
+                                    RequestBody.create(MediaType.parse("multipart/form-data"), file));
+                            AddShopDataRequestBody addShopDataRequestBody = new AddShopDataRequestBody();
+                            addShopDataRequestBody.shopownerid = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);
+                            addShopDataRequestBody.shopname = "" + binding.shopNameEd.getText().toString();
+                            addShopDataRequestBody.mobile = Long.parseLong(binding.mobileEd.getText().toString());
+                            addShopDataRequestBody.upi = "" + binding.upiEd.getText().toString();
+                            addShopDataRequestBody.shopamenities = adapter.getSelectedAmenityIds();
+                            addShopDataRequestBody.address1 = "" + binding.shopAddressEd.getText().toString();
+                            addShopDataRequestBody.address2 = "" + binding.shopAddress2Ed.getText().toString();
+                            addShopDataRequestBody.city = "" + binding.cityEd.getText().toString();
+                            addShopDataRequestBody.state = "" + binding.stateEd.getText().toString();
+                            addShopDataRequestBody.pincode = "" + binding.pincodeEd.getText().toString();
+                            addShopDataRequestBody.categoryid = selectedValue;
+                            addShopDataRequestBody.latitude = latLng.latitude;
+                            addShopDataRequestBody.longitude = latLng.longitude;
+
+                            commonViewModel.getAddShop(addShopDataRequestBody,filePart);
+                        } else
+                            Toast.makeText(this, "Choose shop image", Toast.LENGTH_SHORT).show();
+                    }
                 }
-               /* for (int i = 0; i < adapter.getSelectedAmenityIds().size(); i++) {
-                   Log.e("Check_test","i "+adapter.getSelectedAmenityIds().get(i));
-                }*/
 
                 break;
             default:
@@ -566,5 +575,50 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             return uri.getPath();
         else
             return null;
+    }
+
+    private boolean CheckAllFields() {
+        if (binding.shopNameEd.length() == 0) {
+            binding.shopNameEd.setError("Input required");
+            return false;
+        }
+
+        if (binding.mobileEd.length() == 0) {
+            binding.mobileEd.setError("Input required");
+            return false;
+        }
+
+        if (binding.upiEd.length() == 0) {
+            binding.upiEd.setError("Input required");
+            return false;
+        }
+
+        if (binding.categorySpinner.length() == 0) {
+            binding.categorySpinner.setError("Input required");
+            return false;
+        }
+
+        if (binding.shopAddressEd.length() == 0) {
+            binding.shopAddressEd.setError("Input required");
+            return false;
+        }
+
+        if (binding.cityEd.length() == 0) {
+            binding.cityEd.setError("Input required");
+            return false;
+        }
+
+        if (binding.stateEd.length() == 0) {
+            binding.stateEd.setError("Input required");
+            return false;
+        }
+
+        if (binding.pincodeEd.length() == 0) {
+            binding.pincodeEd.setError("Input required");
+            return false;
+        }
+
+        // after all validation return true.
+        return true;
     }
 }
