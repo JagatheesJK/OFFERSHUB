@@ -528,8 +528,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                             addShopDataRequestBody.state = "" + binding.stateEd.getText().toString();
                             addShopDataRequestBody.pincode = "" + binding.pincodeEd.getText().toString();
                             addShopDataRequestBody.categoryid = selectedValue;
-                            addShopDataRequestBody.latitude = latLng.latitude;
-                            addShopDataRequestBody.longitude = latLng.longitude;
+                            addShopDataRequestBody.latitude = currentLat;
+                            addShopDataRequestBody.longitude = currentLong;
 
                             commonViewModel.getAddShop(addShopDataRequestBody,filePart);
                         } else
