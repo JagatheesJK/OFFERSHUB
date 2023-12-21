@@ -224,7 +224,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 if (path != null) {
                     file = new File(path);
                     if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
-                        Toast.makeText(AddBusinessActivity.this, "Please Select file below 5MB", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddBusinessActivity.this, "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
                         return;
                     }
                    // compressImage();
@@ -249,7 +249,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             } else if (requestCode == GALLERY_REQUEST_CODE) {
                 if (data != null) {
                     binding.shopAddImg.setVisibility(View.GONE);
-                    binding.shopImgRecycler.setVisibility(View.VISIBLE);
+                    //binding.shopImgRecycler.setVisibility(View.VISIBLE);
                     if (data.getClipData() != null) {
                         // Multiple images selected
                         int count = data.getClipData().getItemCount();
@@ -269,8 +269,28 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                                     file = new File(path);
                                 }
                             }
-                            selectedImages.add(imageUri);
-                            setNotifyData();
+                           /* selectedImages.add(imageUri);
+                            setNotifyData();*/
+                            if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
+                                Toast.makeText(AddBusinessActivity.this, "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            showProgress(getString(R.string.please_wait));
+                            binding.shopAddImg.setVisibility(View.GONE);
+                            Glide.with(AddBusinessActivity.this).load(file).listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    hideProgress();
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    hideProgress();
+                                    binding.shopImg.setVisibility(View.VISIBLE);
+                                    return false;
+                                }
+                            }).into(binding.shopImg);
                         }
                     }
                     /*Uri uri = data.getData();
