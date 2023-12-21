@@ -198,10 +198,12 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
     private void getAddShopData() {
         commonViewModel.getMutableAddShop().observeForever( jsonObject -> {
+            hideProgress();
             if (jsonObject != null) {
                 try {
                     if(jsonObject.getString("status").equals("success")) {
                         Toast.makeText(this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        binding.addShopSubmit.setEnabled(true);
                         finish();
                     } else {
 
@@ -509,7 +511,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.addShopSubmit:
                 isAllFieldsChecked = CheckAllFields();
-
+                binding.addShopSubmit.setEnabled(false);
                 if (isAllFieldsChecked) {
                     if (adapter.getSelectedAmenityIds().size() == 0) {
                         Toast.makeText(this, "Choose amenity", Toast.LENGTH_SHORT).show();
@@ -533,6 +535,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                             addShopDataRequestBody.longitude = currentLong;
 
                             commonViewModel.getAddShop(addShopDataRequestBody,filePart);
+                            showProgress("Please Wait...");
                         } else
                             Toast.makeText(this, "Choose shop image", Toast.LENGTH_SHORT).show();
                     }
