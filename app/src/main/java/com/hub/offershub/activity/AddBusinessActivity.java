@@ -556,8 +556,24 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
                             commonViewModel.getAddShop(addShopDataRequestBody,filePart);
                             showProgress("Please Wait...");
-                        } else
-                            Toast.makeText(this, "Choose shop image", Toast.LENGTH_SHORT).show();
+                        } else {
+                            AddShopDataRequestBody addShopDataRequestBody = new AddShopDataRequestBody();
+                            addShopDataRequestBody.shopownerid = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);
+                            addShopDataRequestBody.shopname = "" + binding.shopNameEd.getText().toString();
+                            addShopDataRequestBody.mobile = Long.parseLong(binding.mobileEd.getText().toString());
+                            addShopDataRequestBody.upi = "" + binding.upiEd.getText().toString();
+                            addShopDataRequestBody.shopamenities = adapter.getSelectedAmenityIds();
+                            addShopDataRequestBody.address1 = "" + binding.shopAddressEd.getText().toString();
+                            addShopDataRequestBody.address2 = "" + binding.shopAddress2Ed.getText().toString();
+                            addShopDataRequestBody.city = "" + binding.cityEd.getText().toString();
+                            addShopDataRequestBody.state = "" + binding.stateEd.getText().toString();
+                            addShopDataRequestBody.pincode = "" + binding.pincodeEd.getText().toString();
+                            addShopDataRequestBody.categoryid = selectedValue;
+                            addShopDataRequestBody.latitude = currentLat;
+                            addShopDataRequestBody.longitude = currentLong;
+
+                            commonViewModel.getAddShop(addShopDataRequestBody,null);
+                            showProgress("Please Wait...");                        }
                     }
                 }
 
