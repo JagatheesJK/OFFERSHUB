@@ -168,6 +168,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 Map<String, Integer> categoryMap = AppApplication.getInstance().prefsHelper.getCategory();
                 if (categoryMap != null) {
                     selectedValue = categoryMap.get(t1);
+                    binding.categorySpinner.setError(null);
                     if (selectedValue != null) {
                         // Do something with the selected value
                         Log.e("Check_Spinner", "selectedValue " + selectedValue);
@@ -580,41 +581,49 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
     private boolean CheckAllFields() {
         if (binding.shopNameEd.length() == 0) {
             binding.shopNameEd.setError("Input required");
+            binding.shopNameEd.requestFocus();
             return false;
         }
 
         if (binding.mobileEd.length() == 0) {
             binding.mobileEd.setError("Input required");
-            return false;
-        }
-
-        if (binding.upiEd.length() == 0) {
-            binding.upiEd.setError("Input required");
+            binding.mobileEd.requestFocus();
             return false;
         }
 
         if (binding.categorySpinner.length() == 0) {
             binding.categorySpinner.setError("Input required");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    binding.categorySpinner.requestFocus();
+                    binding.categorySpinner.performClick();
+                }
+            });
             return false;
         }
 
         if (binding.shopAddressEd.length() == 0) {
             binding.shopAddressEd.setError("Input required");
+            binding.shopAddressEd.requestFocus();
             return false;
         }
 
         if (binding.cityEd.length() == 0) {
             binding.cityEd.setError("Input required");
+            binding.cityEd.requestFocus();
             return false;
         }
 
         if (binding.stateEd.length() == 0) {
             binding.stateEd.setError("Input required");
+            binding.stateEd.requestFocus();
             return false;
         }
 
         if (binding.pincodeEd.length() == 0) {
             binding.pincodeEd.setError("Input required");
+            binding.pincodeEd.requestFocus();
             return false;
         }
 
