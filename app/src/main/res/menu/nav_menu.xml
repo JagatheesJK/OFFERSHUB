@@ -5,23 +5,32 @@
 
     <item
         android:id="@+id/nav_home"
-        android:title="Home"
-        android:visible="false"/>
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
 
     <item
         android:id="@+id/nav_shop_dash"
-        android:title="Shop Dashboard" />
-
-    <item
-        android:id="@+id/nav_offer_dash"
-        android:title="Offer Dashboard" />
+        android:icon="@drawable/ic_dashboard"
+        android:title="Dashboard" />
 
     <item
         android:id="@+id/nav_offer"
+        android:icon="@drawable/ic_offer"
         android:title="Offer" />
 
     <item
         android:id="@+id/nav_booking_details"
+        android:icon="@drawable/ic_booking_details"
         android:title="Booking Details" />
+
+    <item
+        android:id="@+id/nav_rating_review"
+        android:icon="@drawable/ic_rate_review"
+        android:title="Rating &amp; Review" />
+
+    <item
+        android:id="@+id/paymant"
+        android:icon="@drawable/baseline_payment_24"
+        android:title="Payment" />
 
 </menu>

@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,8 +87,10 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_shop_dash:
                 fragment = new ShopDetailsFragment();
                 break;
-            case R.id.nav_offer_dash:
-                fragment = new OfferDashboardFragment();
+            case R.id.nav_home:
+                Intent intent = new Intent(DashActivity.this,TestMainActivity2.class);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.nav_offer:
                 fragment = OfferListFragment.newInstance(model.id);
