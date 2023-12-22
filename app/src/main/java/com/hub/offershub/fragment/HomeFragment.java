@@ -23,7 +23,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private PagerAdapter adapter;
 
-    private String[] labels = new String[]{"Active", "In-Active"};
+    private String[] labels = new String[]{"Active", "InActive"};
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();

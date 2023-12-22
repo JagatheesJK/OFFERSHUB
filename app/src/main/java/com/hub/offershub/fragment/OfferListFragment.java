@@ -21,7 +21,7 @@ import com.hub.offershub.databinding.FragmentOfferListBinding;
 public class OfferListFragment extends Fragment {
 
     private FragmentOfferListBinding binding;
-    private String[] labels = new String[]{"Active", "In-Active"};
+    private String[] labels = new String[]{"Active", "InActive"};
     private static String shopID;
 
     public static OfferListFragment newInstance(String shop_id) {

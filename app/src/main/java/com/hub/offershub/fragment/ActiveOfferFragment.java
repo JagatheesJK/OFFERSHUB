@@ -158,6 +158,11 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
     }
 
     @Override
+    public void onOfferInSight(Object obj) {
+
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:

@@ -137,6 +137,7 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
     public void addOffer(AddOfferDataRequestBody addOfferDataRequestBody, MultipartBody.Part multipartBody) {
+        Log.e("Check_JK", "addOffer");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
@@ -160,6 +161,7 @@ public class CommonViewModel extends AndroidViewModel {
                 call.enqueue(new Callback<JsonElement>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JK", "addOffer onResponse : "+new Gson().toJson(response.body()));
                         if (response.body() != null) {
                             try {
                                 JSONObject root = new JSONObject(response.body().toString());

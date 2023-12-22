@@ -227,7 +227,7 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
             addOfferDataRequestBody.offer_amount = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
             addOfferDataRequestBody.flat_percentage = 0;
 
-            commonViewModel.addOffer(addOfferDataRequestBody, filePart);
+            commonViewModel.addOffer(addOfferDataRequestBody, null);
             showProgress("Please Wait...");
         } else {
             MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),

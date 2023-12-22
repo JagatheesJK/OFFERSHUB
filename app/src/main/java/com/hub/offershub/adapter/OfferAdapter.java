@@ -62,6 +62,10 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             holder.deleteLinear.setOnClickListener(v -> {
                 listener.onOfferRemove(model);
             });
+
+            holder.insightLinear.setOnClickListener(v -> {
+                listener.onOfferInSight(model);
+            });
         }
     }
 
@@ -80,7 +84,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         AppCompatTextView offerType, offerPrice;
         AppCompatImageView offerImg;
         SwitchCompat offerSwitch;
-        LinearLayoutCompat editLinear, deleteLinear;
+        LinearLayoutCompat editLinear, deleteLinear, insightLinear;
         public ViewHolder(View v) {
             super(v);
             offerNameTxt = v.findViewById(R.id.offerNameTxt);
@@ -91,6 +95,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             offerSwitch = v.findViewById(R.id.offerSwitch);
             editLinear = v.findViewById(R.id.editLinear);
             deleteLinear = v.findViewById(R.id.deleteLinear);
+            insightLinear = v.findViewById(R.id.insightLinear);
         }
     }
 }

@@ -73,7 +73,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.businessRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new BusinessAdapter(getActivity(), list, this);
+        adapter = new BusinessAdapter(getActivity(), list, this, false);
         binding.businessRecycler.setAdapter(adapter);
         setNotify();
     }

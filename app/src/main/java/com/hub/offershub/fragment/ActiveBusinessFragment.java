@@ -78,7 +78,7 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.businessRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new BusinessAdapter(getActivity(), list, this);
+        adapter = new BusinessAdapter(getActivity(), list, this, true);
         binding.businessRecycler.setAdapter(adapter);
         setNotify();
     }
