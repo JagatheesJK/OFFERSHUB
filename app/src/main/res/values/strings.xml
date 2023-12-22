@@ -23,10 +23,9 @@
     </array>
 
     <array name="offer_type">
-        <item>Fashion</item>
-        <item>Jewellery</item>
-        <item>Pharmacy</item>
-        <item>Furniture</item>
+        <item>Plain Offer</item>
+        <item>Discount Price</item>
+        <item>Flat Percentage</item>
     </array>
     <string name="title_activity_maps">MapsActivity</string>
 </resources>

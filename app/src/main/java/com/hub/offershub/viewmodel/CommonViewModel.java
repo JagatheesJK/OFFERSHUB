@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hub.offershub.PrefsHelper;
+import com.hub.offershub.model.AddOfferDataRequestBody;
 import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BusinessModel;
@@ -44,6 +45,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<OfferModel> mutableActiveOffers = new MutableLiveData<>();
     private final MutableLiveData<OfferModel> mutableInActiveOffers = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableaddShop = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableAddOffer = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableDeleteShop = new MutableLiveData<>();
     private final MutableLiveData<Amenity> mutableAmenity = new MutableLiveData<>();
     private final MutableLiveData<CategoryResponse> mutableCategory = new MutableLiveData<>();
@@ -120,6 +122,59 @@ public class CommonViewModel extends AndroidViewModel {
                     @Override
                     public void onFailure(@NonNull Call<BusinessModel> call, @NonNull Throwable t) {
                         Log.e("Check_JK", "getInActiveShops Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.execute();
+
+    }
+
+    public void addOffer(AddOfferDataRequestBody addOfferDataRequestBody, MultipartBody.Part multipartBody) {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.addOffer(multipartBody,
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addOfferDataRequestBody.shop_id),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addOfferDataRequestBody.offer_name),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addOfferDataRequestBody.offer_desc),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addOfferDataRequestBody.offer_type),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addOfferDataRequestBody.amount),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addOfferDataRequestBody.original_amount),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addOfferDataRequestBody.offer_amount),
+                        RequestBody.create(MediaType.parse("multipart/form-data"), ""+addOfferDataRequestBody.flat_percentage)
+                );
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableAddOffer.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        } else
+                            mutableAddOffer.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JK", "addOffer Error Message : " + t.getMessage());
                     }
                 });
                 return null;
@@ -473,6 +528,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<JSONObject> getMutableDeleteOffer() {
         return mutableDeleteOffer;
+    }
+
+    public MutableLiveData<JSONObject> getMutableAddOffer() {
+        return mutableAddOffer;
     }
 
     public void showDialog() {

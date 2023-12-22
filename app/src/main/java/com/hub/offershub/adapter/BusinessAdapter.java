@@ -43,6 +43,14 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             holder.addressTxt.setText(""+model.address1);
             holder.categoryTxt.setText(""+model.categoryname);
             holder.rateTxt.setText(""+model.total_rate+" ("+model.avg_rating+")");
+            if ("".equals(model.adminverifystatus)) {
+
+            } else if ("".equals(model.adminverifystatus)) {
+
+            } else {
+
+            }
+            holder.statusTxt.setText(""+model.adminverifystatus);
 
             holder.itemView.setOnClickListener(v -> {
                 listener.onItemSelected(model);
@@ -70,7 +78,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView businessNameTxt, addressTxt;
-        AppCompatTextView categoryTxt, rateTxt;
+        AppCompatTextView categoryTxt, rateTxt, statusTxt;
         AppCompatImageView editImg, deleteImg;
         public ViewHolder(View v) {
             super(v);
@@ -78,6 +86,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             addressTxt = v.findViewById(R.id.addressTxt);
             categoryTxt = v.findViewById(R.id.categoryTxt);
             rateTxt = v.findViewById(R.id.rateTxt);
+            statusTxt = v.findViewById(R.id.statusTxt);
             editImg = v.findViewById(R.id.editImg);
             deleteImg = v.findViewById(R.id.deleteImg);
         }

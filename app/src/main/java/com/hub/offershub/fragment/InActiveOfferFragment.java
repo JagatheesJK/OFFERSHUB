@@ -66,9 +66,11 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     }
 
     private void init() {
-        commonViewModel.getInActiveOffers(makeRequest());
-        getInActiveOffersData();
-        getDeleteData();
+        if (commonViewModel != null) {
+            commonViewModel.getInActiveOffers(makeRequest());
+            getInActiveOffersData();
+            getDeleteData();
+        }
     }
 
     private void setListener() {
@@ -173,5 +175,11 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
     }
 }

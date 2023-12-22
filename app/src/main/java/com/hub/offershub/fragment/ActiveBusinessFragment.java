@@ -64,9 +64,11 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     }
 
     private void init() {
-        commonViewModel.getActiveShops(makeRequest());
-        getActiveData();
-        getDeleteData();
+        if (commonViewModel != null) {
+            commonViewModel.getActiveShops(makeRequest());
+            getActiveData();
+            getDeleteData();
+        }
     }
 
     private void setListener() {
@@ -176,5 +178,11 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
     }
 }

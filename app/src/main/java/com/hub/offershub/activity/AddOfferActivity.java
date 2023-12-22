@@ -3,14 +3,16 @@ package com.hub.offershub.activity;
 import static com.hub.offershub.utils.Constants.CAMERA_REQUEST_CODE;
 import static com.hub.offershub.utils.Constants.GALLERY_REQUEST_CODE;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,25 +21,39 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.hub.offershub.AppApplication;
+import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.adapter.ImageAdapter;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityAddOfferBinding;
 import com.hub.offershub.listener.ImageChooseListener;
 import com.hub.offershub.listener.PermissionListener;
+import com.hub.offershub.model.AddOfferDataRequestBody;
 import com.hub.offershub.utils.Constants;
+import com.hub.offershub.utils.Utils;
 import com.hub.offershub.utils.compress.CompressImage;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
+import com.skydoves.powerspinner.SpinnerAnimation;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddOfferActivity extends BaseActivity implements PermissionListener, ImageChooseListener {
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
+public class AddOfferActivity extends BaseActivity implements View.OnClickListener, PermissionListener, ImageChooseListener {
 
     private ActivityAddOfferBinding binding;
     private List<Uri> selectedImages = new ArrayList<>();
     private ImageAdapter imageAdapter;
     private GridLayoutManager gridLayoutManager;
+    String selectedType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +66,39 @@ public class AddOfferActivity extends BaseActivity implements PermissionListener
             finish();
         });
 
+        init();
+        setListener();
         setUpRecycler();
+        getAddOfferData();
 
         binding.offerImgCard.setOnClickListener(v -> {
             getPermission(this);
+        });
+    }
+
+    private void init() {
+        Log.e("Check_Spinner","Size "+AppApplication.getInstance().prefsHelper.getCategory().size());
+        binding.categorySpinner.setSpinnerPopupAnimation(SpinnerAnimation.DROPDOWN);
+        binding.categorySpinner.setSpinnerPopupMaxHeight(Utils.dpToPx(AddOfferActivity.this, 300));
+
+        binding.categorySpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<String>() {
+            @Override
+            public void onItemSelected(int position, @Nullable String item, int spinnerIndex, String t1) {
+                Log.e("Check_JK", "onItemSelected item : "+item);
+                Log.e("Check_JK", "onItemSelected t1 : "+t1);
+                selectedType = t1;
+            }
+        });
+    }
+
+    private void setListener() {
+        binding.offerSubmitBtn.setOnClickListener(this);
+        binding.categorySpinner.setSpinnerOutsideTouchListener(new OnSpinnerOutsideTouchListener() {
+            @Override
+            public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
+                if (binding.categorySpinner.isShowing())
+                    binding.categorySpinner.dismiss();
+            }
         });
     }
 
@@ -166,5 +211,118 @@ public class AddOfferActivity extends BaseActivity implements PermissionListener
             binding.offerAddImg.setVisibility(View.VISIBLE);
             binding.offerImgRecycler.setVisibility(View.GONE);
         }
+    }
+
+    private void callAddOffer() {
+        if(file != null) {
+            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
+                    RequestBody.create(MediaType.parse("multipart/form-data"), file));
+            AddOfferDataRequestBody addOfferDataRequestBody = new AddOfferDataRequestBody();
+            addOfferDataRequestBody.shop_id = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);
+            addOfferDataRequestBody.offer_name = "" + binding.offerNameEd.getText().toString();
+            addOfferDataRequestBody.offer_desc = binding.offerDescEd.getText().toString();
+            addOfferDataRequestBody.offer_type = "" + selectedType;
+            addOfferDataRequestBody.amount = Integer.parseInt(binding.offerPriceEd.getText().toString());
+            addOfferDataRequestBody.original_amount = Integer.parseInt(binding.offerOriginalPriceEd.getText().toString());
+            addOfferDataRequestBody.offer_amount = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
+            addOfferDataRequestBody.flat_percentage = 0;
+
+            commonViewModel.addOffer(addOfferDataRequestBody, filePart);
+            showProgress("Please Wait...");
+        } else {
+            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
+                    RequestBody.create(MediaType.parse("multipart/form-data"), file));
+            AddOfferDataRequestBody addOfferDataRequestBody = new AddOfferDataRequestBody();
+            addOfferDataRequestBody.shop_id = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);
+            addOfferDataRequestBody.offer_name = "" + binding.offerNameEd.getText().toString();
+            addOfferDataRequestBody.offer_desc = binding.offerDescEd.getText().toString();
+            addOfferDataRequestBody.offer_type = "" + selectedType;
+            addOfferDataRequestBody.amount = Integer.parseInt(binding.offerPriceEd.getText().toString());
+            addOfferDataRequestBody.original_amount = Integer.parseInt(binding.offerOriginalPriceEd.getText().toString());
+            addOfferDataRequestBody.offer_amount = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
+            addOfferDataRequestBody.flat_percentage = 0;
+
+            commonViewModel.addOffer(addOfferDataRequestBody, null);
+            showProgress("Please Wait...");
+        }
+    }
+
+    private void getAddOfferData() {
+        commonViewModel.getMutableAddShop().observeForever( jsonObject -> {
+            hideProgress();
+            if (jsonObject != null) {
+                try {
+                    if(jsonObject.getString("status").equals("success")) {
+                        Toast.makeText(this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        binding.offerSubmitBtn.setEnabled(true);
+                        finish();
+                    } else {
+
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    boolean isAllFieldsChecked = false;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.offerSubmitBtn:
+                isAllFieldsChecked = CheckAllFields();
+                binding.offerSubmitBtn.setEnabled(false);
+                if (isAllFieldsChecked) {
+                    callAddOffer();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private boolean CheckAllFields() {
+        if (binding.offerNameEd.length() == 0) {
+            binding.offerNameEd.setError("Input required");
+            binding.offerNameEd.setFocusableInTouchMode(true);
+            binding.offerNameEd.requestFocus();
+            return false;
+        }
+
+        if (binding.offerDescEd.length() == 0) {
+            binding.offerDescEd.setError("Input required");
+            binding.offerDescEd.requestFocus();
+            return false;
+        }
+
+        if (binding.categorySpinner.length() == 0) {
+            binding.categorySpinner.setError("Input required");
+            runOnUiThread(() -> {
+                binding.categorySpinner.requestFocus();
+                binding.categorySpinner.performClick();
+            });
+            return false;
+        }
+
+        if (binding.offerPriceEd.length() == 0) {
+            binding.offerPriceEd.setError("Input required");
+            binding.offerPriceEd.requestFocus();
+            return false;
+        }
+
+        if (binding.offerOriginalPriceEd.length() == 0) {
+            binding.offerOriginalPriceEd.setError("Input required");
+            binding.offerOriginalPriceEd.requestFocus();
+            return false;
+        }
+
+        if (binding.offerOfferPriceEd.length() == 0) {
+            binding.offerOfferPriceEd.setError("Input required");
+            binding.offerOfferPriceEd.requestFocus();
+            return false;
+        }
+        // after all validation return true.
+        return true;
     }
 }

@@ -48,6 +48,18 @@ public interface API {
             @Body Map<String, Object> body
     );
 
+    @POST("addOffers")
+    @Multipart
+    Call<JsonElement> addOffer(@Part MultipartBody.Part offer_image,
+                               @Part("shop_id") RequestBody shop_id,
+                               @Part("offer_name") RequestBody offer_name,
+                               @Part("offer_desc") RequestBody offer_desc,
+                               @Part("offer_type") RequestBody offer_type,
+                               @Part("amount") RequestBody amount,
+                               @Part("original_amount") RequestBody original_amount,
+                               @Part("offer_amount") RequestBody offer_amount,
+                               @Part("flat_percentage") RequestBody flat_percentage);
+
     @Headers("Content-Type: application/json")
     @POST("getActiveOffers")
     Call<OfferModel> getActiveOffers(
