@@ -531,11 +531,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.addShopSubmit:
                 isAllFieldsChecked = CheckAllFields();
-                binding.addShopSubmit.setEnabled(false);
                 if (isAllFieldsChecked) {
-                    if (adapter.getSelectedAmenityIds().size() == 0) {
-                        Toast.makeText(this, "Choose amenity", Toast.LENGTH_SHORT).show();
-                    } else {
+                    binding.addShopSubmit.setEnabled(false);
                         if(file != null) {
                             MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
                                     RequestBody.create(MediaType.parse("multipart/form-data"), file));
@@ -575,7 +572,6 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                             commonViewModel.getAddShop(addShopDataRequestBody,null);
                             showProgress("Please Wait...");                        }
                     }
-                }
 
                 break;
             default:
@@ -618,13 +614,18 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
     }
 
     private boolean CheckAllFields() {
+        Log.e("Check_Moorthy","CheckAllFields "+binding.mobileEd.length() );
         if (binding.shopNameEd.length() == 0) {
             binding.shopNameEd.setError("Input required");
             binding.shopNameEd.requestFocus();
             return false;
+        } else {
+            binding.shopNameEd.setError(null);
         }
+        Log.e("Check_Moorthy","binding.mobileEd.length() "+binding.mobileEd.length() );
 
         if (binding.mobileEd.length() == 0) {
+            Log.e("Check_Moorthy","binding.mobileEd");
             binding.mobileEd.setError("Input required");
             binding.mobileEd.requestFocus();
             return false;
