@@ -2,6 +2,7 @@ package com.hub.offershub.fragment;
 
 import android.os.Bundle;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -168,7 +169,10 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onOfferInSight(Object obj) {
-
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.fragment_container, new OfferDashboardFragment());
+        transaction.commit();
     }
 
     @Override
