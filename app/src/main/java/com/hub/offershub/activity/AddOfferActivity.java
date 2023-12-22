@@ -53,7 +53,8 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
     private List<Uri> selectedImages = new ArrayList<>();
     private ImageAdapter imageAdapter;
     private GridLayoutManager gridLayoutManager;
-    String selectedType;
+    int selectedType;
+    private int shopID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,8 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void init() {
+        shopID = Integer.parseInt(getIntent().getStringExtra("shop_id"));
+        Log.e("Check_JK", "init ID --> "+shopID);
         Log.e("Check_Spinner","Size "+AppApplication.getInstance().prefsHelper.getCategory().size());
         binding.categorySpinner.setSpinnerPopupAnimation(SpinnerAnimation.DROPDOWN);
         binding.categorySpinner.setSpinnerPopupMaxHeight(Utils.dpToPx(AddOfferActivity.this, 300));
@@ -84,9 +87,9 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
         binding.categorySpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<String>() {
             @Override
             public void onItemSelected(int position, @Nullable String item, int spinnerIndex, String t1) {
-                Log.e("Check_JK", "onItemSelected item : "+item);
-                Log.e("Check_JK", "onItemSelected t1 : "+t1);
-                selectedType = t1;
+                Log.e("Check_JK", "onItemSelected item : "+position);
+                Log.e("Check_JK", "onItemSelected t1 : "+spinnerIndex);
+                selectedType = (spinnerIndex + 1);
             }
         });
     }
@@ -214,14 +217,15 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void callAddOffer() {
+        Log.e("Check_JK", "callAddOffer ID --> "+shopID);
         if(file != null) {
             MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
                     RequestBody.create(MediaType.parse("multipart/form-data"), file));
             AddOfferDataRequestBody addOfferDataRequestBody = new AddOfferDataRequestBody();
-            addOfferDataRequestBody.shop_id = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);
+            addOfferDataRequestBody.shop_id = shopID;
             addOfferDataRequestBody.offer_name = "" + binding.offerNameEd.getText().toString();
             addOfferDataRequestBody.offer_desc = binding.offerDescEd.getText().toString();
-            addOfferDataRequestBody.offer_type = "" + selectedType;
+            addOfferDataRequestBody.offer_type = selectedType;
             addOfferDataRequestBody.amount = Integer.parseInt(binding.offerPriceEd.getText().toString());
             addOfferDataRequestBody.original_amount = Integer.parseInt(binding.offerOriginalPriceEd.getText().toString());
             addOfferDataRequestBody.offer_amount = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
@@ -230,13 +234,11 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
             commonViewModel.addOffer(addOfferDataRequestBody, null);
             showProgress("Please Wait...");
         } else {
-            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
-                    RequestBody.create(MediaType.parse("multipart/form-data"), file));
             AddOfferDataRequestBody addOfferDataRequestBody = new AddOfferDataRequestBody();
-            addOfferDataRequestBody.shop_id = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);
+            addOfferDataRequestBody.shop_id = shopID;
             addOfferDataRequestBody.offer_name = "" + binding.offerNameEd.getText().toString();
             addOfferDataRequestBody.offer_desc = binding.offerDescEd.getText().toString();
-            addOfferDataRequestBody.offer_type = "" + selectedType;
+            addOfferDataRequestBody.offer_type = selectedType;
             addOfferDataRequestBody.amount = Integer.parseInt(binding.offerPriceEd.getText().toString());
             addOfferDataRequestBody.original_amount = Integer.parseInt(binding.offerOriginalPriceEd.getText().toString());
             addOfferDataRequestBody.offer_amount = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
@@ -248,13 +250,12 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void getAddOfferData() {
-        commonViewModel.getMutableAddShop().observeForever( jsonObject -> {
+        commonViewModel.getMutableAddOffer().observeForever( jsonObject -> {
             hideProgress();
             if (jsonObject != null) {
                 try {
                     if(jsonObject.getString("status").equals("success")) {
                         Toast.makeText(this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                        binding.offerSubmitBtn.setEnabled(true);
                         finish();
                     } else {
 
@@ -263,6 +264,7 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
                     throw new RuntimeException(e);
                 }
             }
+            binding.offerSubmitBtn.setEnabled(true);
         });
     }
 

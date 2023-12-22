@@ -72,7 +72,7 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.offerRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new OfferAdapter(getActivity(), list, this);
+        adapter = new OfferAdapter(getActivity(), list, this, true);
         binding.offerRecycler.setAdapter(adapter);
         setNotify();
     }

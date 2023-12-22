@@ -44,7 +44,9 @@ public class OfferListFragment extends Fragment {
         binding.pager.setCurrentItem(0, false);
 
         binding.floatingBtn.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), AddOfferActivity.class));
+            Intent i = new Intent(getActivity(), AddOfferActivity.class);
+            i.putExtra("shop_id", shopID);
+            startActivity(i);
         });
         return binding.getRoot();
     }

@@ -81,7 +81,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.offerRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new OfferAdapter(getActivity(), list, this);
+        adapter = new OfferAdapter(getActivity(), list, this, false);
         binding.offerRecycler.setAdapter(adapter);
         setNotify();
     }

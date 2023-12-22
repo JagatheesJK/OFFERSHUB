@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hub.offershub.R;
+import com.hub.offershub.dialogfragment.ExitDialogFragment;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.utils.CommonMethods;
 import com.hub.offershub.utils.compress.CompressImage;
@@ -43,6 +44,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public CommonViewModel commonViewModel;
     public CommonMethods commonMethods;
+    public ExitDialogFragment exitDialogFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class BaseActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(BaseActivity.this);
         commonViewModel = new ViewModelProvider(BaseActivity.this).get(CommonViewModel.class);
         commonMethods = new CommonMethods();
+        exitDialogFragment = new ExitDialogFragment();
     }
 
     public static String getPath(Context context, Uri uri) {

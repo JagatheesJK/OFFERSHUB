@@ -137,7 +137,7 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
     public void addOffer(AddOfferDataRequestBody addOfferDataRequestBody, MultipartBody.Part multipartBody) {
-        Log.e("Check_JK", "addOffer");
+        Log.e("Check_JK", "addOffer Type : "+addOfferDataRequestBody.offer_type);
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {

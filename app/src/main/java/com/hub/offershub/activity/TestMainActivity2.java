@@ -12,12 +12,15 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityTestMain2Binding;
+import com.hub.offershub.dialogfragment.ExitDialogFragment;
 import com.hub.offershub.fragment.AccountFragment;
 import com.hub.offershub.fragment.HomeFragment;
 import com.hub.offershub.fragment.NotifyFragment;
+import com.hub.offershub.listener.ExitListener;
 import com.hub.offershub.listener.PermissionListener;
 
-public class TestMainActivity2 extends BaseActivity implements NavigationBarView.OnItemSelectedListener, PermissionListener {
+public class TestMainActivity2 extends BaseActivity implements NavigationBarView.OnItemSelectedListener,
+        PermissionListener, ExitListener {
 
     private ActivityTestMain2Binding binding;
 
@@ -78,5 +81,24 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
     @Override
     public void onPermissionDenied() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        if (!exitDialogFragment.isAdded()) {
+            exitDialogFragment.setExitListener(this);
+            exitDialogFragment.show(getSupportFragmentManager(), ExitDialogFragment.TAG);
+        }
+    }
+
+    @Override
+    public void onExitCancel() {
+
+    }
+
+    @Override
+    public void onExitYes() {
+        super.onBackPressed();
     }
 }

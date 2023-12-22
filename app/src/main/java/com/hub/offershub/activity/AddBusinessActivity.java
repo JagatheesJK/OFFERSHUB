@@ -203,7 +203,6 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 try {
                     if(jsonObject.getString("status").equals("success")) {
                         Toast.makeText(this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                        binding.addShopSubmit.setEnabled(true);
                         finish();
                     } else {
 
@@ -212,6 +211,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                     throw new RuntimeException(e);
                 }
             }
+            binding.addShopSubmit.setEnabled(true);
         });
     }
     private File file;

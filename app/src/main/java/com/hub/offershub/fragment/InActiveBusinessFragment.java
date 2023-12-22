@@ -86,6 +86,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     @Override
     public void onItemSelected(Object obj) {
         BusinessModel.Data model = (BusinessModel.Data) obj;
+        Log.e("Check_JK", "ID : "+model.id);
         Intent i = new Intent(getActivity(), DashActivity.class);
         i.putExtra("model", model);
         startActivity(i);

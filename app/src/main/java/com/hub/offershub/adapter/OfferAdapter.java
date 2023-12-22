@@ -25,11 +25,13 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     private Context ctx;
     private CommonMethods commonMethods;
     private OfferListener listener;
+    private boolean isActive = false;
 
-    public OfferAdapter(Context context, List<OfferModel.Data> list, OfferListener listener) {
+    public OfferAdapter(Context context, List<OfferModel.Data> list, OfferListener listener, boolean isActive) {
         this.list = list;
         ctx = context;
         this.listener = listener;
+        this.isActive = isActive;
         commonMethods = new CommonMethods();
     }
 
@@ -44,6 +46,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OfferModel.Data model = list.get(position);
         if (model != null) {
+            holder.statusTxt.setVisibility(isActive ? View.GONE : View.VISIBLE);
             holder.offerNameTxt.setText(""+model.offer_name);
             holder.offerDescTxt.setText(""+model.offer_desc);
             holder.offerType.setText("Type : "+model.offer_type_name);
@@ -82,6 +85,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView offerNameTxt, offerDescTxt;
         AppCompatTextView offerType, offerPrice;
+        AppCompatTextView statusTxt, categoryTxt;
         AppCompatImageView offerImg;
         SwitchCompat offerSwitch;
         LinearLayoutCompat editLinear, deleteLinear, insightLinear;
@@ -96,6 +100,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             editLinear = v.findViewById(R.id.editLinear);
             deleteLinear = v.findViewById(R.id.deleteLinear);
             insightLinear = v.findViewById(R.id.insightLinear);
+            statusTxt = v.findViewById(R.id.statusTxt);
+            categoryTxt = v.findViewById(R.id.categoryTxt);
         }
     }
 }

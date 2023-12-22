@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hub.offershub.R;
 import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.utils.CommonMethods;
 
 import java.util.List;
 
@@ -24,12 +25,14 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     private Context ctx;
     private CommonListener listener;
     private boolean isActive = false;
+    private CommonMethods commonMethods;
 
     public BusinessAdapter(Context context, List<BusinessModel.Data> list, CommonListener listener, boolean isActive) {
         this.list = list;
         this.listener = listener;
         this.isActive = isActive;
         ctx = context;
+        commonMethods = new CommonMethods();
     }
 
     @NonNull
@@ -50,6 +53,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             holder.rateTxt.setText(""+model.total_rate+" ("+model.avg_rating+")");
             holder.statusTxt.setText(""+model.adminverifystatus);
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
+            commonMethods.imageLoaderView(ctx, holder.shopImg, model.image_url);
             if ("Verification Pending".equals(model.adminverifystatus)) {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.yellow, null)));
@@ -88,7 +92,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView businessNameTxt, addressTxt;
         AppCompatTextView categoryTxt, rateTxt, statusTxt;
-        AppCompatImageView editImg, deleteImg;
+        AppCompatImageView shopImg, editImg, deleteImg;
         public ViewHolder(View v) {
             super(v);
             businessNameTxt = v.findViewById(R.id.businessNameTxt);
@@ -98,6 +102,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             statusTxt = v.findViewById(R.id.statusTxt);
             editImg = v.findViewById(R.id.editImg);
             deleteImg = v.findViewById(R.id.deleteImg);
+            shopImg = v.findViewById(R.id.shopImg);
         }
     }
 }

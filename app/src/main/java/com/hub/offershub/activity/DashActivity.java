@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.hub.offershub.R;
@@ -88,7 +89,8 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
                 fragment = new ShopDetailsFragment();
                 break;
             case R.id.nav_home:
-                Intent intent = new Intent(DashActivity.this,TestMainActivity2.class);
+                Intent intent = new Intent(DashActivity.this, TestMainActivity2.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
                 break;
@@ -97,6 +99,12 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.nav_booking_details:
                 fragment = new BookingListFragment();
+                break;
+            case R.id.nav_rating_review:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.paymant:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
         }
 
