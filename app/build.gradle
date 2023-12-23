@@ -89,6 +89,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // OTP
     implementation 'io.github.chaosleung:pinview:1.4.4'
+    implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.1.2'
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 
