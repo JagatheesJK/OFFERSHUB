@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.hub.offershub.AppApplication;
+import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityDashBinding;
@@ -68,7 +70,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     private void initUI() {
         if (model != null) {
             userNameTxt.setText(""+model.shop_name);
-            userDesTxt.setText(""+model.city);
+            userDesTxt.setText(""+ AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.MOBILE));
             commonMethods.imageCircle(DashActivity.this, navUserImg, model.image_url);
         }
     }

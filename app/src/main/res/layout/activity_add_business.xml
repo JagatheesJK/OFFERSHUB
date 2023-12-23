@@ -25,38 +25,61 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/shopTxt"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/shopTxtLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Shop Name"
-                app:drawableRightCompat="@drawable/asterisk"
-                app:drawableTint="@color/red"
                 android:layout_marginTop="8dp"
+                android:gravity="center"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent">
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/shopTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shop Name" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/shopNameEd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="shop name"
+                android:hint="Shop Name"
                 android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/shopTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/shopTxtLinear"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/mobileTxt"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/mobileTxtLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableRightCompat="@drawable/asterisk"
-                app:drawableTint="@color/red"
-                android:text="Mobile"
+                android:gravity="center"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/shopNameEd"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/mobileTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/mobileEd"
@@ -68,7 +91,7 @@
                 android:inputType="phone"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/mobileTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/mobileTxtLinear"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/upiTxt"
@@ -90,16 +113,28 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/upiTxt"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/categoryTxt"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/categoryTxtLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableRightCompat="@drawable/asterisk"
-                app:drawableTint="@color/red"
-                android:text="Category"
+                android:gravity="center"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/upiEd"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/categoryTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.skydoves.powerspinner.PowerSpinnerView
                 android:id="@+id/categorySpinner"
@@ -124,7 +159,7 @@
                 app:spinner_popup_elevation="4dp"
                 app:spinner_selected_item_background="@color/grey_light"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/categoryTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/categoryTxtLinear"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/amenitiesTxt"
@@ -141,16 +176,28 @@
                 android:padding="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/amenitiesTxt"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/addressTxt"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/addressTxtLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Address 1"
-                app:drawableRightCompat="@drawable/asterisk"
-                app:drawableTint="@color/red"
                 android:layout_marginTop="12dp"
+                android:gravity="center"
                 app:layout_constraintTop_toBottomOf="@+id/amenitiesrecyclerView"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/addressTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address 1" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/shopAddressEd"
@@ -162,7 +209,7 @@
                 android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/addressTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/addressTxtLinear"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/address2Txt"
@@ -184,16 +231,27 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/address2Txt"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/cityTxt"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/cityTxtLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="City"
-                app:drawableRightCompat="@drawable/asterisk"
-                app:drawableTint="@color/red"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/shopAddress2Ed"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/cityTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="City" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/cityEd"
@@ -205,18 +263,30 @@
                 android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/cityTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/cityTxtLinear"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/stateTxt"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/stateTxtLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="State"
-                app:drawableRightCompat="@drawable/asterisk"
-                app:drawableTint="@color/red"
                 android:layout_marginTop="12dp"
+                android:gravity="center"
                 app:layout_constraintTop_toBottomOf="@+id/cityEd"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/stateTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="State" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/stateEd"
@@ -228,18 +298,30 @@
                 android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/stateTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/stateTxtLinear"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/pincodeTxt"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/pincodeTxtLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableRightCompat="@drawable/asterisk"
-                app:drawableTint="@color/red"
-                android:text="Pincode"
                 android:layout_marginTop="12dp"
+                android:gravity="center"
                 app:layout_constraintTop_toBottomOf="@+id/stateEd"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/pincodeTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pincode" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/pincodeEd"
@@ -252,7 +334,7 @@
                 android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/pincodeTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/pincodeTxtLinear"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/locationTxt"

@@ -42,22 +42,27 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         return new ViewHolder(view);
     }
 
+    private String addr1, addr2, city, state;
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BusinessModel.Data model = list.get(position);
         if (model != null) {
             holder.statusTxt.setVisibility(isActive ? View.GONE : View.VISIBLE);
             holder.businessNameTxt.setText(""+model.shop_name);
-            holder.addressTxt.setText(""+model.address1);
+            addr1 = ((model.address1.length() != 0) ? model.address1 : "");
+            addr2 = ((model.address2.length() != 0) ? model.address2 : "");
+            city = ((model.city.length() != 0) ? model.city : "");
+            state = ((model.state.length() != 0) ? model.state : "");
+            holder.addressTxt.setText(""+addr1+", "+addr2+", "+city+", "+state);
             holder.categoryTxt.setText(""+model.categoryname);
             holder.rateTxt.setText(""+model.total_rate+" ("+model.avg_rating+")");
             holder.statusTxt.setText(""+model.adminverifystatus);
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
             commonMethods.imageLoaderView(ctx, holder.shopImg, model.image_url);
-            if ("Verification Pending".equals(model.adminverifystatus)) {
+            if ("Pending".equals(model.adminverifystatus)) {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.yellow, null)));
-            } else if ("Verification Reject".equals(model.adminverifystatus)) {
+            } else if ("Rejected".equals(model.adminverifystatus)) {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.red, null)));
             } else {

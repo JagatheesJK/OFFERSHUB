@@ -21,31 +21,60 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/shopTxt"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/offerTxtLinear"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Offer Name"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/offerTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Offer Name"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/offerNameEd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="offer name"
+                android:hint="Offer Name"
                 android:padding="12dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/shopTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/offerTxtLinear"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/offerDescTxt"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/offerDescTxtLinear"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Description"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerNameEd"/>
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/offerNameEd">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/offerDescTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Description" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/offerDescEd"
@@ -59,15 +88,30 @@
                 android:paddingBottom="8dp"
                 android:background="@drawable/bg_rectangle"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerDescTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/offerDescTxtLinear"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/offerTypeTxt"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/offerTypeTxtLinear"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Offer Type"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerDescEd"/>
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/offerDescEd">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/offerTypeTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Offer Type" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/asterisk"
+                    app:tint="@color/red"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.skydoves.powerspinner.PowerSpinnerView
                 android:id="@+id/categorySpinner"
@@ -93,67 +137,180 @@
                 app:spinner_popup_elevation="4dp"
                 app:spinner_selected_item_background="@color/grey_light"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerTypeTxt"/>
+                app:layout_constraintTop_toBottomOf="@+id/offerTypeTxtLinear"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/offerPriceTxt"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/plainLinear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Price"
+                android:orientation="vertical"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/categorySpinner"/>
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/categorySpinner">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/offerPriceEd"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/offerPriceTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/asterisk"
+                        app:tint="@color/red"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/offerPriceEd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Price"
+                    android:gravity="top"
+                    android:padding="12dp"
+                    android:inputType="number"
+                    android:background="@drawable/bg_rectangle"
+                    android:layout_marginTop="12dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/discountLinear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Price"
-                android:gravity="top"
-                android:padding="12dp"
-                android:inputType="phone"
-                android:background="@drawable/bg_rectangle"
+                android:orientation="horizontal"
+                android:weightSum="2"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerPriceTxt"/>
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/plainLinear">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/offerOriginalPriceTxt"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/offerOriginalPriceTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Original Price" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/asterisk"
+                            app:tint="@color/red"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/offerOriginalPriceEd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Original Price"
+                        android:gravity="top"
+                        android:padding="12dp"
+                        android:inputType="number"
+                        android:background="@drawable/bg_rectangle"
+                        android:layout_marginTop="12dp"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/offerOfferPriceTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Offer Price" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/asterisk"
+                            app:tint="@color/red"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/offerOfferPriceEd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Offer Price"
+                        android:gravity="top"
+                        android:padding="12dp"
+                        android:inputType="number"
+                        android:background="@drawable/bg_rectangle"
+                        android:layout_marginTop="12dp"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/flatPerLinear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Original Price"
+                android:orientation="vertical"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerPriceEd"/>
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/discountLinear">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/offerOriginalPriceEd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Original Price"
-                android:gravity="top"
-                android:padding="12dp"
-                android:inputType="phone"
-                android:background="@drawable/bg_rectangle"
-                android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerOriginalPriceTxt"/>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/offerOfferPriceTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Offer Price"
-                android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerOriginalPriceEd"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/flatPerTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Flat Percentage" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/offerOfferPriceEd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Offer Price"
-                android:gravity="top"
-                android:padding="12dp"
-                android:inputType="phone"
-                android:background="@drawable/bg_rectangle"
-                android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerOfferPriceTxt"/>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/asterisk"
+                        app:tint="@color/red"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/flatPerEd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Flat Percentage"
+                    android:gravity="top"
+                    android:padding="12dp"
+                    android:inputType="number"
+                    android:background="@drawable/bg_rectangle"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintTop_toBottomOf="@+id/offerPriceTxt"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/offerImgTxt"
@@ -161,7 +318,7 @@
                 android:layout_height="wrap_content"
                 android:text="Offer Image"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/offerOfferPriceEd"/>
+                app:layout_constraintTop_toBottomOf="@+id/flatPerLinear"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/offerImgCard"

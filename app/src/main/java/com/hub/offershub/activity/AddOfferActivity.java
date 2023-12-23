@@ -89,6 +89,19 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
             public void onItemSelected(int position, @Nullable String item, int spinnerIndex, String t1) {
                 Log.e("Check_JK", "onItemSelected item : "+position);
                 Log.e("Check_JK", "onItemSelected t1 : "+spinnerIndex);
+                if (spinnerIndex == 0) {
+                    binding.plainLinear.setVisibility(View.VISIBLE);
+                    binding.discountLinear.setVisibility(View.GONE);
+                    binding.flatPerLinear.setVisibility(View.GONE);
+                } else if (spinnerIndex == 1) {
+                    binding.plainLinear.setVisibility(View.GONE);
+                    binding.discountLinear.setVisibility(View.VISIBLE);
+                    binding.flatPerLinear.setVisibility(View.GONE);
+                } else if (spinnerIndex == 2) {
+                    binding.plainLinear.setVisibility(View.GONE);
+                    binding.discountLinear.setVisibility(View.GONE);
+                    binding.flatPerLinear.setVisibility(View.VISIBLE);
+                }
                 selectedType = (spinnerIndex + 1);
             }
         });
@@ -226,10 +239,10 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
             addOfferDataRequestBody.offer_name = "" + binding.offerNameEd.getText().toString();
             addOfferDataRequestBody.offer_desc = binding.offerDescEd.getText().toString();
             addOfferDataRequestBody.offer_type = selectedType;
-            addOfferDataRequestBody.amount = Integer.parseInt(binding.offerPriceEd.getText().toString());
-            addOfferDataRequestBody.original_amount = Integer.parseInt(binding.offerOriginalPriceEd.getText().toString());
-            addOfferDataRequestBody.offer_amount = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
-            addOfferDataRequestBody.flat_percentage = 0;
+            addOfferDataRequestBody.amount = priceAmount;
+            addOfferDataRequestBody.original_amount = originalPrice;
+            addOfferDataRequestBody.offer_amount = offerPrice;
+            addOfferDataRequestBody.flat_percentage = flatPer;
 
             commonViewModel.addOffer(addOfferDataRequestBody, null);
             showProgress("Please Wait...");
@@ -239,10 +252,10 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
             addOfferDataRequestBody.offer_name = "" + binding.offerNameEd.getText().toString();
             addOfferDataRequestBody.offer_desc = binding.offerDescEd.getText().toString();
             addOfferDataRequestBody.offer_type = selectedType;
-            addOfferDataRequestBody.amount = Integer.parseInt(binding.offerPriceEd.getText().toString());
-            addOfferDataRequestBody.original_amount = Integer.parseInt(binding.offerOriginalPriceEd.getText().toString());
-            addOfferDataRequestBody.offer_amount = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
-            addOfferDataRequestBody.flat_percentage = 0;
+            addOfferDataRequestBody.amount = priceAmount;
+            addOfferDataRequestBody.original_amount = originalPrice;
+            addOfferDataRequestBody.offer_amount = offerPrice;
+            addOfferDataRequestBody.flat_percentage = flatPer;
 
             commonViewModel.addOffer(addOfferDataRequestBody, null);
             showProgress("Please Wait...");
@@ -269,12 +282,29 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
     }
 
     boolean isAllFieldsChecked = false;
+    private int priceAmount = 0, originalPrice = 0, offerPrice = 0, flatPer = 0;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.offerSubmitBtn:
                 isAllFieldsChecked = CheckAllFields();
                 binding.offerSubmitBtn.setEnabled(false);
+                if (binding.offerPriceEd.length() == 0)
+                    priceAmount = 0;
+                else
+                    priceAmount = Integer.parseInt(binding.offerPriceEd.getText().toString());
+                if (binding.offerOriginalPriceEd.length() == 0)
+                    originalPrice = 0;
+                else
+                    originalPrice = Integer.parseInt(binding.offerOriginalPriceEd.getText().toString());
+                if (binding.offerOfferPriceEd.length() == 0)
+                    offerPrice = 0;
+                else
+                    offerPrice = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
+                if (binding.flatPerEd.length() == 0)
+                    flatPer = 0;
+                else
+                    flatPer = Integer.parseInt(binding.flatPerEd.getText().toString());
                 if (isAllFieldsChecked) {
                     callAddOffer();
                 }
@@ -307,21 +337,27 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
             return false;
         }
 
-        if (binding.offerPriceEd.length() == 0) {
+        if (binding.plainLinear.getVisibility() == View.VISIBLE && binding.offerPriceEd.length() == 0) {
             binding.offerPriceEd.setError("Input required");
             binding.offerPriceEd.requestFocus();
             return false;
         }
 
-        if (binding.offerOriginalPriceEd.length() == 0) {
+        if (binding.discountLinear.getVisibility() == View.VISIBLE && binding.offerOriginalPriceEd.length() == 0) {
             binding.offerOriginalPriceEd.setError("Input required");
             binding.offerOriginalPriceEd.requestFocus();
             return false;
         }
 
-        if (binding.offerOfferPriceEd.length() == 0) {
+        if (binding.discountLinear.getVisibility() == View.VISIBLE && binding.offerOfferPriceEd.length() == 0) {
             binding.offerOfferPriceEd.setError("Input required");
             binding.offerOfferPriceEd.requestFocus();
+            return false;
+        }
+
+        if (binding.flatPerLinear.getVisibility() == View.VISIBLE && binding.flatPerEd.length() == 0) {
+            binding.flatPerEd.setError("Input required");
+            binding.flatPerEd.requestFocus();
             return false;
         }
         // after all validation return true.
