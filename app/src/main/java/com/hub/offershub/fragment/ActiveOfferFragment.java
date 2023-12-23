@@ -3,7 +3,10 @@ package com.hub.offershub.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +48,7 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
         // Inflate the layout for this fragment
         binding = FragmentActiveOfferBinding.inflate(getLayoutInflater());
 
-        init();
+//        init();
         setListener();
         setUpRecycler();
 
@@ -60,9 +63,11 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void init() {
-        commonViewModel.getActiveOffers(makeRequest());
-        getActiveOffersData();
-        getDeleteData();
+        if (commonViewModel != null) {
+            commonViewModel.getActiveOffers(makeRequest());
+            getActiveOffersData();
+            getDeleteData();
+        }
     }
 
     private void setListener() {
@@ -84,37 +89,44 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
 
     private void getActiveOffersData() {
         commonViewModel.getMutableActiveOffers().observe(getViewLifecycleOwner(), offerModel -> {
-            if (offerModel != null) {
-                if(offerModel.status.equals("success")) {
-                    if (offerModel.data != null) {
-                        binding.empty.emptyConstraint.setVisibility(View.GONE);
-                        binding.offerRecycler.setVisibility(View.VISIBLE);
-                        list.addAll(offerModel.data);
-                        setNotify();
+            if (ActiveOfferFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (offerModel != null) {
+                    if(offerModel.status.equals("success")) {
+                        if (offerModel.data != null) {
+                            if (page_no == 0)
+                                list.clear();
+                            binding.empty.emptyConstraint.setVisibility(View.GONE);
+                            binding.offerRecycler.setVisibility(View.VISIBLE);
+                            list.addAll(offerModel.data);
+                            setNotify();
+                        } else {
+                            binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                            binding.offerRecycler.setVisibility(View.GONE);
+                        }
                     } else {
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.offerRecycler.setVisibility(View.GONE);
                     }
-                } else {
-                    binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
-                    binding.offerRecycler.setVisibility(View.GONE);
                 }
             }
         });
     }
 
     private void getDeleteData() {
-        commonViewModel.getMutableDeleteOffer().observe(getViewLifecycleOwner(), jsonObject -> {
-            if (jsonObject != null) {
-                try {
-                    if(jsonObject.getString("status").equals("success")) {
-                        adapter.removeData(deleteModel);
-                        Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                    } else {
+        commonViewModel.getMutableDeleteOffer().observe(ActiveOfferFragment.this, jsonObject -> {
+            if (ActiveOfferFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (jsonObject != null) {
+                    try {
+                        Log.e("Check_Offer", "ActiveOffer getDeleteData Status : "+jsonObject.getString("status"));
+                        if(jsonObject.getString("status").equals("success")) {
+                            adapter.removeData(deleteModel, deletePosition);
+                            Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        } else {
 
+                        }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
                 }
             }
         });
@@ -152,9 +164,11 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
     }
 
     OfferModel.Data deleteModel;
+    int deletePosition;
     @Override
-    public void onOfferRemove(Object obj) {
+    public void onOfferRemove(Object obj, int position) {
         deleteModel = (OfferModel.Data) obj;
+        deletePosition = position;
         commonViewModel.getDeleteOffer(makeDeleteRequest(deleteModel.offer_id));
     }
 
@@ -175,5 +189,29 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Check_Offer", "ActiveOffer onPause");
+        if (commonViewModel != null) {
+            commonViewModel.getMutableActiveOffers().removeObservers(this);
+            commonViewModel.getMutableDeleteOffer().removeObservers(ActiveOfferFragment.this);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (list != null) {
+                if (list.size() > 0)
+                    list.clear();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        init();
     }
 }

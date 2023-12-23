@@ -31,7 +31,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        commonViewModel = new ViewModelProvider(requireActivity()).get(CommonViewModel.class);
+        commonViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory()).get(CommonViewModel.class);
     }
 
     public void loadFragment(Fragment fragment) {

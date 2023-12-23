@@ -3,6 +3,7 @@ package com.hub.offershub.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -106,25 +107,27 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
 
     private void getInActiveData() {
         commonViewModel.getMutableInActiveBusiness().observe(getViewLifecycleOwner(), businessModel -> {
-            if (businessModel != null) {
-                Log.e("Check_JK", "InActiveShopsFrag getInActiveData Status : "+businessModel.status);
-                if(businessModel.status.equals("success")) {
-                    if (businessModel.data != null) {
-                        binding.empty.emptyConstraint.setVisibility(View.GONE);
-                        binding.businessRecycler.setVisibility(View.VISIBLE);
-                        if (page_no == 0) {
-                            if (list.size() > 0)
-                                list.clear();
+            if (InActiveBusinessFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (businessModel != null) {
+                    Log.e("Check_JK", "InActiveShopsFrag getInActiveData Status : "+businessModel.status);
+                    if(businessModel.status.equals("success")) {
+                        if (businessModel.data != null) {
+                            binding.empty.emptyConstraint.setVisibility(View.GONE);
+                            binding.businessRecycler.setVisibility(View.VISIBLE);
+                            if (page_no == 0) {
+                                if (list.size() > 0)
+                                    list.clear();
+                            }
+                            list.addAll(businessModel.data);
+                            setNotify();
+                        } else {
+                            binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                            binding.businessRecycler.setVisibility(View.GONE);
                         }
-                        list.addAll(businessModel.data);
-                        setNotify();
                     } else {
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.businessRecycler.setVisibility(View.GONE);
                     }
-                } else {
-                    binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
-                    binding.businessRecycler.setVisibility(View.GONE);
                 }
             }
         });
@@ -132,16 +135,18 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
 
     private void getDeleteData() {
         commonViewModel.getMutableDeleteShop().observe(getViewLifecycleOwner(), jsonObject -> {
-            if (jsonObject != null) {
-                try {
-                    if(jsonObject.getString("status").equals("success")) {
-                        adapter.removeData(deleteModel);
-                        Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                    } else {
+            if (InActiveBusinessFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (jsonObject != null) {
+                    try {
+                        if(jsonObject.getString("status").equals("success")) {
+                            adapter.removeData(deleteModel);
+                            Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        } else {
 
+                        }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
                 }
             }
         });
@@ -177,5 +182,28 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (commonViewModel != null) {
+            commonViewModel.getMutableInActiveBusiness().removeObservers(this);
+            commonViewModel.getMutableDeleteShop().removeObservers(this);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (list != null) {
+                if (list.size() > 0)
+                    list.clear();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        init();
     }
 }

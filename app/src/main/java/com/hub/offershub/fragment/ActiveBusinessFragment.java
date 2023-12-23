@@ -3,6 +3,7 @@ package com.hub.offershub.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -49,7 +50,7 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
         // Inflate the layout for this fragment
         binding = FragmentActiveBusinessBinding.inflate(getLayoutInflater());
 
-        init();
+//        init();
         setListener();
         setUpRecycler();
 
@@ -110,22 +111,24 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
 
     private void getActiveData() {
         commonViewModel.getMutableActiveBusiness().observe(getViewLifecycleOwner(), businessModel -> {
-            if (businessModel != null) {
-                if(businessModel.status.equals("success")) {
-                    if (businessModel.data != null) {
-                        if (page_no == 0)
-                            list.clear();
-                        binding.empty.emptyConstraint.setVisibility(View.GONE);
-                        binding.businessRecycler.setVisibility(View.VISIBLE);
-                        list.addAll(businessModel.data);
-                        setNotify();
+            if (ActiveBusinessFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (businessModel != null) {
+                    if(businessModel.status.equals("success")) {
+                        if (businessModel.data != null) {
+                            if (page_no == 0)
+                                list.clear();
+                            binding.empty.emptyConstraint.setVisibility(View.GONE);
+                            binding.businessRecycler.setVisibility(View.VISIBLE);
+                            list.addAll(businessModel.data);
+                            setNotify();
+                        } else {
+                            binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                            binding.businessRecycler.setVisibility(View.GONE);
+                        }
                     } else {
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.businessRecycler.setVisibility(View.GONE);
                     }
-                } else {
-                    binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
-                    binding.businessRecycler.setVisibility(View.GONE);
                 }
             }
         });
@@ -133,16 +136,18 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
 
     private void getDeleteData() {
         commonViewModel.getMutableDeleteShop().observe(getViewLifecycleOwner(), jsonObject -> {
-            if (jsonObject != null) {
-                try {
-                    if(jsonObject.getString("status").equals("success")) {
-                        adapter.removeData(deleteModel);
-                        Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                    } else {
+            if (ActiveBusinessFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (jsonObject != null) {
+                    try {
+                        if(jsonObject.getString("status").equals("success")) {
+                            adapter.removeData(deleteModel);
+                            Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        } else {
 
+                        }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
                 }
             }
         });
@@ -181,8 +186,25 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (commonViewModel != null) {
+            commonViewModel.getMutableActiveBusiness().removeObservers(this);
+            commonViewModel.getMutableDeleteShop().removeObservers(this);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        try {
+            if (list != null) {
+                if (list.size() > 0)
+                    list.clear();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         init();
     }
 }

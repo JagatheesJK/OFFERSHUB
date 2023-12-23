@@ -69,7 +69,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 Log.e("Check_JK", "Type : "+model.offer_type+" ELSE ");
                 holder.amountLinear.setVisibility(View.VISIBLE);
                 holder.discountLinear.setVisibility(View.GONE);
-                holder.offerPrice.setText("Flat "+model.flat_percentage);
+                holder.offerPrice.setText("Flat "+model.flat_percentage+"%");
             }
 //            holder.offerSwitch.setChecked(model.offerToggle);
             holder.statusTxt.setText(""+model.adminverifystatus);
@@ -99,7 +99,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             });
 
             holder.deleteLinear.setOnClickListener(v -> {
-                listener.onOfferRemove(model);
+                listener.onOfferRemove(model, position);
             });
 
             holder.insightLinear.setOnClickListener(v -> {
@@ -113,9 +113,10 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         return list.size();
     }
 
-    public void removeData(OfferModel.Data model) {
+    public void removeData(OfferModel.Data model, int position) {
         list.remove(model);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, getItemCount());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
