@@ -60,6 +60,7 @@ public class OtpActivity extends BaseActivity {
         isRegister = getIntent().getBooleanExtra("isRegister",false);
         callBack();
         sendOtp("+91" + mobile);
+        binding.pinView.requestFocus();
         binding.verifyBtn.setOnClickListener(v -> {
             String code = binding.pinView.getText().toString();
             if (code.length() < 6) {
