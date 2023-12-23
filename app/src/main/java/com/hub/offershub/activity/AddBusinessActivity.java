@@ -21,7 +21,9 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -140,6 +142,58 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
                 if (binding.categorySpinner.isShowing())
                     binding.categorySpinner.dismiss();
+            }
+        });
+
+        binding.mobileEd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that the characters within charSequence are about to be replaced with new text
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that somewhere within charSequence, the text has been changed
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This method is called to notify you that somewhere within editable, the text has been changed
+                String input = editable.toString();
+
+                if (input.length() < 10) {
+                    binding.mobileEd.setError("Enter Valid Mobile Number");
+                } else if ( input.length() == 10) {
+                    // Clear any previous validation messages or actions
+                    // Example: You can clear any error messages
+                    binding.mobileEd.setError(null);
+                }
+            }
+        });
+
+        binding.pincodeEd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that the characters within charSequence are about to be replaced with new text
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that somewhere within charSequence, the text has been changed
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This method is called to notify you that somewhere within editable, the text has been changed
+                String input = editable.toString();
+
+                if (input.length() < 6) {
+                    binding.pincodeEd.setError("Enter Valid PinCode");
+                } else if ( input.length() == 6) {
+                    // Clear any previous validation messages or actions
+                    // Example: You can clear any error messages
+                    binding.pincodeEd.setError(null);
+                }
             }
         });
     }
@@ -629,7 +683,10 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             binding.mobileEd.setError("Input required");
             binding.mobileEd.requestFocus();
             return false;
+        }  else if(binding.mobileEd.length() >0 && binding.mobileEd.length() < 10 ) {
+            binding.pincodeEd.setError("Enter Valid Mobile Number");
         }
+
 
         if (binding.categorySpinner.length() == 0) {
             binding.categorySpinner.setError("Input required");
@@ -665,6 +722,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             binding.pincodeEd.setError("Input required");
             binding.pincodeEd.requestFocus();
             return false;
+        } else if(binding.pincodeEd.length() >0 && binding.pincodeEd.length() < 6 ) {
+            binding.pincodeEd.setError("Enter Valid PinCode");
         }
 
         // after all validation return true.

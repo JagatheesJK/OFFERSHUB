@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -114,6 +116,35 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
             public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
                 if (binding.categorySpinner.isShowing())
                     binding.categorySpinner.dismiss();
+            }
+        });
+
+        binding.flatPerEd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that the characters within charSequence are about to be replaced with new text
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that somewhere within charSequence, the text has been changed
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This method is called to notify you that somewhere within editable, the text has been changed
+                String inputStr = editable.toString();
+                if (!inputStr.isEmpty()) {
+                    int input = Integer.parseInt(inputStr);
+
+                    if (input > 0 && input < 100) {
+                        // Valid number between 0 and 100
+                        binding.flatPerEd.setError(null);
+                    } else {
+                        // Invalid number
+                        binding.flatPerEd.setError("Flat % applicable between 0 and 100");
+                    }
+                }
             }
         });
     }
@@ -359,6 +390,8 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
             binding.flatPerEd.setError("Input required");
             binding.flatPerEd.requestFocus();
             return false;
+        } else if(binding.flatPerLinear.getVisibility() == View.VISIBLE && binding.flatPerEd.getText().toString() == "0") {
+            binding.flatPerEd.setError("Flat % applicable between 0 and 100");
         }
         // after all validation return true.
         return true;
