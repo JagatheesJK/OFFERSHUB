@@ -1,6 +1,5 @@
 package com.hub.offershub.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -28,20 +27,6 @@ import com.chart.all.anychart.enums.MarkerType;
 import com.chart.all.anychart.enums.Position;
 import com.chart.all.anychart.enums.TooltipPositionMode;
 import com.chart.all.anychart.graphics.vector.Stroke;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.hub.offershub.R;
 import com.hub.offershub.databinding.FragmentOfferDashboardBinding;
 
 import java.util.ArrayList;
@@ -264,6 +249,5 @@ public class OfferDashboardFragment extends Fragment {
             setValue("value2", value2);
             setValue("value3", value3);
         }
-
     }
 }
