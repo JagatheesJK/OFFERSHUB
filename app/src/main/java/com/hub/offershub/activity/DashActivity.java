@@ -2,7 +2,6 @@ package com.hub.offershub.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
@@ -21,8 +20,8 @@ import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityDashBinding;
 import com.hub.offershub.fragment.BookingListFragment;
-import com.hub.offershub.fragment.OfferDashboardFragment;
 import com.hub.offershub.fragment.OfferListFragment;
+import com.hub.offershub.fragment.RatingFragment;
 import com.hub.offershub.fragment.ShopDetailsFragment;
 import com.hub.offershub.model.BusinessModel;
 
@@ -103,7 +102,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
                 fragment = new BookingListFragment();
                 break;
             case R.id.nav_rating_review:
-                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+                fragment = RatingFragment.newInstance(model.id);
                 break;
             case R.id.paymant:
                 Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();

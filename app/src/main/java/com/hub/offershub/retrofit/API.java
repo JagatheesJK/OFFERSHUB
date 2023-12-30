@@ -1,11 +1,11 @@
 package com.hub.offershub.retrofit;
 
 import com.google.gson.JsonElement;
-import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.OfferModel;
+import com.hub.offershub.model.RatingModel;
 
 import java.util.List;
 import java.util.Map;
@@ -14,8 +14,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -101,4 +99,23 @@ public interface API {
 
     @POST("deleteOffer")
     Call<JsonElement> deleteOffer(@Body Map<String, Object> body);
+
+    @POST("updateShopsDetails")
+    Call<JsonElement> updateShopsDetails(@Body Map<String, Object> body);
+
+    @POST("updateShopImage")
+    @Multipart
+    Call<JsonElement> updateShopImages(@Part MultipartBody.Part shopimage,
+                                       @Part("shop_id") RequestBody shop_id);
+
+    @POST("updateOfferDetails")
+    Call<JsonElement> updateOfferDetails(@Body Map<String, Object> body);
+
+    @POST("updateOfferImage")
+    @Multipart
+    Call<JsonElement> updateOfferImages(@Part MultipartBody.Part shopimage,
+                                       @Part("offer_id") RequestBody shop_id);
+
+    @POST("getRatingReview")
+    Call<RatingModel> getRatingReview(@Body Map<String, Object> body);
 }

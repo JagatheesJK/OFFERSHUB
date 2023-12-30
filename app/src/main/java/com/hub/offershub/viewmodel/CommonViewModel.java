@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.model.AddOfferDataRequestBody;
 import com.hub.offershub.model.AddShopDataRequestBody;
@@ -18,6 +18,7 @@ import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.OfferModel;
+import com.hub.offershub.model.RatingModel;
 import com.hub.offershub.retrofit.API;
 import com.hub.offershub.retrofit.RetrofitClient;
 import com.hub.offershub.utils.loading.MyProgressDialog;
@@ -50,10 +51,15 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<Amenity> mutableAmenity = new MutableLiveData<>();
     private final MutableLiveData<CategoryResponse> mutableCategory = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableDeleteOffer = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableUpdateShopDetails = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableUpdateShopImages = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableUpdateOfferDetails = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableUpdateOfferImages = new MutableLiveData<>();
+    private final MutableLiveData<RatingModel> mutableRatingData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
-        myProgressDialog = new MyProgressDialog(application.getApplicationContext());
+        myProgressDialog = new MyProgressDialog(AppApplication.getInstance());
     }
 
     public void getActiveShops(Map<String, Object> requestData) {
@@ -62,6 +68,7 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                Log.e("Check_JKUpdate", "getActiveShops onPreExecute");
                 showDialog();
             }
 
@@ -496,6 +503,221 @@ public class CommonViewModel extends AndroidViewModel {
 
     }
 
+    public void updateShopDetails(Map<String, Object> requestData) {
+        Log.e("Check_JKUpdate", "updateDetails");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.updateShopsDetails(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "updateDetails onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableUpdateShopDetails.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableUpdateShopDetails.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "updateDetails Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void updateShopImages(MultipartBody.Part filePart, RequestBody requestBody) {
+        Log.e("Check_JKUpdate", "updateShopImages");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.updateShopImages(filePart, requestBody);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "updateShopImages onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableUpdateShopImages.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableUpdateShopImages.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "updateShopImages Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void updateOfferDetails(Map<String, Object> requestData) {
+        Log.e("Check_JKUpdate", "updateOfferDetails");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.updateOfferDetails(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "updateOfferDetails onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableUpdateOfferDetails.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableUpdateOfferDetails.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "updateOfferDetails Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void updateOfferImages(MultipartBody.Part filePart, RequestBody requestBody) {
+        Log.e("Check_JKUpdate", "updateOfferImages");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.updateOfferImages(filePart, requestBody);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "updateOfferImages onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableUpdateOfferImages.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableUpdateOfferImages.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "updateOfferImages Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void getRatingReview(Map<String, Object> requestData) {
+        Log.e("Check_JKUpdate", "getRatingReview");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<RatingModel> call = apiInterface.getRatingReview(requestData);
+                call.enqueue(new Callback<RatingModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<RatingModel> call, @NonNull Response<RatingModel> response) {
+                        Log.e("Check_JKUpdate", "getRatingReview onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableRatingData.postValue(response.body());
+                        } else
+                            mutableRatingData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<RatingModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "getRatingReview Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -536,12 +758,33 @@ public class CommonViewModel extends AndroidViewModel {
         return mutableAddOffer;
     }
 
+    public MutableLiveData<JSONObject> getMutableUpdateShopDetails() {
+        return mutableUpdateShopDetails;
+    }
+
+    public MutableLiveData<JSONObject> getMutableUpdateShopImages() {
+        return mutableUpdateShopImages;
+    }
+
+    public MutableLiveData<JSONObject> getMutableUpdateOfferDetails() {
+        return mutableUpdateOfferDetails;
+    }
+
+    public MutableLiveData<JSONObject> getMutableUpdateOfferImages() {
+        return mutableUpdateOfferImages;
+    }
+
+    public MutableLiveData<RatingModel> getMutableRatingData() {
+        return mutableRatingData;
+    }
+
     public void showDialog() {
         try {
             if (myProgressDialog != null && !myProgressDialog.isShowing())
                 myProgressDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("Check_JKUpdate", "showDialog Error : "+e.getMessage());
         }
     }
 

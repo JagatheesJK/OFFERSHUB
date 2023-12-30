@@ -1,22 +1,24 @@
 package com.hub.offershub.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.hub.offershub.R;
+import com.hub.offershub.activity.EditDetailsActivity;
 import com.hub.offershub.adapter.OfferAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentInActiveOfferBinding;
 import com.hub.offershub.listener.OfferListener;
+import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
@@ -113,7 +115,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     }
 
     private void getDeleteData() {
-        commonViewModel.getMutableDeleteOffer().observe(InActiveOfferFragment.this, jsonObject -> {
+        commonViewModel.getMutableDeleteOffer().observe(getViewLifecycleOwner(), jsonObject -> {
             if (InActiveOfferFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (jsonObject != null) {
                     try {
@@ -147,8 +149,8 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     public void onDestroyView() {
         super.onDestroyView();
         if (commonViewModel != null) {
-            commonViewModel.getMutableInActiveOffers().removeObservers(this);
-            commonViewModel.getMutableDeleteOffer().removeObservers(this);
+            commonViewModel.getMutableInActiveOffers().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteOffer().removeObservers(getViewLifecycleOwner());
         }
     }
 
@@ -159,7 +161,13 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onOfferEdit(Object obj) {
-        Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
+        OfferModel.Data model = (OfferModel.Data) obj;
+        BusinessModel.Data businessModel = null;
+        Intent i = new Intent(getActivity(), EditDetailsActivity.class);
+        i.putExtra("offer_model", model);
+        i.putExtra("shop_model", businessModel);
+        i.putExtra("isShop", false);
+        startActivity(i);
     }
 
     OfferModel.Data deleteModel;
@@ -194,8 +202,8 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     public void onPause() {
         super.onPause();
         if (commonViewModel != null) {
-            commonViewModel.getMutableInActiveOffers().removeObservers(this);
-            commonViewModel.getMutableDeleteOffer().removeObservers(InActiveOfferFragment.this);
+            commonViewModel.getMutableInActiveOffers().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteOffer().removeObservers(getViewLifecycleOwner());
         }
     }
 

@@ -43,6 +43,10 @@ public class BusinessModel implements Parcelable {
     public static class Data implements Parcelable {
         public String id;
         public String shop_name;
+        public String mobile;
+        public String upi_details;
+        public String latitude;
+        public String longitude;
         public String address1;
         public String address2;
         public String city;
@@ -58,6 +62,10 @@ public class BusinessModel implements Parcelable {
         protected Data(Parcel in) {
             id = in.readString();
             shop_name = in.readString();
+            mobile = in.readString();
+            upi_details = in.readString();
+            latitude = in.readString();
+            longitude = in.readString();
             address1 = in.readString();
             address2 = in.readString();
             city = in.readString();
@@ -92,6 +100,10 @@ public class BusinessModel implements Parcelable {
         public void writeToParcel(@NonNull Parcel dest, int flags) {
             dest.writeString(id);
             dest.writeString(shop_name);
+            dest.writeString(mobile);
+            dest.writeString(upi_details);
+            dest.writeString(latitude);
+            dest.writeString(longitude);
             dest.writeString(address1);
             dest.writeString(address2);
             dest.writeString(city);

@@ -35,11 +35,11 @@
                     android:layout_height="wrap_content"
                     android:text="Offer Name"/>
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/asterisk"
-                    app:tint="@color/red"/>
+                    android:text=" *"
+                    android:textColor="@color/red" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -68,18 +68,18 @@
                     android:layout_height="wrap_content"
                     android:text="Description" />
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/asterisk"
-                    app:tint="@color/red"/>
+                    android:text=" *"
+                    android:textColor="@color/red" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/offerDescEd"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="90dp"
                 android:hint="Description"
                 android:gravity="top"
                 android:paddingStart="12dp"
@@ -105,11 +105,11 @@
                     android:layout_height="wrap_content"
                     android:text="Offer Type" />
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/asterisk"
-                    app:tint="@color/red"/>
+                    android:text=" *"
+                    android:textColor="@color/red" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -159,11 +159,11 @@
                         android:layout_height="wrap_content"
                         android:text="Price" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/asterisk"
-                        app:tint="@color/red"/>
+                        android:text=" *"
+                        android:textColor="@color/red" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -208,11 +208,11 @@
                             android:layout_height="wrap_content"
                             android:text="Original Price" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/asterisk"
-                            app:tint="@color/red"/>
+                            android:text=" *"
+                            android:textColor="@color/red" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -247,11 +247,11 @@
                             android:layout_height="wrap_content"
                             android:text="Offer Price" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/asterisk"
-                            app:tint="@color/red"/>
+                            android:text=" *"
+                            android:textColor="@color/red" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -290,11 +290,11 @@
                         android:layout_height="wrap_content"
                         android:text="Flat Percentage" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/asterisk"
-                        app:tint="@color/red"/>
+                        android:text=" *"
+                        android:textColor="@color/red" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -16,11 +16,13 @@ import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.activity.DashActivity;
+import com.hub.offershub.activity.EditDetailsActivity;
 import com.hub.offershub.adapter.BusinessAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentInActiveBusinessBinding;
 import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import org.json.JSONException;
@@ -48,7 +50,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentInActiveBusinessBinding.inflate(getLayoutInflater());
-        init();
+//        init();
         setListener();
         setUpRecycler();
         binding.swipeRefresh.setOnRefreshListener(() -> {
@@ -62,6 +64,8 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     }
 
     private void init() {
+        Log.e("Check_JKShop", "init 1 : "+commonViewModel.getMutableInActiveBusiness().hasActiveObservers());
+        Log.e("Check_JKShop", "init 2 : "+commonViewModel.getMutableInActiveBusiness().isInitialized());
         commonViewModel.getInActiveShops(makeRequest());
         getInActiveData();
         getDeleteData();
@@ -95,7 +99,13 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
 
     @Override
     public void onItemEdited(Object obj) {
-        Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
+        BusinessModel.Data model = (BusinessModel.Data) obj;
+        OfferModel.Data offerModel = null;
+        Intent i = new Intent(getActivity(), EditDetailsActivity.class);
+        i.putExtra("shop_model", model);
+        i.putExtra("offer_model", offerModel);
+        i.putExtra("isShop", true);
+        startActivity(i);
     }
 
     BusinessModel.Data deleteModel;
@@ -168,8 +178,8 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     public void onDestroyView() {
         super.onDestroyView();
         if (commonViewModel != null) {
-            commonViewModel.getMutableInActiveBusiness().removeObservers(this);
-            commonViewModel.getMutableDeleteShop().removeObservers(this);
+            commonViewModel.getMutableInActiveBusiness().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteShop().removeObservers(getViewLifecycleOwner());
         }
     }
 
@@ -187,15 +197,17 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     @Override
     public void onPause() {
         super.onPause();
+        Log.e("Check_JKShop", "onPause : "+commonViewModel);
         if (commonViewModel != null) {
-            commonViewModel.getMutableInActiveBusiness().removeObservers(this);
-            commonViewModel.getMutableDeleteShop().removeObservers(this);
+            commonViewModel.getMutableInActiveBusiness().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteShop().removeObservers(getViewLifecycleOwner());
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("Check_JKShop", "onResume");
         try {
             if (list != null) {
                 if (list.size() > 0)

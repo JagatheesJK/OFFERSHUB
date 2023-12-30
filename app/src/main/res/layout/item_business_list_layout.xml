@@ -202,6 +202,8 @@
                     android:layout_height="17dp"
                     app:srcCompat="@drawable/ic_pen"
                     app:tint="@color/grey"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
@@ -211,6 +213,8 @@
                     android:layout_height="24dp"
                     app:srcCompat="@drawable/ic_delete"
                     app:tint="@color/grey"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_marginStart="28dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>

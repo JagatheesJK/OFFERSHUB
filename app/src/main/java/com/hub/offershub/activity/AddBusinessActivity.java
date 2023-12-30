@@ -300,8 +300,46 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     Toast.makeText(AddBusinessActivity.this, "path is null", Toast.LENGTH_SHORT).show();
                 }
-            } else if (requestCode == GALLERY_REQUEST_CODE) {
+            }
+            else if (requestCode == GALLERY_REQUEST_CODE) {
                 if (data != null) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        String path = getPath(AddBusinessActivity.this, uri);
+                        if (path != null) {
+                            file = new File(path);
+                            if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
+                                Toast.makeText(AddBusinessActivity.this, "Please Select file below 5MB", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+//                            compressImage();
+                            showProgress(getString(R.string.please_wait));
+                            binding.shopAddImg.setVisibility(View.GONE);
+                            Glide.with(AddBusinessActivity.this).load(file.getAbsolutePath()).listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    hideProgress();
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    hideProgress();
+                                    return false;
+                                }
+                            }).into(binding.shopImg);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "path is null", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "uri is null", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "data is null", Toast.LENGTH_SHORT).show();
+                }
+
+
+                /*if (data != null) {
                     binding.shopAddImg.setVisibility(View.GONE);
                     //binding.shopImgRecycler.setVisibility(View.VISIBLE);
                     if (data.getClipData() != null) {
@@ -323,8 +361,8 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                                     file = new File(path);
                                 }
                             }
-                           /* selectedImages.add(imageUri);
-                            setNotifyData();*/
+                           *//* selectedImages.add(imageUri);
+                            setNotifyData();*//*
                             if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
                                 Toast.makeText(AddBusinessActivity.this, "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
                                 return;
@@ -347,7 +385,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                             }).into(binding.shopImg);
                         }
                     }
-                    /*Uri uri = data.getData();
+                    *//*Uri uri = data.getData();
                     if (uri != null) {
                         String path = getPath(AddBusinessActivity.this, uri);
                         if (path != null) {
@@ -377,10 +415,10 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                         }
                     } else {
                         Toast.makeText(AddBusinessActivity.this, "uri is null", Toast.LENGTH_SHORT).show();
-                    }*/
+                    }*//*
                 } else {
                     Toast.makeText(AddBusinessActivity.this, "data is null", Toast.LENGTH_SHORT).show();
-                }
+                }*/
                 hideProgress();
             }
         }
@@ -588,7 +626,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 if (isAllFieldsChecked) {
                     binding.addShopSubmit.setEnabled(false);
                         if(file != null) {
-                            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(),
+                            MultipartBody.Part filePart = MultipartBody.Part.createFormData("shopimage", file.getName(),
                                     RequestBody.create(MediaType.parse("multipart/form-data"), file));
                             AddShopDataRequestBody addShopDataRequestBody = new AddShopDataRequestBody();
                             addShopDataRequestBody.shopownerid = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID, 0);

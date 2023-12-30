@@ -6,22 +6,22 @@ import android.os.Bundle;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.activity.DashActivity;
+import com.hub.offershub.activity.EditDetailsActivity;
 import com.hub.offershub.adapter.BusinessAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentActiveBusinessBinding;
 import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import org.json.JSONException;
@@ -99,7 +99,13 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
 
     @Override
     public void onItemEdited(Object obj) {
-        Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
+        BusinessModel.Data model = (BusinessModel.Data) obj;
+        OfferModel.Data offerModel = null;
+        Intent i = new Intent(getActivity(), EditDetailsActivity.class);
+        i.putExtra("shop_model", model);
+        i.putExtra("offer_model", offerModel);
+        i.putExtra("isShop", true);
+        startActivity(i);
     }
 
     BusinessModel.Data deleteModel;
@@ -169,8 +175,8 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     public void onDestroyView() {
         super.onDestroyView();
         if (commonViewModel != null) {
-            commonViewModel.getMutableActiveBusiness().removeObservers(this);
-            commonViewModel.getMutableDeleteShop().removeObservers(this);
+            commonViewModel.getMutableActiveBusiness().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteShop().removeObservers(getViewLifecycleOwner());
         }
     }
 
@@ -189,8 +195,8 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     public void onPause() {
         super.onPause();
         if (commonViewModel != null) {
-            commonViewModel.getMutableActiveBusiness().removeObservers(this);
-            commonViewModel.getMutableDeleteShop().removeObservers(this);
+            commonViewModel.getMutableActiveBusiness().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteShop().removeObservers(getViewLifecycleOwner());
         }
     }
 
