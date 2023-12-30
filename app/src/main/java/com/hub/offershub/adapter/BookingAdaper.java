@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hub.offershub.R;
 import com.hub.offershub.model.BookModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHolder> {
 
-    private List<BookModel> list;
+    private List<BookModel.Data> list;
     private Context ctx;
 
-    public BookingAdaper(Context context, List<BookModel> list) {
+    public BookingAdaper(Context context, List<BookModel.Data> list) {
         this.list = list;
         ctx = context;
     }
@@ -34,12 +33,12 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
 
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-        BookModel model = list.get(position);
+        BookModel.Data model = list.get(position);
         if (model != null) {
-            holder.offerNameTxt.setText(""+model.offerName);
-            holder.userNameTxt.setText(""+model.userName);
-            holder.userMobileTxt.setText(""+model.userMobile);
-            holder.bookingDateTxt.setText(""+model.bookingDate);
+            holder.offerNameTxt.setText(""+model.offer_name);
+            holder.userNameTxt.setText(""+model.name);
+            holder.userMobileTxt.setText(""+model.fullmobile);
+            holder.bookingDateTxt.setText(""+model.user_ordered_date);
         }
     }
 

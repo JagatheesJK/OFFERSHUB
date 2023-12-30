@@ -2,34 +2,36 @@ package com.hub.offershub.fragment;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hub.offershub.R;
 import com.hub.offershub.adapter.BookingAdaper;
-import com.hub.offershub.adapter.BusinessAdapter;
+import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentBookingListBinding;
 import com.hub.offershub.model.BookModel;
-import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class BookingListFragment extends Fragment {
+public class BookingListFragment extends BaseFragment {
 
     private FragmentBookingListBinding binding;
-    private List<BookModel> list = new ArrayList<>();
+    private List<BookModel.Data> list = new ArrayList<>();
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
     private BookingAdaper adapter;
+    private int page_no = 0;
+    private static String shopID;
 
-    public static BookingListFragment newInstance() {
+    public static BookingListFragment newInstance(String shop_id) {
         BookingListFragment fragment = new BookingListFragment();
+        shopID = shop_id;
         return fragment;
     }
 
@@ -42,22 +44,24 @@ public class BookingListFragment extends Fragment {
         init();
         setListener();
         setUpRecycler();
+        getBookingData();
 
-        binding.swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                binding.swipeRefresh.setRefreshing(false);
-            }
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+            list.clear();
+            page_no = 0;
+            binding.swipeRefresh.setRefreshing(false);
+            commonViewModel.getOrderDetailsShops(makeRequest());
         });
 
         return binding.getRoot();
     }
 
     private void init() {
-        list.add(new BookModel("Offer1", "JK", "9898574636", "10-11-2023"));
-        list.add(new BookModel("Offer2", "KJ", "9898574636", "10-11-2023"));
-        list.add(new BookModel("Offer3", "DJ", "9898574636", "10-11-2023"));
-        list.add(new BookModel("Offer4", "JD", "9898574636", "10-11-2023"));
+//        list.add(new BookModel("Offer1", "JK", "9898574636", "10-11-2023"));
+//        list.add(new BookModel("Offer2", "KJ", "9898574636", "10-11-2023"));
+//        list.add(new BookModel("Offer3", "DJ", "9898574636", "10-11-2023"));
+//        list.add(new BookModel("Offer4", "JD", "9898574636", "10-11-2023"));
+        commonViewModel.getOrderDetailsShops(makeRequest());
     }
 
     private void setListener() {
@@ -81,5 +85,44 @@ public class BookingListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().setTitle("Booking Details");
+    }
+
+    private void getBookingData() {
+        commonViewModel.getMutableBookingData().observe(getViewLifecycleOwner(), bookModel -> {
+            if (BookingListFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (bookModel != null) {
+                    if ("success".equals(bookModel.status)) {
+                        if (bookModel.data != null) {
+                            if (page_no == 0)
+                                list.clear();
+                            binding.empty.emptyConstraint.setVisibility(View.GONE);
+                            binding.bookingRecycler.setVisibility(View.VISIBLE);
+                            list.addAll(bookModel.data);
+                            setNotify();
+                        } else {
+                            binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                            binding.bookingRecycler.setVisibility(View.GONE);
+                        }
+                    } else {
+                        binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
+                        binding.bookingRecycler.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
+
+    private Map<String, Object> makeRequest() {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shop_id", shopID);
+        return requestData;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (commonViewModel != null) {
+            commonViewModel.getMutableBookingData().removeObservers(getViewLifecycleOwner());
+        }
     }
 }

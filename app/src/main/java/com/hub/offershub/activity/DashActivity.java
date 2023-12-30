@@ -99,7 +99,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
                 fragment = OfferListFragment.newInstance(model.id);
                 break;
             case R.id.nav_booking_details:
-                fragment = new BookingListFragment();
+                fragment = BookingListFragment.newInstance(model.id);
                 break;
             case R.id.nav_rating_review:
                 fragment = RatingFragment.newInstance(model.id);

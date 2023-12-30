@@ -2,6 +2,7 @@ package com.hub.offershub.retrofit;
 
 import com.google.gson.JsonElement;
 import com.hub.offershub.model.Amenity;
+import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.OfferModel;
@@ -88,7 +89,7 @@ public interface API {
                                @Part("longitude") RequestBody longitude
                                );
 
-    @POST("deleteShop")
+    @POST("deleteShopPermanent")
     Call<JsonElement> deleteShop(@Body Map<String, Object> body);
 
     @GET("getMasterAmenities")
@@ -97,7 +98,7 @@ public interface API {
     @GET("categoryListWithCount")
     Call<CategoryResponse> getCategory();
 
-    @POST("deleteOffer")
+    @POST("deleteOfferPermanent")
     Call<JsonElement> deleteOffer(@Body Map<String, Object> body);
 
     @POST("updateShopsDetails")
@@ -118,4 +119,7 @@ public interface API {
 
     @POST("getRatingReview")
     Call<RatingModel> getRatingReview(@Body Map<String, Object> body);
+
+    @POST("getOrderDetails_shops")
+    Call<BookModel> getOrderDetailsShops(@Body Map<String, Object> body);
 }

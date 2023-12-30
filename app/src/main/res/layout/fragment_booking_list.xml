@@ -18,4 +18,9 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <include
+        android:visibility="gone"
+        android:id="@+id/empty"
+        layout="@layout/fragment_empty_list"/>
+
 </FrameLayout>

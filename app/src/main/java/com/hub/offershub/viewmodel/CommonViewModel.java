@@ -15,6 +15,7 @@ import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.model.AddOfferDataRequestBody;
 import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
+import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.OfferModel;
@@ -56,6 +57,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableUpdateOfferDetails = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateOfferImages = new MutableLiveData<>();
     private final MutableLiveData<RatingModel> mutableRatingData = new MutableLiveData<>();
+    private final MutableLiveData<BookModel> mutableBookingData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -718,6 +720,45 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void getOrderDetailsShops(Map<String, Object> requestData) {
+        Log.e("Check_JKUpdate", "getOrderDetailsShops");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<BookModel> call = apiInterface.getOrderDetailsShops(requestData);
+                call.enqueue(new Callback<BookModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<BookModel> call, @NonNull Response<BookModel> response) {
+                        Log.e("Check_JKUpdate", "getOrderDetailsShops onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableBookingData.postValue(response.body());
+                        } else
+                            mutableBookingData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<BookModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "getOrderDetailsShops Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -776,6 +817,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<RatingModel> getMutableRatingData() {
         return mutableRatingData;
+    }
+
+    public MutableLiveData<BookModel> getMutableBookingData() {
+        return mutableBookingData;
     }
 
     public void showDialog() {
