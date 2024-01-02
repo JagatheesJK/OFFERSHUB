@@ -112,7 +112,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     @Override
     public void onItemRemoved(Object obj) {
         deleteModel = (BusinessModel.Data) obj;
-        commonViewModel.getDeleteShop(makeDeleteRequest(deleteModel.id));
+        commonViewModel.deleteShopPermanent(makeDeleteRequest(deleteModel.id));
     }
 
     private void getInActiveData() {
@@ -144,7 +144,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     }
 
     private void getDeleteData() {
-        commonViewModel.getMutableDeleteShop().observe(getViewLifecycleOwner(), jsonObject -> {
+        commonViewModel.getMutableDeleteShopPermanent().observe(getViewLifecycleOwner(), jsonObject -> {
             if (InActiveBusinessFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (jsonObject != null) {
                     try {
@@ -179,7 +179,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
         super.onDestroyView();
         if (commonViewModel != null) {
             commonViewModel.getMutableInActiveBusiness().removeObservers(getViewLifecycleOwner());
-            commonViewModel.getMutableDeleteShop().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteShopPermanent().removeObservers(getViewLifecycleOwner());
         }
     }
 
@@ -200,7 +200,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
         Log.e("Check_JKShop", "onPause : "+commonViewModel);
         if (commonViewModel != null) {
             commonViewModel.getMutableInActiveBusiness().removeObservers(getViewLifecycleOwner());
-            commonViewModel.getMutableDeleteShop().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteShopPermanent().removeObservers(getViewLifecycleOwner());
         }
     }
 

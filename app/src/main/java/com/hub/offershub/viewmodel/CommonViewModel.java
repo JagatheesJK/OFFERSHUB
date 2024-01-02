@@ -49,14 +49,17 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableaddShop = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableAddOffer = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableDeleteShop = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableDeleteShopPermanent = new MutableLiveData<>();
     private final MutableLiveData<Amenity> mutableAmenity = new MutableLiveData<>();
     private final MutableLiveData<CategoryResponse> mutableCategory = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableDeleteOffer = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableDeleteOfferPermanent = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateShopDetails = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateShopImages = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateOfferDetails = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateOfferImages = new MutableLiveData<>();
     private final MutableLiveData<RatingModel> mutableRatingData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableRatingReplyData = new MutableLiveData<>();
     private final MutableLiveData<BookModel> mutableBookingData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
@@ -386,6 +389,50 @@ public class CommonViewModel extends AndroidViewModel {
         }.execute();
     }
 
+    public void deleteShopPermanent(Map<String, Object> requestData) {
+        Log.e("Check_JK", "getDeleteShop ID : "+requestData.get("shop_id"));
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.deleteShopPermanent(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JK", "getDeleteShop onResponse : "+response.body().toString());
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableDeleteShopPermanent.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableDeleteShopPermanent.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JK", "getDeleteShop Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.execute();
+    }
+
     public void getMasterAmenities() {
         new AsyncTask<String, String, String>() {
             @Override
@@ -448,6 +495,48 @@ public class CommonViewModel extends AndroidViewModel {
                             }
                         } else
                             mutableDeleteOffer.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.execute();
+    }
+
+    public void deleteOfferPermanent(Map<String, Object> requestData) {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.deleteOfferPermanent(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableDeleteOfferPermanent.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableDeleteOfferPermanent.postValue(null);
                     }
 
                     @Override
@@ -720,6 +809,50 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void shopRatingReply(Map<String, Object> requestData) {
+        Log.e("Check_JKUpdate", "shopRatingReply");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.shopRatingReply(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "shopRatingReply onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableRatingReplyData.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else
+                            mutableRatingReplyData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "shopRatingReply Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public void getOrderDetailsShops(Map<String, Object> requestData) {
         Log.e("Check_JKUpdate", "getOrderDetailsShops");
         new AsyncTask<String, String, String>() {
@@ -783,6 +916,10 @@ public class CommonViewModel extends AndroidViewModel {
         return mutableDeleteShop;
     }
 
+    public MutableLiveData<JSONObject> getMutableDeleteShopPermanent() {
+        return mutableDeleteShopPermanent;
+    }
+
     public MutableLiveData<OfferModel> getMutableInActiveOffers() {
         return mutableInActiveOffers;
     }
@@ -793,6 +930,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<JSONObject> getMutableDeleteOffer() {
         return mutableDeleteOffer;
+    }
+
+    public MutableLiveData<JSONObject> getMutableDeleteOfferPermanent() {
+        return mutableDeleteOfferPermanent;
     }
 
     public MutableLiveData<JSONObject> getMutableAddOffer() {
@@ -817,6 +958,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<RatingModel> getMutableRatingData() {
         return mutableRatingData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableRatingReplyData() {
+        return mutableRatingReplyData;
     }
 
     public MutableLiveData<BookModel> getMutableBookingData() {

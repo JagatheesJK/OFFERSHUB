@@ -1,5 +1,7 @@
 package com.hub.offershub.fragment;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.os.Bundle;
 
 import androidx.lifecycle.Lifecycle;
@@ -8,7 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
+import com.hub.offershub.R;
 import com.hub.offershub.adapter.RatingAdaper;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentRatingBinding;
@@ -20,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RatingFragment extends BaseFragment implements View.OnClickListener {
+public class RatingFragment extends BaseFragment implements View.OnClickListener, RatingAdaper.CommentListener {
 
     private FragmentRatingBinding binding;
     private List<RatingModel.Data> list = new ArrayList<>();
@@ -28,6 +32,9 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
     private RatingAdaper adapter;
     private static String shopID;
     private int page_no = 0;
+
+    // Keyboard
+    protected InputMethodManager inputMethodManager;
 
     public static RatingFragment newInstance(String shop_id) {
         RatingFragment fragment = new RatingFragment();
@@ -44,6 +51,7 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
         setListener();
         setUpRecycler();
         getRatingReviewData();
+        getReplayRatingData();
 
         binding.swipeRefresh.setOnRefreshListener(() -> {
             list.clear();
@@ -55,17 +63,18 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void init() {
+        inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
         commonViewModel.getRatingReview(makeRatingRequest());
     }
 
     private void setListener() {
-
+        binding.liveSendBtn.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.ratingRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new RatingAdaper(getActivity(), list);
+        adapter = new RatingAdaper(getActivity(), list, this);
         binding.ratingRecycler.setAdapter(adapter);
         setNotify();
     }
@@ -77,12 +86,26 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.liveSendBtn:
+                hideKeybaord();
+                commonViewModel.shopRatingReply(makeReplayRatingRequest(binding.liveMessageEditText.getText().toString()));
+                break;
+            default:
+                break;
+        }
     }
 
     private Map<String, Object> makeRatingRequest() {
         Map<String, Object> requestData = new HashMap<>();
-        requestData.put("shop_id", shopID);
+        requestData.put("shop_id", "1");
+        return requestData;
+    }
+
+    private Map<String, Object> makeReplayRatingRequest(String replayComment) {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("id", "3");
+        requestData.put("replycomments", replayComment);
         return requestData;
     }
 
@@ -96,8 +119,9 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
                                 list.clear();
                             binding.empty.emptyConstraint.setVisibility(View.GONE);
                             binding.ratingRecycler.setVisibility(View.VISIBLE);
-                            list.addAll(ratingModel.data);
-                            setNotify();
+                            adapter.addAll(ratingModel.data);
+//                            list.addAll(ratingModel.data);
+//                            setNotify();
                         } else {
                             binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                             binding.ratingRecycler.setVisibility(View.GONE);
@@ -111,10 +135,40 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
         });
     }
 
+    private void getReplayRatingData() {
+        commonViewModel.getMutableRatingReplyData().observe(getViewLifecycleOwner(), jsonObject -> {
+            if (RatingFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (jsonObject != null) {
+                    binding.commentEditLayout.setVisibility(View.GONE);
+                    adapter.changeData(list.indexOf(replayModel), replayModel);
+                }
+            }
+        });
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         getActivity().setTitle("Rating & Review");
     }
 
+    private RatingModel.Data replayModel;
+    @Override
+    public void onReplay(RatingModel.Data model) {
+        replayModel = model;
+        showKeyboard();
+    }
+
+    private void showKeyboard() {
+        if (binding.commentEditLayout != null) {
+            binding.commentEditLayout.setVisibility(View.VISIBLE);
+            binding.liveMessageEditText.setFocusable(true);
+            binding.liveMessageEditText.requestFocus();
+            inputMethodManager.showSoftInput(binding.liveMessageEditText, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
+    }
+
+    private void hideKeybaord() {
+        inputMethodManager.hideSoftInputFromWindow(binding.liveMessageEditText.getWindowToken(), 0);
+    }
 }

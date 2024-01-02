@@ -115,7 +115,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     }
 
     private void getDeleteData() {
-        commonViewModel.getMutableDeleteOffer().observe(getViewLifecycleOwner(), jsonObject -> {
+        commonViewModel.getMutableDeleteOfferPermanent().observe(getViewLifecycleOwner(), jsonObject -> {
             if (InActiveOfferFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (jsonObject != null) {
                     try {
@@ -150,7 +150,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
         super.onDestroyView();
         if (commonViewModel != null) {
             commonViewModel.getMutableInActiveOffers().removeObservers(getViewLifecycleOwner());
-            commonViewModel.getMutableDeleteOffer().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteOfferPermanent().removeObservers(getViewLifecycleOwner());
         }
     }
 
@@ -176,7 +176,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     public void onOfferRemove(Object obj, int position) {
         deleteModel = (OfferModel.Data) obj;
         deletePosition = position;
-        commonViewModel.getDeleteOffer(makeDeleteRequest(deleteModel.offer_id));
+        commonViewModel.deleteOfferPermanent(makeDeleteRequest(deleteModel.offer_id));
     }
 
     @Override
@@ -203,7 +203,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
         super.onPause();
         if (commonViewModel != null) {
             commonViewModel.getMutableInActiveOffers().removeObservers(getViewLifecycleOwner());
-            commonViewModel.getMutableDeleteOffer().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableDeleteOfferPermanent().removeObservers(getViewLifecycleOwner());
         }
     }
 

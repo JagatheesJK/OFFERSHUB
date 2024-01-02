@@ -1,6 +1,7 @@
 package com.hub.offershub.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hub.offershub.R;
@@ -19,10 +21,12 @@ public class RatingAdaper extends RecyclerView.Adapter<RatingAdaper.BookViewHold
 
     private List<RatingModel.Data> list;
     private Context ctx;
+    private CommentListener listener;
 
-    public RatingAdaper(Context context, List<RatingModel.Data> list) {
-        this.list = list;
+    public RatingAdaper(Context context, List<RatingModel.Data> list, CommentListener listener) {
         ctx = context;
+        this.list = list;
+        this.listener = listener;
     }
 
     @NonNull
@@ -39,7 +43,21 @@ public class RatingAdaper extends RecyclerView.Adapter<RatingAdaper.BookViewHold
             holder.ratingBar.setRating(model.rating);
             holder.nameTxt.setText(""+model.name);
             holder.ratingTimeTxt.setText(""+model.created_on);
-            holder.ratingCommentTxt.setText(""+model.user_comments);
+            holder.ratingUserCommentTxt.setText(""+model.user_comments);
+            holder.ratingShopCommentTxt.setText(""+model.shop_comments);
+            if (model.user_comments != null && model.user_comments.length() > 0)
+                holder.ratingUserCommentTxt.setVisibility(View.VISIBLE);
+            else
+                holder.ratingUserCommentTxt.setVisibility(View.GONE);
+
+            if (model.shop_comments != null && model.shop_comments.length() > 0)
+                holder.ratingShopCommentTxt.setVisibility(View.VISIBLE);
+            else
+                holder.ratingShopCommentTxt.setVisibility(View.GONE);
+
+            holder.replyLinear.setOnClickListener(v -> {
+                listener.onReplay(model);
+            });
         }
     }
 
@@ -50,13 +68,44 @@ public class RatingAdaper extends RecyclerView.Adapter<RatingAdaper.BookViewHold
 
     public class BookViewHolder extends RecyclerView.ViewHolder {
         AppCompatRatingBar ratingBar;
-        AppCompatTextView nameTxt, ratingTimeTxt, ratingCommentTxt;
+        AppCompatTextView nameTxt, ratingTimeTxt;
+        AppCompatTextView ratingUserCommentTxt, ratingShopCommentTxt;
+        LinearLayoutCompat replyLinear;
         public BookViewHolder(View v) {
             super(v);
             ratingBar = v.findViewById(R.id.ratingBar);
             nameTxt = v.findViewById(R.id.nameTxt);
             ratingTimeTxt = v.findViewById(R.id.ratingTimeTxt);
-            ratingCommentTxt = v.findViewById(R.id.ratingCommentTxt);
+            ratingUserCommentTxt = v.findViewById(R.id.ratingUserCommentTxt);
+            ratingShopCommentTxt = v.findViewById(R.id.ratingShopCommentTxt);
+            replyLinear = v.findViewById(R.id.replyLinear);
         }
+    }
+
+    public void addData(RatingModel.Data model) {
+        list.add(model);
+        notifyItemInserted(list.size() - 1);
+    }
+
+    public void removeData(int position) {
+        list.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, getItemCount());
+    }
+
+    public void addAll(List<RatingModel.Data> ratingList) {
+        for (RatingModel.Data result : ratingList) {
+            addData(result);
+        }
+    }
+
+    public void changeData(int position, RatingModel.Data model) {
+        Log.e("Check_Adapter", "changeData position : "+position);
+        list.set(position, model);
+        notifyItemChanged(position);
+    }
+
+    public interface CommentListener {
+        void onReplay(RatingModel.Data model);
     }
 }

@@ -89,8 +89,11 @@ public interface API {
                                @Part("longitude") RequestBody longitude
                                );
 
-    @POST("deleteShopPermanent")
+    @POST("deleteShop")
     Call<JsonElement> deleteShop(@Body Map<String, Object> body);
+
+    @POST("deleteShopPermanent")
+    Call<JsonElement> deleteShopPermanent(@Body Map<String, Object> body);
 
     @GET("getMasterAmenities")
     Call<Amenity> getMasterAmenities();
@@ -98,8 +101,11 @@ public interface API {
     @GET("categoryListWithCount")
     Call<CategoryResponse> getCategory();
 
-    @POST("deleteOfferPermanent")
+    @POST("deleteOffer")
     Call<JsonElement> deleteOffer(@Body Map<String, Object> body);
+
+    @POST("deleteOfferPermanent")
+    Call<JsonElement> deleteOfferPermanent(@Body Map<String, Object> body);
 
     @POST("updateShopsDetails")
     Call<JsonElement> updateShopsDetails(@Body Map<String, Object> body);
@@ -119,6 +125,9 @@ public interface API {
 
     @POST("getRatingReview")
     Call<RatingModel> getRatingReview(@Body Map<String, Object> body);
+
+    @POST("shopRatingReply")
+    Call<JsonElement> shopRatingReply(@Body Map<String, Object> body);
 
     @POST("getOrderDetails_shops")
     Call<BookModel> getOrderDetailsShops(@Body Map<String, Object> body);
