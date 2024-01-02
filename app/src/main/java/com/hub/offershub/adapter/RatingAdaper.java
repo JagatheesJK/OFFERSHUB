@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hub.offershub.R;
 import com.hub.offershub.model.RatingModel;
+import com.hub.offershub.utils.Utils;
 
 import java.util.List;
 
@@ -42,7 +43,8 @@ public class RatingAdaper extends RecyclerView.Adapter<RatingAdaper.BookViewHold
         if (model != null) {
             holder.ratingBar.setRating(model.rating);
             holder.nameTxt.setText(""+model.name);
-            holder.ratingTimeTxt.setText(""+model.created_on);
+            if (model.created_on != null && model.created_on.length() > 0)
+                holder.ratingTimeTxt.setText(""+ Utils.convertDateFormat(model.created_on));
             holder.ratingUserCommentTxt.setText(""+model.user_comments);
             holder.ratingShopCommentTxt.setText(""+model.shop_comments);
             if (model.user_comments != null && model.user_comments.length() > 0)

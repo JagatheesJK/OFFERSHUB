@@ -7,10 +7,12 @@ import android.os.Bundle;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.hub.offershub.R;
 import com.hub.offershub.adapter.RatingAdaper;
@@ -69,6 +71,7 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setListener() {
         binding.liveSendBtn.setOnClickListener(this);
+        binding.rootLayout.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
@@ -84,12 +87,22 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
         adapter.notifyDataSetChanged();
     }
 
+    String replayComment;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.liveSendBtn:
+                replayComment = binding.liveMessageEditText.getText().toString();
                 hideKeybaord();
-                commonViewModel.shopRatingReply(makeReplayRatingRequest(binding.liveMessageEditText.getText().toString()));
+                if (replayComment.length() > 0) {
+                    commonViewModel.shopRatingReply(makeReplayRatingRequest(binding.liveMessageEditText.getText().toString()));
+                    binding.liveMessageEditText.setText("");
+                } else {
+                    Toast.makeText(getActivity(), "Say something...", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.rootLayout:
+                Log.e("Check_Touch", "setListener RootClick 1");
                 break;
             default:
                 break;
@@ -98,13 +111,13 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
 
     private Map<String, Object> makeRatingRequest() {
         Map<String, Object> requestData = new HashMap<>();
-        requestData.put("shop_id", "1");
+        requestData.put("shop_id", shopID);
         return requestData;
     }
 
     private Map<String, Object> makeReplayRatingRequest(String replayComment) {
         Map<String, Object> requestData = new HashMap<>();
-        requestData.put("id", "3");
+        requestData.put("id", replayModel.id);
         requestData.put("replycomments", replayComment);
         return requestData;
     }
@@ -169,6 +182,7 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void hideKeybaord() {
+        binding.commentEditLayout.setVisibility(View.GONE);
         inputMethodManager.hideSoftInputFromWindow(binding.liveMessageEditText.getWindowToken(), 0);
     }
 }

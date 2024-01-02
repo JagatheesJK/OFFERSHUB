@@ -17,14 +17,27 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/feedbackName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Name"
             android:textColor="@color/red"
             android:textStyle="bold"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/feedbackTime"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/feedbackTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2023-12-04 14:35:04"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/feedbackMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="feedback"

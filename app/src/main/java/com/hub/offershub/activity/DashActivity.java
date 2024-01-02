@@ -20,6 +20,7 @@ import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityDashBinding;
 import com.hub.offershub.fragment.BookingListFragment;
+import com.hub.offershub.fragment.FeedbackFragment;
 import com.hub.offershub.fragment.OfferListFragment;
 import com.hub.offershub.fragment.RatingFragment;
 import com.hub.offershub.fragment.ShopDetailsFragment;
@@ -86,27 +87,18 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         switch (item.getItemId()) {
-            case R.id.nav_shop_dash:
-                fragment = new ShopDetailsFragment();
-                break;
-            case R.id.nav_home:
+            case R.id.nav_shop_dash -> fragment = new ShopDetailsFragment();
+            case R.id.nav_home -> {
                 Intent intent = new Intent(DashActivity.this, TestMainActivity2.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
-                break;
-            case R.id.nav_offer:
-                fragment = OfferListFragment.newInstance(model.id);
-                break;
-            case R.id.nav_booking_details:
-                fragment = BookingListFragment.newInstance(model.id);
-                break;
-            case R.id.nav_rating_review:
-                fragment = RatingFragment.newInstance(model.id);
-                break;
-            case R.id.paymant:
-                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
-                break;
+            }
+            case R.id.nav_offer -> fragment = OfferListFragment.newInstance(model.id);
+            case R.id.nav_booking_details -> fragment = BookingListFragment.newInstance(model.id);
+            case R.id.nav_rating_review -> fragment = RatingFragment.newInstance(model.id);
+            case R.id.nav_faq -> fragment = FeedbackFragment.newInstance(model.id);
+            case R.id.paymant -> Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
         }
 
         if (fragment != null) {

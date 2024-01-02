@@ -54,6 +54,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:text="Jan 01, 2024 12:00 AM"
+               android:textSize="11sp"
                app:layout_constraintEnd_toEndOf="parent"
                app:layout_constraintTop_toTopOf="parent"
                app:layout_constraintBottom_toBottomOf="parent"/>

@@ -24,6 +24,10 @@
         android:title="Rating &amp; Review" />
 
     <item
+        android:id="@+id/nav_faq"
+        android:title="FAQ" />
+
+    <item
         android:id="@+id/paymant"
         android:title="Payment" />
 

@@ -5,6 +5,7 @@ import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
+import com.hub.offershub.model.FeedbackModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
 
@@ -131,4 +132,10 @@ public interface API {
 
     @POST("getOrderDetails_shops")
     Call<BookModel> getOrderDetailsShops(@Body Map<String, Object> body);
+
+    @POST("getshopFeedback")
+    Call<FeedbackModel> getshopFeedback(@Body Map<String, Object> body);
+
+    @POST("shopFeedback")
+    Call<JsonElement> shopFeedback(@Body Map<String, Object> body);
 }

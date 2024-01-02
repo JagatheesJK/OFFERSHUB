@@ -18,6 +18,7 @@ import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
+import com.hub.offershub.model.FeedbackModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
 import com.hub.offershub.retrofit.API;
@@ -61,6 +62,8 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<RatingModel> mutableRatingData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableRatingReplyData = new MutableLiveData<>();
     private final MutableLiveData<BookModel> mutableBookingData = new MutableLiveData<>();
+    private final MutableLiveData<FeedbackModel> mutableShopFeedbackData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableAddFeedbackData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -892,6 +895,89 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void getShopFeedback(Map<String, Object> requestData) {
+        Log.e("Check_JKUpdate", "getShopFeedback");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<FeedbackModel> call = apiInterface.getshopFeedback(requestData);
+                call.enqueue(new Callback<FeedbackModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<FeedbackModel> call, @NonNull Response<FeedbackModel> response) {
+                        Log.e("Check_JKUpdate", "getShopFeedback onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableShopFeedbackData.postValue(response.body());
+                        } else
+                            mutableShopFeedbackData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<FeedbackModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "getShopFeedback Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void shopFeedback(Map<String, Object> requestData) {
+        Log.e("Check_JKUpdate", "shopFeedback");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.shopFeedback(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "shopFeedback onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableAddFeedbackData.postValue(root);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableAddFeedbackData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "shopFeedback Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -966,6 +1052,14 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<BookModel> getMutableBookingData() {
         return mutableBookingData;
+    }
+
+    public MutableLiveData<FeedbackModel> getMutableShopFeedbackData() {
+        return mutableShopFeedbackData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableAddFeedbackData() {
+        return mutableAddFeedbackData;
     }
 
     public void showDialog() {

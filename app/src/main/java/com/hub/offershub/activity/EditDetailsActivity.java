@@ -14,12 +14,17 @@ import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityEditDetailsBinding;
 import com.hub.offershub.fragment.EditBasicFragment;
 import com.hub.offershub.fragment.EditImageFragment;
+import com.hub.offershub.fragment.EditLocationFragment;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     private ActivityEditDetailsBinding binding;
+    private List<String> labelData = new ArrayList<>();
     private String[] labels = new String[]{"Basic", "Image"};
     private BusinessModel.Data shopData;
     private OfferModel.Data offerData;
@@ -40,9 +45,13 @@ public class EditDetailsActivity extends BaseActivity implements View.OnClickLis
         isShop = getIntent().getBooleanExtra("isShop", false);
         binding.toolbarLayout.toolbarTitle.setText("Edit Business");
         binding.pager.setAdapter(new ViewPagerFragmentAdapter(EditDetailsActivity.this));
+        labelData.add(0, "Basic");
+        labelData.add(1, "Image");
+        if (isShop)
+            labelData.add(2, "Location");
 
         new TabLayoutMediator(binding.tabLayout, binding.pager, (tab, position) -> {
-            tab.setText(labels[position]);
+            tab.setText(labelData.get(position));
         }).attach();
 
         binding.pager.setCurrentItem(0, false);
@@ -77,13 +86,15 @@ public class EditDetailsActivity extends BaseActivity implements View.OnClickLis
                     return EditBasicFragment.newInstance(shopData, offerData, isShop);
                 case 1:
                     return EditImageFragment.newInstance(shopData, offerData, isShop);
+                case 2:
+                    return EditLocationFragment.newInstance(shopData, offerData, isShop);
             }
             return EditBasicFragment.newInstance(shopData, offerData, isShop);
         }
 
         @Override
         public int getItemCount() {
-            return labels.length;
+            return labelData.size();
         }
     }
 }
