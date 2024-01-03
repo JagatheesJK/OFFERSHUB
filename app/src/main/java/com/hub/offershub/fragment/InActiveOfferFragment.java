@@ -139,9 +139,9 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
         return requestData;
     }
 
-    private Map<String, Object> makeDeleteRequest(String shopID) {
+    private Map<String, Object> makeDeleteRequest(String offerID) {
         Map<String, Object> requestData = new HashMap<>();
-        requestData.put("offer_id", shopID);
+        requestData.put("offer_id", offerID);
         return requestData;
     }
 

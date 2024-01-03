@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,12 +32,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.hub.offershub.R;
+import com.hub.offershub.adapter.AmenityAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentEditLocationBinding;
+import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.custommap.WorkaroundMapFragment;
 import com.permissionx.guolindev.PermissionX;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EditLocationFragment extends BaseFragment implements View.OnClickListener,
         OnMapReadyCallback, GoogleMap.OnMapClickListener {
@@ -50,6 +59,10 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Marker marker;
     private MarkerOptions markerOptions;
+
+    // TODO AMINITIES
+    private AmenityAdapter adapter;
+    private List<Amenity.AmenityItem> amenities = new ArrayList<>();
 
     public static EditLocationFragment newInstance(BusinessModel.Data model, OfferModel.Data offer, boolean isShopData) {
         EditLocationFragment fragment = new EditLocationFragment();
@@ -66,6 +79,10 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
         binding = FragmentEditLocationBinding.inflate(getLayoutInflater());
         init();
         setListener();
+        setUpRecycler();
+        getAmenitiesData();
+        getUpdateShopAmenities();
+        getUpdateShopLocation();
         return binding.getRoot();
     }
 
@@ -74,6 +91,8 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
             currentLat = Double.parseDouble(businessModel.latitude);
             currentLong = Double.parseDouble(businessModel.longitude);
         }
+        binding.amenitiesProgress.setVisibility(View.VISIBLE);
+        commonViewModel.getMasterAmenities();
         setMap();
     }
 
@@ -90,7 +109,7 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
         initApiClient();
 
         ((WorkaroundMapFragment) getChildFragmentManager().findFragmentById(R.id.mapImg)).setListener(() -> {
-            binding.rootLayout.requestDisallowInterceptTouchEvent(true);
+            binding.nestedView.requestDisallowInterceptTouchEvent(true);
         });
     }
 
@@ -110,6 +129,12 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
         result.addOnCompleteListener(task -> {});
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+    }
+
+    private void setUpRecycler() {
+        binding.amenitiesrecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        adapter = new AmenityAdapter(amenities);
+        binding.amenitiesrecyclerView.setAdapter(adapter);
     }
 
     private LatLng latLng;
@@ -207,11 +232,83 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.amititiesSubmitBtn:
+                showDialog();
+                commonViewModel.updateShopAmenities(businessModel.id, adapter.getSelectedAmenityIds());
                 break;
             case R.id.mapSubmitBtn:
+                showDialog();
+                commonViewModel.updateShopLocation(makeRequest(businessModel.id));
                 break;
             default:
                 break;
+        }
+    }
+
+    private Map<String, Object> makeRequest(String shopID) {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shop_id", shopID);
+        requestData.put("latitude", currentLat);
+        requestData.put("longitude", currentLong);
+        return requestData;
+    }
+
+    private void getUpdateShopAmenities() {
+        commonViewModel.getMutableUpdateShopAmenitiesData().observe(getViewLifecycleOwner(), jsonObject -> {
+            if (EditLocationFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (jsonObject != null) {
+                    try {
+                        if ("success".equals(jsonObject.getString("status"))) {
+                            getActivity().finish();
+                        }
+                        Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                closeDialog();
+            }
+        });
+    }
+
+    private void getUpdateShopLocation() {
+        commonViewModel.getMutableUpdateShopLocationData().observe(getViewLifecycleOwner(), jsonObject -> {
+            if (EditLocationFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (jsonObject != null) {
+                    try {
+                        if ("success".equals(jsonObject.getString("status"))) {
+                            getActivity().finish();
+                        }
+                        Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                closeDialog();
+            }
+        });
+    }
+
+    private void getAmenitiesData() {
+        commonViewModel.getMutableAmenity().observeForever( amenity -> {
+            if (amenity != null) {
+                if(amenity.getStatus().equals("success")) {
+                    amenities.addAll(amenity.getData());
+                    adapter.notifyDataSetChanged();
+                } else {
+
+                }
+            }
+            binding.amenitiesProgress.setVisibility(View.GONE);
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (commonViewModel != null) {
+            commonViewModel.getMutableAmenity().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableUpdateShopAmenitiesData().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableUpdateShopLocationData().removeObservers(getViewLifecycleOwner());
         }
     }
 }

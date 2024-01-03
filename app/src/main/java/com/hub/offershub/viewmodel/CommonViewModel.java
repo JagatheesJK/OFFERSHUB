@@ -64,6 +64,8 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<BookModel> mutableBookingData = new MutableLiveData<>();
     private final MutableLiveData<FeedbackModel> mutableShopFeedbackData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableAddFeedbackData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableUpdateShopLocationData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableUpdateShopAmenitiesData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -978,6 +980,101 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void updateShopLocation(Map<String, Object> requestData) {
+        Log.e("Check_JKUpdate", "updateShopLocation");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.updateShopLocation(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "updateShopLocation onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableUpdateShopLocationData.postValue(root);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableUpdateShopLocationData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "updateShopLocation Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void updateShopAmenities(String shopID, List<Integer> amenitiesList) {
+        Log.e("Check_JKUpdate", "updateShopAmenities");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog();
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                List<MultipartBody.Part> arrayOfParts = new ArrayList<>();
+                for (int i = 0; i < amenitiesList.size(); i++) {
+                    String partName = "shopamenities[" + i + "]";
+                    String partValue = String.valueOf(amenitiesList.get(i));
+                    arrayOfParts.add(MultipartBody.Part.createFormData(partName, partValue));
+                }
+                Call<JsonElement> call = apiInterface.updateShopAmenities(RequestBody.create(MediaType.parse("multipart/form-data"), ""+shopID),
+                        arrayOfParts);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "updateShopAmenities onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableUpdateShopAmenitiesData.postValue(root);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableUpdateShopAmenitiesData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "updateShopAmenities Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -1060,6 +1157,14 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<JSONObject> getMutableAddFeedbackData() {
         return mutableAddFeedbackData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableUpdateShopLocationData() {
+        return mutableUpdateShopLocationData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableUpdateShopAmenitiesData() {
+        return mutableUpdateShopAmenitiesData;
     }
 
     public void showDialog() {

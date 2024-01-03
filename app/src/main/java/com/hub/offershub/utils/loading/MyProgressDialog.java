@@ -38,7 +38,7 @@ public class MyProgressDialog extends Dialog {
                 new SimpleLottieValueCallback<ColorFilter>() {
                     @Override
                     public ColorFilter getValue(LottieFrameInfo<ColorFilter> frameInfo) {
-                        return new PorterDuffColorFilter(getContext().getResources().getColor(R.color.black),
+                        return new PorterDuffColorFilter(getContext().getResources().getColor(R.color.red),
                                 PorterDuff.Mode.SRC_ATOP);
                     }
                 }

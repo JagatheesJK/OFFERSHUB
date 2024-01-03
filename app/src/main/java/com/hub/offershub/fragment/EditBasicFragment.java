@@ -116,10 +116,10 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
                 else
                     binding.flatPerLinear.setVisibility(View.VISIBLE);
 
-                binding.categorySpinner.setSpinnerPopupAnimation(SpinnerAnimation.DROPDOWN);
-                binding.categorySpinner.setSpinnerPopupMaxHeight(Utils.dpToPx(getActivity(), 300));
+                binding.offerCategorySpinner.setSpinnerPopupAnimation(SpinnerAnimation.DROPDOWN);
+                binding.offerCategorySpinner.setSpinnerPopupMaxHeight(Utils.dpToPx(getActivity(), 300));
 
-                binding.categorySpinner.setOnSpinnerItemSelectedListener((position, item, spinnerIndex, t1) -> {
+                binding.offerCategorySpinner.setOnSpinnerItemSelectedListener((position, item, spinnerIndex, t1) -> {
                     if (spinnerIndex == 0) {
                         binding.plainLinear.setVisibility(View.VISIBLE);
                         binding.discountLinear.setVisibility(View.GONE);
@@ -143,9 +143,9 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
         binding.shopSubmit.setOnClickListener(this);
         binding.offerSubmitBtn.setOnClickListener(this);
 
-        binding.categorySpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> {
-            if (binding.categorySpinner.isShowing())
-                binding.categorySpinner.dismiss();
+        binding.offerCategorySpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> {
+            if (binding.offerCategorySpinner.isShowing())
+                binding.offerCategorySpinner.dismiss();
         });
     }
 

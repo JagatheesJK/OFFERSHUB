@@ -138,4 +138,12 @@ public interface API {
 
     @POST("shopFeedback")
     Call<JsonElement> shopFeedback(@Body Map<String, Object> body);
+
+    @POST("updateShopLocation")
+    Call<JsonElement> updateShopLocation(@Body Map<String, Object> body);
+
+    @POST("updateShopAmenities")
+    @Multipart
+    Call<JsonElement> updateShopAmenities(@Part("shop_id") RequestBody shopownerid,
+                                          @Part() List<MultipartBody.Part> shopamenities);
 }
