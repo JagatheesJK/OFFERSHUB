@@ -45,20 +45,13 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EditBasicFragment extends BaseFragment implements View.OnClickListener,
-        OnMapReadyCallback, GoogleMap.OnMapClickListener {
+public class EditBasicFragment extends BaseFragment implements View.OnClickListener {
 
     private FragmentEditBasicBinding binding;
     private static BusinessModel.Data businessModel;
     private static OfferModel.Data offerModel;
     private static boolean isShop = false;
     private int selectedType;
-
-    // TODO MAP
-    private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private Marker marker;
-    private MarkerOptions markerOptions;
 
     public static EditBasicFragment newInstance(BusinessModel.Data model, OfferModel.Data offer, boolean isShopData) {
         EditBasicFragment fragment = new EditBasicFragment();
@@ -93,10 +86,7 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
                 binding.cityEd.setText(""+businessModel.city);
                 binding.stateEd.setText(""+businessModel.state);
                 binding.pincodeEd.setText(""+businessModel.pincode);
-                currentLat = Double.parseDouble(businessModel.latitude);
-                currentLong = Double.parseDouble(businessModel.longitude);
             }
-            setMap();
         } else {
             binding.shopNestedView.setVisibility(View.GONE);
             binding.offerNestedView.setVisibility(View.VISIBLE);
@@ -105,10 +95,10 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
                 binding.offerNameEd.setText("" + offerModel.offer_name);
                 binding.offerDescEd.setText("" + offerModel.offer_desc);
                 binding.offerCategorySpinner.selectItemByIndex((selectedType - 1));
-                binding.offerPriceEd.setText("" + offerModel.amount);
-                binding.offerOriginalPriceEd.setText("" + offerModel.original_amount);
-                binding.offerOfferPriceEd.setText("" + offerModel.offer_amount);
-                binding.flatPerEd.setText("" + offerModel.flat_percentage);
+                binding.offerPriceEd.setText("" + ((offerModel.amount == null || offerModel.amount.equals("null") || offerModel.amount.isEmpty()) ? "0" : offerModel.amount));
+                binding.offerOriginalPriceEd.setText("" + ((offerModel.original_amount == null || offerModel.original_amount.equals("null") || offerModel.original_amount.isEmpty()) ? "0" : offerModel.original_amount));
+                binding.offerOfferPriceEd.setText("" + ((offerModel.offer_amount == null || offerModel.offer_amount.equals("null") || offerModel.offer_amount.isEmpty()) ? "0" : offerModel.offer_amount));
+                binding.flatPerEd.setText("" + ((offerModel.flat_percentage == null || offerModel.flat_percentage.equals("null") || offerModel.flat_percentage.isEmpty()) ? "0" : offerModel.flat_percentage));
                 if (selectedType == 1)
                     binding.plainLinear.setVisibility(View.VISIBLE);
                 else if (selectedType == 2)
@@ -160,127 +150,6 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
                 break;
             default:
                 break;
-        }
-    }
-
-    private void setMap() {
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.mapImg);
-        mapFragment.getMapAsync(this);
-        initApiClient();
-
-        ((WorkaroundMapFragment) getChildFragmentManager().findFragmentById(R.id.mapImg)).setListener(() -> {
-            binding.shopNestedView.requestDisallowInterceptTouchEvent(true);
-        });
-    }
-
-    private void mapInit() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(5000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setSmallestDisplacement(16);
-        locationRequest.setFastestInterval(3000);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-
-        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(getActivity().getApplicationContext())
-                .checkLocationSettings(builder.build());
-        result.addOnCompleteListener(task -> {});
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-    }
-
-    private LatLng latLng;
-    private double currentLat, currentLong;
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setOnMapClickListener(this);
-
-        mMap.setOnCameraMoveListener(() -> {
-            LatLng midLatLng = googleMap.getCameraPosition().target;
-            if (marker != null) {
-                marker.setPosition(midLatLng);
-                currentLat = marker.getPosition().latitude;
-                currentLong = marker.getPosition().longitude;
-            }
-        });
-
-        PermissionX.init(EditBasicFragment.this)
-                .permissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-                .request((allGranted, grantedList, deniedList) -> {
-                    if (allGranted) {
-                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
-//                        mMap.setMyLocationEnabled(true);
-                        googleMap.getUiSettings().setZoomControlsEnabled(true);
-                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 1000, null);
-                        fusedLocationProviderClient.getLastLocation().addOnFailureListener(e -> {
-                            Toast.makeText(getActivity(), "Error "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }).addOnSuccessListener(location ->  {
-                            latLng = new LatLng(currentLat, currentLong);
-                            if (marker != null) {
-                                marker.remove();
-                            }
-                            markerOptions = new MarkerOptions();
-                            markerOptions.title(""+currentLat+", "+currentLong);
-//                                markerOptions.draggable(true);
-                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                            markerOptions.position(new LatLng(currentLat, currentLong));
-                            marker = mMap.addMarker(markerOptions);
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-                        });
-                    } else {
-
-                    }
-                });
-    }
-
-    void initApiClient() {
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(@Nullable Bundle bundle) {
-                        mapInit();
-                    }
-
-                    @Override
-                    public void onConnectionSuspended(int i) {
-
-                    }
-                })
-                .addOnConnectionFailedListener(result -> {
-                    Log.i("TAG", "onConnectionFailed() connectionResult = [" + result + "]");
-                })
-                .build();
-        mGoogleApiClient.connect();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-    }
-
-    @Override
-    public void onMapClick(@NonNull LatLng latLng) {
-        if (marker != null) {
-            marker.remove();
-        }
-
-        if (businessModel != null) {
-            markerOptions.title(""+businessModel.latitude+", "+businessModel.longitude);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-            markerOptions.position(new LatLng(Long.parseLong(businessModel.latitude), Long.parseLong(businessModel.longitude)));
-            marker = mMap.addMarker(markerOptions);
-
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-
-            currentLat = latLng.latitude;
-            currentLong = latLng.longitude;
-            Log.e("Check_Location", "Lat : "+latLng.latitude);
-            Log.e("Check_Location", "Long : "+latLng.longitude);
         }
     }
 
