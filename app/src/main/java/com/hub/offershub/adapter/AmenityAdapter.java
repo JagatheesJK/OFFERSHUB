@@ -13,15 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hub.offershub.R;
 import com.hub.offershub.model.Amenity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AmenityAdapter extends RecyclerView.Adapter<AmenityAdapter.ViewHolder> {
     private List<Amenity.AmenityItem> amenities;
+    private List<Integer> selectedAmenities;
     private SparseBooleanArray selectedItems;
 
-    public AmenityAdapter(List<Amenity.AmenityItem> amenities) {
+    public AmenityAdapter(List<Amenity.AmenityItem> amenities, List<Integer> selectedAmenities) {
         this.amenities = amenities;
+        this.selectedAmenities = selectedAmenities;
         selectedItems = new SparseBooleanArray();
     }
 
@@ -35,6 +36,13 @@ public class AmenityAdapter extends RecyclerView.Adapter<AmenityAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Amenity.AmenityItem amenity = amenities.get(position);
+        if (selectedAmenities != null) {
+            for (Integer data : selectedAmenities) {
+                if (amenity.getId() == data) {
+                    selectedItems.put(position, true);
+                }
+            }
+        }
         holder.bind(amenity, selectedItems.get(position, false));
     }
 
@@ -53,7 +61,6 @@ public class AmenityAdapter extends RecyclerView.Adapter<AmenityAdapter.ViewHold
             checkBox.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 Log.e("Check_toggle","position 1"+position);
-
                 if (position != RecyclerView.NO_POSITION) {
                     toggleSelection(position);
                 }

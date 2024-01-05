@@ -292,10 +292,15 @@ public class CommonViewModel extends AndroidViewModel {
             protected String doInBackground(String... strings) {
                 API apiInterface = RetrofitClient.getApiClient().create(API.class);
                 List<MultipartBody.Part> arrayOfParts = new ArrayList<>();
-                for (int i = 0; i < addShopDataRequestBody.shopamenities.size(); i++) {
-                    String partName = "shopamenities[" + i + "]";
-                    String partValue = String.valueOf(addShopDataRequestBody.shopamenities.get(i));
-                    arrayOfParts.add(MultipartBody.Part.createFormData(partName, partValue));
+                if (addShopDataRequestBody.shopamenities.size() > 0) {
+                    for (int i = 0; i < addShopDataRequestBody.shopamenities.size(); i++) {
+                        String partName = "shopamenities[" + i + "]";
+                        String partValue = String.valueOf(addShopDataRequestBody.shopamenities.get(i));
+                        arrayOfParts.add(MultipartBody.Part.createFormData(partName, partValue));
+                    }
+                } else {
+                    String partName = "shopamenities[" + 0 + "]";
+                    arrayOfParts.add(MultipartBody.Part.createFormData(partName, ""));
                 }
                 Call<JsonElement> call = apiInterface.addShops(multipartBody,
                         RequestBody.create(MediaType.parse("multipart/form-data"), ""+addShopDataRequestBody.shopownerid),

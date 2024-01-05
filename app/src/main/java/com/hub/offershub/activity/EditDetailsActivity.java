@@ -25,7 +25,6 @@ public class EditDetailsActivity extends BaseActivity implements View.OnClickLis
 
     private ActivityEditDetailsBinding binding;
     private List<String> labelData = new ArrayList<>();
-    private String[] labels = new String[]{"Basic", "Image"};
     private BusinessModel.Data shopData;
     private OfferModel.Data offerData;
     private boolean isShop = false;
@@ -73,7 +72,6 @@ public class EditDetailsActivity extends BaseActivity implements View.OnClickLis
     }
 
     private class ViewPagerFragmentAdapter extends FragmentStateAdapter {
-
         public ViewPagerFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
         }

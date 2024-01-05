@@ -31,6 +31,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hub.offershub.R;
 import com.hub.offershub.adapter.AmenityAdapter;
 import com.hub.offershub.base.BaseFragment;
@@ -41,6 +43,7 @@ import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.custommap.WorkaroundMapFragment;
 import com.permissionx.guolindev.PermissionX;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +66,7 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
     // TODO AMINITIES
     private AmenityAdapter adapter;
     private List<Amenity.AmenityItem> amenities = new ArrayList<>();
+    private List<Integer> selectedAmenities = new ArrayList<>();
 
     public static EditLocationFragment newInstance(BusinessModel.Data model, OfferModel.Data offer, boolean isShopData) {
         EditLocationFragment fragment = new EditLocationFragment();
@@ -88,12 +92,22 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
 
     private void init() {
         if (businessModel != null) {
+            selectedAmenities = getAmenities(businessModel.amenities);
             currentLat = Double.parseDouble(businessModel.latitude);
             currentLong = Double.parseDouble(businessModel.longitude);
         }
         binding.amenitiesProgress.setVisibility(View.VISIBLE);
         commonViewModel.getMasterAmenities(myProgressDialog);
         setMap();
+    }
+
+    private List<Integer> getAmenities(String data) {
+        if (data != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Integer>>() {}.getType();
+            return gson.fromJson(data, type);
+        } else
+            return null;
     }
 
     private void setListener() {
@@ -133,7 +147,7 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
 
     private void setUpRecycler() {
         binding.amenitiesrecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        adapter = new AmenityAdapter(amenities);
+        adapter = new AmenityAdapter(amenities, selectedAmenities);
         binding.amenitiesrecyclerView.setAdapter(adapter);
     }
 

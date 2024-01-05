@@ -117,7 +117,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         binding.amenitiesrecyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // Set number of columns to 3
 
 
-        adapter = new AmenityAdapter(amenities);
+        adapter = new AmenityAdapter(amenities, null);
         binding.amenitiesrecyclerView.setAdapter(adapter);
 
         // Get selected amenity IDs

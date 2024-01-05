@@ -58,6 +58,7 @@ public class BusinessModel implements Parcelable {
         public String total_rate;
         public String avg_rating;
         public String image_url;
+        public String amenities;
 
         protected Data(Parcel in) {
             id = in.readString();
@@ -77,6 +78,7 @@ public class BusinessModel implements Parcelable {
             total_rate = in.readString();
             avg_rating = in.readString();
             image_url = in.readString();
+            amenities = in.readString();
         }
 
         public static final Creator<Data> CREATOR = new Creator<Data>() {
@@ -115,6 +117,7 @@ public class BusinessModel implements Parcelable {
             dest.writeString(total_rate);
             dest.writeString(avg_rating);
             dest.writeString(image_url);
+            dest.writeString(amenities);
         }
     }
 }
