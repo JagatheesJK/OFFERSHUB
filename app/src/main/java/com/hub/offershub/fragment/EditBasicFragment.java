@@ -143,10 +143,10 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shopSubmit:
-                commonViewModel.updateShopDetails(makeShopRequest());
+                commonViewModel.updateShopDetails(makeShopRequest(), myProgressDialog);
                 break;
             case R.id.offerSubmitBtn:
-                commonViewModel.updateOfferDetails(makeOfferRequest());
+                commonViewModel.updateOfferDetails(makeOfferRequest(), myProgressDialog);
                 break;
             default:
                 break;

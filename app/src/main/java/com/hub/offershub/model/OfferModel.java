@@ -46,6 +46,7 @@ public class OfferModel implements Parcelable {
         public String offer_desc;
         public String image_url;
         public int offer_type;
+        public int is_show_mainpage;
         public String offer_type_name;
         public String amount;
         public String original_amount;
@@ -61,6 +62,7 @@ public class OfferModel implements Parcelable {
             offer_desc = in.readString();
             image_url = in.readString();
             offer_type = in.readInt();
+            is_show_mainpage = in.readInt();
             offer_type_name = in.readString();
             amount = in.readString();
             original_amount = in.readString();
@@ -95,6 +97,7 @@ public class OfferModel implements Parcelable {
             dest.writeString(offer_desc);
             dest.writeString(image_url);
             dest.writeInt(offer_type);
+            dest.writeInt(is_show_mainpage);
             dest.writeString(offer_type_name);
             dest.writeString(amount);
             dest.writeString(original_amount);

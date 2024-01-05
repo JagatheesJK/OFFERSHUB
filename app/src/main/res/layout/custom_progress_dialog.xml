@@ -4,17 +4,17 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:outlineSpotShadowColor="@color/white"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="16dp"
     app:cardElevation="10dp"
+    android:elevation="10dp"
     app:cardUseCompatPadding="true">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="86dp"
         android:layout_height="86dp"
         android:gravity="center"
-        android:padding="12dp">
+        android:padding="16dp">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_view"
@@ -23,7 +23,8 @@
             android:layout_gravity="center"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/sandclock_blue" />
+            app:lottie_colorFilter="@color/red"
+            app:lottie_rawRes="@raw/loading_grey" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

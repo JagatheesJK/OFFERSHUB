@@ -52,13 +52,13 @@ public class FeedbackFragment extends BaseFragment implements View.OnClickListen
             list.clear();
             page_no = 0;
             binding.swipeRefresh.setRefreshing(false);
-            commonViewModel.getShopFeedback(makeFeedbackRequest());
+            commonViewModel.getShopFeedback(makeFeedbackRequest(), myProgressDialog);
         });
         return binding.getRoot();
     }
 
     private void init() {
-        commonViewModel.getShopFeedback(makeFeedbackRequest());
+        commonViewModel.getShopFeedback(makeFeedbackRequest(), myProgressDialog);
     }
 
     private void setListener() {
@@ -135,7 +135,7 @@ public class FeedbackFragment extends BaseFragment implements View.OnClickListen
     public void onFeedbackSuccess() {
         list.clear();
         page_no = 0;
-        commonViewModel.getShopFeedback(makeFeedbackRequest());
+        commonViewModel.getShopFeedback(makeFeedbackRequest(), myProgressDialog);
     }
 
     @Override

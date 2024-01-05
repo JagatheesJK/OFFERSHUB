@@ -94,7 +94,7 @@ public class QueryDialogFragment extends BottomSheetDialogFragment implements Vi
                 feedbackMsg = binding.feedbackEd.getText().toString();
                 if (feedbackMsg.length() > 0) {
                     showDialog();
-                    commonViewModel.shopFeedback(makeAddFeedbackRequest(feedbackMsg));
+                    commonViewModel.shopFeedback(makeAddFeedbackRequest(feedbackMsg), myProgressDialog);
                 } else
                     Toast.makeText(getActivity(), "Say something...", Toast.LENGTH_SHORT).show();
                 break;

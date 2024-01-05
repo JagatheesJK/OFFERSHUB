@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp">
+    android:paddingTop="12sp"
+    android:background="@color/red">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userImg"
@@ -32,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Android Knowledge"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -40,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="contact@androidknowledge.com"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="14sp"
             android:layout_marginTop="8dp"/>
     </androidx.appcompat.widget.LinearLayoutCompat>

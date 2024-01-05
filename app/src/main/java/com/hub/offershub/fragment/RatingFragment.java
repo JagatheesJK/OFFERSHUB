@@ -59,14 +59,14 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
             list.clear();
             page_no = 0;
             binding.swipeRefresh.setRefreshing(false);
-            commonViewModel.getRatingReview(makeRatingRequest());
+            commonViewModel.getRatingReview(makeRatingRequest(), myProgressDialog);
         });
         return binding.getRoot();
     }
 
     private void init() {
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-        commonViewModel.getRatingReview(makeRatingRequest());
+        commonViewModel.getRatingReview(makeRatingRequest(), myProgressDialog);
     }
 
     private void setListener() {
@@ -95,7 +95,7 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
                 replayComment = binding.liveMessageEditText.getText().toString();
                 hideKeybaord();
                 if (replayComment.length() > 0) {
-                    commonViewModel.shopRatingReply(makeReplayRatingRequest(binding.liveMessageEditText.getText().toString()));
+                    commonViewModel.shopRatingReply(makeReplayRatingRequest(binding.liveMessageEditText.getText().toString()), myProgressDialog);
                     binding.liveMessageEditText.setText("");
                 } else {
                     Toast.makeText(getActivity(), "Say something...", Toast.LENGTH_SHORT).show();

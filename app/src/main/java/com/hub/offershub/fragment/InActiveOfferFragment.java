@@ -58,7 +58,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
             list.clear();
             page_no = 0;
             binding.swipeRefresh.setRefreshing(false);
-            commonViewModel.getInActiveOffers(makeRequest());
+            commonViewModel.getInActiveOffers(makeRequest(), myProgressDialog);
         });
 
         return binding.getRoot();
@@ -66,7 +66,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
 
     private void init() {
         if (commonViewModel != null) {
-            commonViewModel.getInActiveOffers(makeRequest());
+            commonViewModel.getInActiveOffers(makeRequest(), myProgressDialog);
             getInActiveOffersData();
             getDeleteData();
         }
@@ -155,7 +155,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
-    public void onOfferSelect() {
+    public void onOfferSelect(OfferModel.Data model, String priority) {
 //        loadFragment(new ShopDetailsFragment());
     }
 
@@ -176,7 +176,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     public void onOfferRemove(Object obj, int position) {
         deleteModel = (OfferModel.Data) obj;
         deletePosition = position;
-        commonViewModel.deleteOfferPermanent(makeDeleteRequest(deleteModel.offer_id));
+        commonViewModel.deleteOfferPermanent(makeDeleteRequest(deleteModel.offer_id), myProgressDialog);
     }
 
     @Override
@@ -191,7 +191,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getInActiveOffers(makeRequest());
+                commonViewModel.getInActiveOffers(makeRequest(), myProgressDialog);
                 break;
             default:
                 break;

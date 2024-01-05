@@ -58,7 +58,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
             page_no = 0;
             binding.swipeRefresh.setRefreshing(false);
             Log.e("Check_JK", "InActiveShopsFrag List : "+list.size()+" OwnerID : "+AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID));
-            commonViewModel.getInActiveShops(makeRequest());
+            commonViewModel.getInActiveShops(makeRequest(), myProgressDialog);
         });
         return binding.getRoot();
     }
@@ -66,7 +66,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     private void init() {
         Log.e("Check_JKShop", "init 1 : "+commonViewModel.getMutableInActiveBusiness().hasActiveObservers());
         Log.e("Check_JKShop", "init 2 : "+commonViewModel.getMutableInActiveBusiness().isInitialized());
-        commonViewModel.getInActiveShops(makeRequest());
+        commonViewModel.getInActiveShops(makeRequest(), myProgressDialog);
         getInActiveData();
         getDeleteData();
     }
@@ -112,7 +112,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     @Override
     public void onItemRemoved(Object obj) {
         deleteModel = (BusinessModel.Data) obj;
-        commonViewModel.deleteShopPermanent(makeDeleteRequest(deleteModel.id));
+        commonViewModel.deleteShopPermanent(makeDeleteRequest(deleteModel.id), myProgressDialog);
     }
 
     private void getInActiveData() {
@@ -187,7 +187,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getInActiveShops(makeRequest());
+                commonViewModel.getInActiveShops(makeRequest(), myProgressDialog);
                 break;
             default:
                 break;

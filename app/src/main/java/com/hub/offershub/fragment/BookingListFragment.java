@@ -50,18 +50,14 @@ public class BookingListFragment extends BaseFragment {
             list.clear();
             page_no = 0;
             binding.swipeRefresh.setRefreshing(false);
-            commonViewModel.getOrderDetailsShops(makeRequest());
+            commonViewModel.getOrderDetailsShops(makeRequest(), myProgressDialog);
         });
 
         return binding.getRoot();
     }
 
     private void init() {
-//        list.add(new BookModel("Offer1", "JK", "9898574636", "10-11-2023"));
-//        list.add(new BookModel("Offer2", "KJ", "9898574636", "10-11-2023"));
-//        list.add(new BookModel("Offer3", "DJ", "9898574636", "10-11-2023"));
-//        list.add(new BookModel("Offer4", "JD", "9898574636", "10-11-2023"));
-        commonViewModel.getOrderDetailsShops(makeRequest());
+        commonViewModel.getOrderDetailsShops(makeRequest(), myProgressDialog);
     }
 
     private void setListener() {

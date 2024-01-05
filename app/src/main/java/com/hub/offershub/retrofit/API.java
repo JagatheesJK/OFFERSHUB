@@ -146,4 +146,7 @@ public interface API {
     @Multipart
     Call<JsonElement> updateShopAmenities(@Part("shop_id") RequestBody shopownerid,
                                           @Part() List<MultipartBody.Part> shopamenities);
+
+    @POST("offerPriority")
+    Call<JsonElement> offerPriority(@Body Map<String, Object> body);
 }

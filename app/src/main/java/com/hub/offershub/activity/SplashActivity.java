@@ -1,22 +1,19 @@
 package com.hub.offershub.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
 
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
-import com.hub.offershub.R;
 import com.hub.offershub.animation.Animation;
+import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivitySplashBinding;
 import com.hub.offershub.utils.WindowUtils;
 import com.hub.offershub.viewmodel.CommonViewModel;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     ActivitySplashBinding binding;
 
@@ -29,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         commonViewModel = new CommonViewModel(AppApplication.getInstance());
-        commonViewModel.getCategory(AppApplication.getInstance().prefsHelper);
+        commonViewModel.getCategory(AppApplication.getInstance().prefsHelper, myProgressDialog);
 
         Animation.startZoomEffect(binding.splashImg);
         enterDelay();

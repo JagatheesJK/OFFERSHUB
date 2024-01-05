@@ -59,7 +59,7 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
             list.clear();
             page_no = 0;
             binding.swipeRefresh.setRefreshing(false);
-            commonViewModel.getActiveOffers(makeRequest());
+            commonViewModel.getActiveOffers(makeRequest(), myProgressDialog);
         });
 
         return binding.getRoot();
@@ -67,9 +67,10 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
 
     private void init() {
         if (commonViewModel != null) {
-            commonViewModel.getActiveOffers(makeRequest());
+            commonViewModel.getActiveOffers(makeRequest(), myProgressDialog);
             getActiveOffersData();
             getDeleteData();
+            getOfferPriorityData();
         }
     }
 
@@ -135,6 +136,26 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
         });
     }
 
+    private void getOfferPriorityData() {
+        commonViewModel.getMutableOfferPriorityData().observe(getViewLifecycleOwner(), jsonObject -> {
+            if (ActiveOfferFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (jsonObject != null) {
+                    try {
+                        Log.e("Check_Offer", "ActiveOffer getDeleteData Status : "+jsonObject.getString("status"));
+                        if(jsonObject.getString("status").equals("success")) {
+
+                        } else {
+
+                        }
+                        Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+    }
+
     private Map<String, Object> makeRequest() {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("shop_id", shopID);
@@ -147,17 +168,26 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
         return requestData;
     }
 
+    private Map<String, Object> makePriorityRequest(String offer_id, String priority) {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("offer_id", offer_id);
+        requestData.put("priority", priority);
+        return requestData;
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (commonViewModel != null) {
             commonViewModel.getMutableActiveOffers().removeObservers(getViewLifecycleOwner());
             commonViewModel.getMutableDeleteOffer().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableOfferPriorityData().removeObservers(getViewLifecycleOwner());
         }
     }
 
     @Override
-    public void onOfferSelect() {
+    public void onOfferSelect(OfferModel.Data model, String priority) {
+        commonViewModel.offerPriority(makePriorityRequest(model.offer_id, priority), myProgressDialog);
 //        loadFragment(new ShopDetailsFragment());
     }
 
@@ -178,7 +208,7 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
     public void onOfferRemove(Object obj, int position) {
         deleteModel = (OfferModel.Data) obj;
         deletePosition = position;
-        commonViewModel.getDeleteOffer(makeDeleteRequest(deleteModel.offer_id));
+        commonViewModel.getDeleteOffer(makeDeleteRequest(deleteModel.offer_id), myProgressDialog);
     }
 
     @Override
@@ -193,7 +223,7 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getActiveOffers(makeRequest());
+                commonViewModel.getActiveOffers(makeRequest(), myProgressDialog);
                 break;
             default:
                 break;
@@ -207,6 +237,7 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
         if (commonViewModel != null) {
             commonViewModel.getMutableActiveOffers().removeObservers(getViewLifecycleOwner());
             commonViewModel.getMutableDeleteOffer().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableOfferPriorityData().removeObservers(getViewLifecycleOwner());
         }
     }
 

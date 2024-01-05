@@ -92,7 +92,7 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
             currentLong = Double.parseDouble(businessModel.longitude);
         }
         binding.amenitiesProgress.setVisibility(View.VISIBLE);
-        commonViewModel.getMasterAmenities();
+        commonViewModel.getMasterAmenities(myProgressDialog);
         setMap();
     }
 
@@ -163,7 +163,7 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
                         }
 //                        mMap.setMyLocationEnabled(true);
                         googleMap.getUiSettings().setZoomControlsEnabled(true);
-                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 1000, null);
+                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(18), 1000, null);
                         fusedLocationProviderClient.getLastLocation().addOnFailureListener(e -> {
                             Toast.makeText(getActivity(), "Error "+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }).addOnSuccessListener(location ->  {
@@ -177,7 +177,7 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
                             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                             markerOptions.position(new LatLng(currentLat, currentLong));
                             marker = mMap.addMarker(markerOptions);
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
                         });
                     } else {
 
@@ -219,7 +219,7 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
             markerOptions.position(new LatLng(Long.parseLong(businessModel.latitude), Long.parseLong(businessModel.longitude)));
             marker = mMap.addMarker(markerOptions);
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
 
             currentLat = latLng.latitude;
             currentLong = latLng.longitude;
@@ -233,11 +233,11 @@ public class EditLocationFragment extends BaseFragment implements View.OnClickLi
         switch (v.getId()) {
             case R.id.amititiesSubmitBtn:
                 showDialog();
-                commonViewModel.updateShopAmenities(businessModel.id, adapter.getSelectedAmenityIds());
+                commonViewModel.updateShopAmenities(businessModel.id, adapter.getSelectedAmenityIds(), myProgressDialog);
                 break;
             case R.id.mapSubmitBtn:
                 showDialog();
-                commonViewModel.updateShopLocation(makeRequest(businessModel.id));
+                commonViewModel.updateShopLocation(makeRequest(businessModel.id), myProgressDialog);
                 break;
             default:
                 break;

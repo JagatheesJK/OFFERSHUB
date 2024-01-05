@@ -3,12 +3,14 @@ package com.hub.offershub.adapter;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -17,6 +19,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.hub.offershub.R;
 import com.hub.offershub.listener.OfferListener;
 import com.hub.offershub.model.OfferModel;
@@ -31,6 +39,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     private CommonMethods commonMethods;
     private OfferListener listener;
     private boolean isActive = false;
+    private int selectedPosition = RecyclerView.NO_POSITION;
+    String priority;
+    private boolean isFirst = true;
 
     public OfferAdapter(Context context, List<OfferModel.Data> list, OfferListener listener, boolean isActive) {
         this.list = list;
@@ -51,11 +62,17 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OfferModel.Data model = list.get(position);
         if (model != null) {
+            if (isFirst) {
+                isFirst = false;
+                selectedPosition = (model.is_show_mainpage == 1) ? position : RecyclerView.NO_POSITION;
+            }
+            Log.e("Check_JK", "Type selectedPosition : "+selectedPosition+" position : "+position);
             holder.statusTxt.setVisibility(isActive ? View.GONE : View.VISIBLE);
             holder.switchLinear.setVisibility(isActive ? View.VISIBLE : View.GONE);
             holder.offerNameTxt.setText(""+model.offer_name);
             holder.offerDescTxt.setText(""+model.offer_desc);
             holder.offerType.setText("Type : "+model.offer_type_name);
+            holder.offerSwitch.setChecked(selectedPosition == position);
             if (1 == model.offer_type) {
                 Log.e("Check_JK", "Type : "+model.offer_type+" IF ");
                 holder.amountLinear.setVisibility(View.VISIBLE);
@@ -71,10 +88,22 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 holder.discountLinear.setVisibility(View.GONE);
                 holder.offerPrice.setText("Flat "+model.flat_percentage+"%");
             }
-//            holder.offerSwitch.setChecked(model.offerToggle);
             holder.statusTxt.setText(""+model.adminverifystatus);
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
-            commonMethods.imageLoaderView(ctx, holder.offerImg, model.image_url);
+            holder.shimmerFrameLayout.startShimmer();
+            Glide.with(ctx).load(model.image_url).listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    holder.shimmerFrameLayout.stopShimmer();
+                    holder.shimmerFrameLayout.setVisibility(View.GONE);
+                    return false;
+                }
+            }).error(R.drawable.def_logo).into(holder.offerImg);
             if ("Pending".equals(model.adminverifystatus)) {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.yellow, null)));
@@ -90,8 +119,22 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             holder.discountPriceTxt.setText(""+model.offer_amount);
             holder.discountOfferTxt.setText("Off "+model.offer_percentage+"%");
 
+            holder.offerSwitch.setOnClickListener(v -> {
+                Log.e("Check_JK", "Type selectedPosition Click : "+selectedPosition+" position : "+position);
+                if (selectedPosition != position) {
+                    this.selectedPosition = position;
+                    priority = "1";
+                } else {
+                    selectedPosition = RecyclerView.NO_POSITION;
+                    priority = "0";
+                }
+                Log.e("Check_JK", "Type selectedPosition Click After : "+selectedPosition+" position : "+position);
+                listener.onOfferSelect(model, priority);
+                notifyDataSetChanged();
+            });
+
             holder.itemView.setOnClickListener(v -> {
-                listener.onOfferSelect();
+//                listener.onOfferSelect();
             });
 
             holder.editLinear.setOnClickListener(v -> {
@@ -130,6 +173,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         ConstraintLayout switchLinear;
         AppCompatTextView discountOfferTxt, discountPriceTxt;
         LinearLayoutCompat amountLinear, discountLinear;
+        ShimmerFrameLayout shimmerFrameLayout;
         public ViewHolder(View v) {
             super(v);
             offerNameTxt = v.findViewById(R.id.offerNameTxt);
@@ -149,6 +193,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             discountPriceTxt = v.findViewById(R.id.discountPriceTxt);
             amountLinear = v.findViewById(R.id.amountLinear);
             discountLinear = v.findViewById(R.id.discountLinear);
+            shimmerFrameLayout = v.findViewById(R.id.shimmerFrameLayout);
         }
     }
 }

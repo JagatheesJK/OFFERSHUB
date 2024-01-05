@@ -32,7 +32,7 @@ import com.hub.offershub.R;
 import com.hub.offershub.dialogfragment.ExitDialogFragment;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.utils.CommonMethods;
-import com.hub.offershub.utils.compress.CompressImage;
+import com.hub.offershub.utils.loading.MyProgressDialog;
 import com.hub.offershub.viewmodel.CommonViewModel;
 import com.permissionx.guolindev.PermissionX;
 
@@ -45,6 +45,7 @@ public class BaseActivity extends AppCompatActivity {
     public CommonViewModel commonViewModel;
     public CommonMethods commonMethods;
     public ExitDialogFragment exitDialogFragment;
+    public MyProgressDialog myProgressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class BaseActivity extends AppCompatActivity {
         commonViewModel = new ViewModelProvider(BaseActivity.this).get(CommonViewModel.class);
         commonMethods = new CommonMethods();
         exitDialogFragment = new ExitDialogFragment();
+        myProgressDialog = new MyProgressDialog(BaseActivity.this);
     }
 
     public static String getPath(Context context, Uri uri) {

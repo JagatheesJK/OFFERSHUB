@@ -2,16 +2,24 @@ package com.hub.offershub.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.hub.offershub.R;
 import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BusinessModel;
@@ -58,7 +66,20 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             holder.rateTxt.setText(""+model.total_rate+" ("+model.avg_rating+")");
             holder.statusTxt.setText(""+model.adminverifystatus);
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
-            commonMethods.imageLoaderView(ctx, holder.shopImg, model.image_url);
+            holder.shimmerFrameLayout.startShimmer();
+            Glide.with(ctx).load(model.image_url).listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    holder.shimmerFrameLayout.stopShimmer();
+                    holder.shimmerFrameLayout.setVisibility(View.GONE);
+                    return false;
+                }
+            }).error(R.drawable.def_logo).into(holder.shopImg);
             if ("Pending".equals(model.adminverifystatus)) {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.yellow, null)));
@@ -98,6 +119,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         AppCompatTextView businessNameTxt, addressTxt;
         AppCompatTextView categoryTxt, rateTxt, statusTxt;
         AppCompatImageView shopImg, editImg, deleteImg;
+        ShimmerFrameLayout shimmerFrameLayout;
         public ViewHolder(View v) {
             super(v);
             businessNameTxt = v.findViewById(R.id.businessNameTxt);
@@ -108,6 +130,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             editImg = v.findViewById(R.id.editImg);
             deleteImg = v.findViewById(R.id.deleteImg);
             shopImg = v.findViewById(R.id.shopImg);
+            shimmerFrameLayout = v.findViewById(R.id.shimmerFrameLayout);
         }
     }
 }

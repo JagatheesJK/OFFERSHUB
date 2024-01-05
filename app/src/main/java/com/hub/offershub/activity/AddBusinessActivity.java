@@ -122,7 +122,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         // Get selected amenity IDs
         //List<Integer> selectedIds = adapter.getSelectedAmenityIds();
-        commonViewModel.getMasterAmenities();
+        commonViewModel.getMasterAmenities(myProgressDialog);
         getAmenitiesData();
         getAddShopData();
         setListener();
@@ -523,7 +523,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                         }
                         mMap.setMyLocationEnabled(true);
                         googleMap.getUiSettings().setZoomControlsEnabled(true);
-                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 1000, null);
+                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(19), 1000, null);
                         fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
@@ -542,7 +542,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                                 markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
                                 marker = mMap.addMarker(markerOptions);
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19));
                             }
                         });
 
@@ -588,7 +588,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         markerOptions.position(new LatLng(latLng.latitude, latLng.longitude));
         marker = mMap.addMarker(markerOptions);
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19));
 
         currentLat = latLng.latitude;
         currentLong = latLng.longitude;
@@ -643,7 +643,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                             addShopDataRequestBody.latitude = currentLat;
                             addShopDataRequestBody.longitude = currentLong;
 
-                            commonViewModel.getAddShop(addShopDataRequestBody,filePart);
+                            commonViewModel.getAddShop(addShopDataRequestBody,filePart, myProgressDialog);
                             showProgress("Please Wait...");
                         } else {
                             AddShopDataRequestBody addShopDataRequestBody = new AddShopDataRequestBody();
@@ -661,7 +661,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                             addShopDataRequestBody.latitude = currentLat;
                             addShopDataRequestBody.longitude = currentLong;
 
-                            commonViewModel.getAddShop(addShopDataRequestBody,null);
+                            commonViewModel.getAddShop(addShopDataRequestBody,null, myProgressDialog);
                             showProgress("Please Wait...");                        }
                     }
 

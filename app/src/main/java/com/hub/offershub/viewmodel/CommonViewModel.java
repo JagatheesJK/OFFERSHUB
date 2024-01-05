@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.model.AddOfferDataRequestBody;
 import com.hub.offershub.model.AddShopDataRequestBody;
@@ -41,8 +40,6 @@ import retrofit2.Response;
 
 public class CommonViewModel extends AndroidViewModel {
 
-    public MyProgressDialog myProgressDialog;
-
     private final MutableLiveData<BusinessModel> mutableActiveBusiness = new MutableLiveData<>();
     private final MutableLiveData<BusinessModel> mutableInActiveBusiness = new MutableLiveData<>();
     private final MutableLiveData<OfferModel> mutableActiveOffers = new MutableLiveData<>();
@@ -66,20 +63,20 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableAddFeedbackData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateShopLocationData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateShopAmenitiesData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableOfferPriorityData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
-        myProgressDialog = new MyProgressDialog(AppApplication.getInstance());
     }
 
-    public void getActiveShops(Map<String, Object> requestData) {
+    public void getActiveShops(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JK", "getActiveShops");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 Log.e("Check_JKUpdate", "getActiveShops onPreExecute");
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -107,19 +104,19 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 
-    public void getInActiveShops(Map<String, Object> requestData) {
+    public void getInActiveShops(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JK", "getInActiveShops");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -147,19 +144,19 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 
-    public void addOffer(AddOfferDataRequestBody addOfferDataRequestBody, MultipartBody.Part multipartBody) {
+    public void addOffer(AddOfferDataRequestBody addOfferDataRequestBody, MultipartBody.Part multipartBody, MyProgressDialog myProgressDialog) {
         Log.e("Check_JK", "addOffer Type : "+addOfferDataRequestBody.offer_type);
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -202,18 +199,17 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
-
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getActiveOffers(Map<String, Object> requestData) {
+    public void getActiveOffers(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -240,19 +236,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
-
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getInActiveOffers(Map<String, Object> requestData) {
+    public void getInActiveOffers(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JK", "getInActiveOffers ID : "+requestData.get("shop_id"));
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -280,18 +275,17 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
-
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getAddShop(AddShopDataRequestBody addShopDataRequestBody, MultipartBody.Part multipartBody) {
+    public void getAddShop(AddShopDataRequestBody addShopDataRequestBody, MultipartBody.Part multipartBody, MyProgressDialog myProgressDialog) {
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -344,19 +338,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
-
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getDeleteShop(Map<String, Object> requestData) {
+    public void getDeleteShop(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JK", "getDeleteShop ID : "+requestData.get("shop_id"));
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -389,18 +382,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void deleteShopPermanent(Map<String, Object> requestData) {
+    public void deleteShopPermanent(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JK", "getDeleteShop ID : "+requestData.get("shop_id"));
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -433,17 +426,17 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getMasterAmenities() {
+    public void getMasterAmenities(MyProgressDialog myProgressDialog) {
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -470,18 +463,17 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
-
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getDeleteOffer(Map<String, Object> requestData) {
+    public void getDeleteOffer(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -513,17 +505,17 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void deleteOfferPermanent(Map<String, Object> requestData) {
+    public void deleteOfferPermanent(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -555,17 +547,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getCategory(PrefsHelper prefsHelper) {
+    public void getCategory(PrefsHelper prefsHelper, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JK", "getCategory");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -584,7 +577,7 @@ public class CommonViewModel extends AndroidViewModel {
 
                     @Override
                     public void onFailure(@NonNull Call<CategoryResponse> call, @NonNull Throwable t) {
-                        Log.e("TAG", "settingsData Error Message : " + t.getMessage());
+                        Log.e("Check_JK", "getCategory Error Message : " + t.getMessage());
                     }
                 });
                 return null;
@@ -593,19 +586,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
-        }.execute();
-
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void updateShopDetails(Map<String, Object> requestData) {
+    public void updateShopDetails(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "updateDetails");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -638,18 +630,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void updateShopImages(MultipartBody.Part filePart, RequestBody requestBody) {
+    public void updateShopImages(MultipartBody.Part filePart, RequestBody requestBody, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "updateShopImages");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -682,18 +674,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void updateOfferDetails(Map<String, Object> requestData) {
+    public void updateOfferDetails(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "updateOfferDetails");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -726,18 +718,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void updateOfferImages(MultipartBody.Part filePart, RequestBody requestBody) {
+    public void updateOfferImages(MultipartBody.Part filePart, RequestBody requestBody, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "updateOfferImages");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -770,18 +762,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getRatingReview(Map<String, Object> requestData) {
+    public void getRatingReview(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "getRatingReview");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -809,18 +801,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void shopRatingReply(Map<String, Object> requestData) {
+    public void shopRatingReply(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "shopRatingReply");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -853,18 +845,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getOrderDetailsShops(Map<String, Object> requestData) {
+    public void getOrderDetailsShops(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "getOrderDetailsShops");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -892,18 +884,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void getShopFeedback(Map<String, Object> requestData) {
+    public void getShopFeedback(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "getShopFeedback");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -931,18 +923,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void shopFeedback(Map<String, Object> requestData) {
+    public void shopFeedback(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "shopFeedback");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -975,18 +967,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void updateShopLocation(Map<String, Object> requestData) {
+    public void updateShopLocation(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "updateShopLocation");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -1019,18 +1011,18 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void updateShopAmenities(String shopID, List<Integer> amenitiesList) {
+    public void updateShopAmenities(String shopID, List<Integer> amenitiesList, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "updateShopAmenities");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showDialog();
+                showDialog(myProgressDialog);
             }
 
             @Override
@@ -1070,7 +1062,51 @@ public class CommonViewModel extends AndroidViewModel {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                closeDialog();
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void offerPriority(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKUpdate", "offerPriority");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.offerPriority(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "offerPriority onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableOfferPriorityData.postValue(root);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableOfferPriorityData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "offerPriority Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -1167,7 +1203,11 @@ public class CommonViewModel extends AndroidViewModel {
         return mutableUpdateShopAmenitiesData;
     }
 
-    public void showDialog() {
+    public MutableLiveData<JSONObject> getMutableOfferPriorityData() {
+        return mutableOfferPriorityData;
+    }
+
+    public void showDialog(MyProgressDialog myProgressDialog) {
         try {
             if (myProgressDialog != null && !myProgressDialog.isShowing())
                 myProgressDialog.show();
@@ -1177,7 +1217,7 @@ public class CommonViewModel extends AndroidViewModel {
         }
     }
 
-    public void closeDialog() {
+    public void closeDialog(MyProgressDialog myProgressDialog) {
         try {
             if (myProgressDialog != null && myProgressDialog.isShowing())
                 myProgressDialog.dismiss();

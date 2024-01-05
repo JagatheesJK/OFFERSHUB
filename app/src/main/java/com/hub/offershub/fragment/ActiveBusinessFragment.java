@@ -58,7 +58,7 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
             list.clear();
             page_no = 0;
             binding.swipeRefresh.setRefreshing(false);
-            commonViewModel.getActiveShops(makeRequest());
+            commonViewModel.getActiveShops(makeRequest(), myProgressDialog);
         });
 
         return binding.getRoot();
@@ -66,7 +66,7 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
 
     private void init() {
         if (commonViewModel != null) {
-            commonViewModel.getActiveShops(makeRequest());
+            commonViewModel.getActiveShops(makeRequest(), myProgressDialog);
             getActiveData();
             getDeleteData();
         }
@@ -112,7 +112,7 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     @Override
     public void onItemRemoved(Object obj) {
         deleteModel = (BusinessModel.Data) obj;
-        commonViewModel.getDeleteShop(makeDeleteRequest(deleteModel.id));
+        commonViewModel.getDeleteShop(makeDeleteRequest(deleteModel.id), myProgressDialog);
     }
 
     private void getActiveData() {
@@ -184,7 +184,7 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getActiveShops(makeRequest());
+                commonViewModel.getActiveShops(makeRequest(), myProgressDialog);
                 break;
             default:
                 break;

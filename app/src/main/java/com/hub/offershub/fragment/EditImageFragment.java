@@ -141,11 +141,11 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         Log.e("Check_JKUpdate", "updateShopImages ShopID : "+businessModel.id);
                         commonViewModel.updateShopImages(MultipartBody.Part.createFormData("shopimage", file.getName(),
                                         RequestBody.create(MediaType.parse("multipart/form-data"), file)),
-                                RequestBody.create(MediaType.parse("multipart/form-data"), ""+businessModel.id));
+                                RequestBody.create(MediaType.parse("multipart/form-data"), ""+businessModel.id), myProgressDialog);
                     } else {
                         commonViewModel.updateOfferImages(MultipartBody.Part.createFormData("offerimage[]", file.getName(),
                                         RequestBody.create(MediaType.parse("multipart/form-data"), file)),
-                                RequestBody.create(MediaType.parse("multipart/form-data"), ""+offerModel.offer_id));
+                                RequestBody.create(MediaType.parse("multipart/form-data"), ""+offerModel.offer_id), myProgressDialog);
                     }
                 }
                 break;
