@@ -18,6 +18,7 @@ import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.FeedbackModel;
+import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
 import com.hub.offershub.retrofit.API;
@@ -56,6 +57,8 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableUpdateShopImages = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateOfferDetails = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateOfferImages = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableDeleteOfferImages = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableDeleteShopImages = new MutableLiveData<>();
     private final MutableLiveData<RatingModel> mutableRatingData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableRatingReplyData = new MutableLiveData<>();
     private final MutableLiveData<BookModel> mutableBookingData = new MutableLiveData<>();
@@ -63,6 +66,8 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableAddFeedbackData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateShopLocationData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableUpdateShopAmenitiesData = new MutableLiveData<>();
+    private final MutableLiveData<OfferImageModel> mutableGetOfferImageData = new MutableLiveData<>();
+    private final MutableLiveData<OfferImageModel> mutableGetShopImageData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableOfferPriorityData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
@@ -772,6 +777,94 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void deleteOfferImages(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKUpdate", "updateOfferImages");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.deleteOfferImage(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "deleteOfferImage onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableDeleteOfferImages.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableDeleteOfferImages.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "deleteOfferImage Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void deleteShopImages(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKUpdate", "updateOfferImages");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.deleteShopImage(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "deleteOfferImage onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutableDeleteShopImages.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutableDeleteShopImages.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "deleteOfferImage Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public void getRatingReview(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "getRatingReview");
         new AsyncTask<String, String, String>() {
@@ -1072,6 +1165,86 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void getOfferImages(Map<String, Object> requestData,MyProgressDialog myProgressDialog) {
+        Log.e("Check_Moorthy", "getOfferImages");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<OfferImageModel> call = apiInterface.getImagesbyOfferid(requestData);
+                call.enqueue(new Callback<OfferImageModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<OfferImageModel> call, @NonNull Response<OfferImageModel> response) {
+                        Log.e("Check_Moorthy", "getOfferImages onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableGetOfferImageData.postValue(response.body());
+
+                        } else
+                            mutableGetOfferImageData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<OfferImageModel> call, @NonNull Throwable t) {
+                        Log.e("Check_Moorthy", "getOfferImages Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void getShopImages(Map<String, Object> requestData,MyProgressDialog myProgressDialog) {
+        Log.e("Check_Moorthy", "getShopImages");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<OfferImageModel> call = apiInterface.getImagesbyShopid(requestData);
+                call.enqueue(new Callback<OfferImageModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<OfferImageModel> call, @NonNull Response<OfferImageModel> response) {
+                        Log.e("Check_Moorthy", "getShopImages onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableGetShopImageData.postValue(response.body());
+
+                        } else
+                            mutableGetShopImageData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<OfferImageModel> call, @NonNull Throwable t) {
+                        Log.e("Check_Moorthy", "getShopImages Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public void offerPriority(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "offerPriority");
         new AsyncTask<String, String, String>() {
@@ -1210,6 +1383,22 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<JSONObject> getMutableOfferPriorityData() {
         return mutableOfferPriorityData;
+    }
+
+    public MutableLiveData<JSONObject> deleteMutableOfferImageData() {
+        return mutableDeleteOfferImages;
+    }
+
+    public MutableLiveData<JSONObject> deleteMutableShopImageData() {
+        return mutableDeleteShopImages;
+    }
+
+    public MutableLiveData<OfferImageModel> getMutableGetOfferImages() {
+        return mutableGetOfferImageData;
+    }
+
+    public MutableLiveData<OfferImageModel> getMutableGetShopImages() {
+        return mutableGetShopImageData;
     }
 
     public void showDialog(MyProgressDialog myProgressDialog) {

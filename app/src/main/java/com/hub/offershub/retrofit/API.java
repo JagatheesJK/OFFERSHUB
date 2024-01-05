@@ -6,6 +6,7 @@ import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.FeedbackModel;
+import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
 
@@ -149,4 +150,16 @@ public interface API {
 
     @POST("offerPriority")
     Call<JsonElement> offerPriority(@Body Map<String, Object> body);
+
+    @POST("getImagesbyOfferid")
+    Call<OfferImageModel> getImagesbyOfferid(@Body Map<String, Object> body);
+
+    @POST("getImagesbyshopid")
+    Call<OfferImageModel> getImagesbyShopid(@Body Map<String, Object> body);
+
+    @POST("deleteOfferImage")
+    Call<JsonElement> deleteOfferImage(@Body Map<String, Object> body);
+
+    @POST("deleteShopImage")
+    Call<JsonElement> deleteShopImage(@Body Map<String, Object> body);
 }
