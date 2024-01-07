@@ -18,6 +18,8 @@ import com.hub.offershub.R;
 import com.hub.offershub.adapter.RatingAdaper;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentRatingBinding;
+import com.hub.offershub.dialogfragment.QueryDialogFragment;
+import com.hub.offershub.listener.ReplayListener;
 import com.hub.offershub.model.RatingModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
@@ -26,7 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RatingFragment extends BaseFragment implements View.OnClickListener, RatingAdaper.CommentListener {
+public class RatingFragment extends BaseFragment implements View.OnClickListener,
+        RatingAdaper.CommentListener, ReplayListener {
 
     private FragmentRatingBinding binding;
     private List<RatingModel.Data> list = new ArrayList<>();
@@ -70,8 +73,8 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setListener() {
-        binding.liveSendBtn.setOnClickListener(this);
         binding.rootLayout.setOnClickListener(this);
+        binding.empty.reloadBtn.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
@@ -87,22 +90,14 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
         adapter.notifyDataSetChanged();
     }
 
-    String replayComment;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.liveSendBtn:
-                replayComment = binding.liveMessageEditText.getText().toString();
-                hideKeybaord();
-                if (replayComment.length() > 0) {
-                    commonViewModel.shopRatingReply(makeReplayRatingRequest(binding.liveMessageEditText.getText().toString()), myProgressDialog);
-                    binding.liveMessageEditText.setText("");
-                } else {
-                    Toast.makeText(getActivity(), "Say something...", Toast.LENGTH_SHORT).show();
-                }
-                break;
             case R.id.rootLayout:
                 Log.e("Check_Touch", "setListener RootClick 1");
+                break;
+            case R.id.reloadBtn:
+                commonViewModel.getRatingReview(makeRatingRequest(), myProgressDialog);
                 break;
             default:
                 break;
@@ -152,7 +147,6 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
         commonViewModel.getMutableRatingReplyData().observe(getViewLifecycleOwner(), jsonObject -> {
             if (RatingFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (jsonObject != null) {
-                    binding.commentEditLayout.setVisibility(View.GONE);
                     adapter.changeData(list.indexOf(replayModel), replayModel);
                 }
             }
@@ -169,20 +163,19 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onReplay(RatingModel.Data model) {
         replayModel = model;
-        showKeyboard();
-    }
-
-    private void showKeyboard() {
-        if (binding.commentEditLayout != null) {
-            binding.commentEditLayout.setVisibility(View.VISIBLE);
-            binding.liveMessageEditText.setFocusable(true);
-            binding.liveMessageEditText.requestFocus();
-            inputMethodManager.showSoftInput(binding.liveMessageEditText, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        if (!queryDialogFragment.isAdded()) {
+            queryDialogFragment.setData("Rating Replay", model, this);
+            queryDialogFragment.show(getChildFragmentManager(), QueryDialogFragment.TAG);
         }
     }
 
-    private void hideKeybaord() {
-        binding.commentEditLayout.setVisibility(View.GONE);
-        inputMethodManager.hideSoftInputFromWindow(binding.liveMessageEditText.getWindowToken(), 0);
+    @Override
+    public void onReplaySuccess(String replayComment) {
+        replayModel.shop_comments = replayComment;
+        if (replayComment.length() > 0) {
+            commonViewModel.shopRatingReply(makeReplayRatingRequest(replayComment), myProgressDialog);
+        } else {
+            Toast.makeText(getActivity(), "Say something...", Toast.LENGTH_SHORT).show();
+        }
     }
 }

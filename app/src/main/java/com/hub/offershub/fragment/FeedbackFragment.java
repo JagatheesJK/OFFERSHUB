@@ -63,6 +63,7 @@ public class FeedbackFragment extends BaseFragment implements View.OnClickListen
 
     private void setListener() {
         binding.createBtn.setOnClickListener(this);
+        binding.empty.reloadBtn.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
@@ -81,9 +82,12 @@ public class FeedbackFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.reloadBtn:
+                commonViewModel.getShopFeedback(makeFeedbackRequest(), myProgressDialog);
+                break;
             case R.id.createBtn:
                 if (!queryDialogFragment.isAdded()) {
-                    queryDialogFragment.setData(shopID, this);
+                    queryDialogFragment.setData("Feedback", shopID, this);
                     queryDialogFragment.show(getChildFragmentManager(), QueryDialogFragment.TAG);
                 }
                 break;

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hub.offershub.R;
@@ -37,10 +38,16 @@ public class FeedbackAdaper extends RecyclerView.Adapter<FeedbackAdaper.BookView
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         FeedbackModel.Data model = list.get(position);
         if (model != null) {
-            holder.feedbackName.setText(""+model.name);
+            holder.feedbackName.setText("You");
             if (model.created_on != null && model.created_on.length() > 0)
                 holder.feedbackTime.setText(""+ Utils.convertDateFormat(model.created_on));
             holder.feedbackMsg.setText(""+model.feedback);
+            holder.feedbackAdminCommentTxt.setText(""+model.adminreply);
+            if (model.adminreply != null && !"null".equals(model.adminreply) && model.adminreply.length() > 0) {
+                holder.feedbackAdminCommentLinear.setVisibility(View.VISIBLE);
+            } else {
+                holder.feedbackAdminCommentLinear.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -51,11 +58,15 @@ public class FeedbackAdaper extends RecyclerView.Adapter<FeedbackAdaper.BookView
 
     public class BookViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView feedbackName, feedbackTime, feedbackMsg;
+        LinearLayoutCompat feedbackAdminCommentLinear;
+        AppCompatTextView feedbackAdminCommentTxt;
         public BookViewHolder(View v) {
             super(v);
             feedbackName = v.findViewById(R.id.feedbackName);
             feedbackTime = v.findViewById(R.id.feedbackTime);
             feedbackMsg = v.findViewById(R.id.feedbackMsg);
+            feedbackAdminCommentLinear = v.findViewById(R.id.feedbackAdminCommentLinear);
+            feedbackAdminCommentTxt = v.findViewById(R.id.feedbackAdminCommentTxt);
         }
     }
 

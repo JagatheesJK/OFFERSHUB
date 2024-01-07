@@ -48,9 +48,6 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
         PermissionListener {
 
     private FragmentEditImageBinding binding;
-    private String image1 = "https://static.vecteezy.com/system/resources/previews/001/381/216/non_2x/special-offer-sale-banner-with-megaphone-free-vector.jpg";
-    private String image2 = "https://static.vecteezy.com/system/resources/previews/001/381/216/non_2x/special-offer-sale-banner-with-megaphone-free-vector.jpg";
-    private String image3 = "https://static.vecteezy.com/system/resources/previews/001/381/216/non_2x/special-offer-sale-banner-with-megaphone-free-vector.jpg";
     private List<Uri> selectedImages = new ArrayList<>();
     private EditImageAdapter adapter;
 
@@ -84,9 +81,6 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void init() {
-//        selectedImages.add(Uri.parse(image1));
-//        selectedImages.add(Uri.parse(image2));
-//        selectedImages.add(Uri.parse(image3));
         initUI();
     }
 
@@ -94,19 +88,19 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
         binding.addImg.setOnClickListener(this);
         binding.editImg.setOnClickListener(this);
         binding.editDelete.setOnClickListener(this);
-        binding.uploadshopImg.setOnClickListener(this);
+        binding.uploadshopLinear.setOnClickListener(this);
         binding.imageClear.setOnClickListener(this);
         binding.addofferImg1.setOnClickListener(this);
         binding.editofferDelete1.setOnClickListener(this);
-        binding.uploadofferImg1.setOnClickListener(this);
+        binding.uploadOfferLinear1.setOnClickListener(this);
         binding.offerClose1.setOnClickListener(this);
         binding.addofferImg2.setOnClickListener(this);
         binding.editofferDelete2.setOnClickListener(this);
-        binding.uploadofferImg2.setOnClickListener(this);
+        binding.uploadOfferLinear2.setOnClickListener(this);
         binding.offerClose2.setOnClickListener(this);
         binding.addofferImg3.setOnClickListener(this);
         binding.editofferDelete3.setOnClickListener(this);
-        binding.uploadofferImg3.setOnClickListener(this);
+        binding.uploadOfferLinear3.setOnClickListener(this);
         binding.offerClose3.setOnClickListener(this);
     }
 
@@ -170,10 +164,10 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.editImg:
+            /*case R.id.editImg:
                 editImage = "editImg";
                 getPermission(this);
-                break;
+                break;*/
             case R.id.addofferImg1:
                 editImage = "offerImg1";
                 getPermission(this);
@@ -206,16 +200,18 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 editImage = "offerImg3";
                 commonViewModel.deleteOfferImages(makeImageRequest(""+(Integer) v.getTag()),myProgressDialog);
                 break;
-            case R.id.uploadshopImg:
-            case R.id.uploadofferImg1:
-            case R.id.uploadofferImg2:
-            case R.id.uploadofferImg3:
+            case R.id.uploadshopLinear:
+            case R.id.uploadOfferLinear1:
+            case R.id.uploadOfferLinear2:
+            case R.id.uploadOfferLinear3:
                 if (file != null) {
                     if (isShop) {
+                        showProgress();
                         commonViewModel.updateShopImages(MultipartBody.Part.createFormData("shopimage", file.getName(),
                                         RequestBody.create(MediaType.parse("multipart/form-data"), file)),
                                 RequestBody.create(MediaType.parse("multipart/form-data"), ""+businessModel.id), myProgressDialog);
                     } else {
+                        showProgress();
                         getUpdateOfferImages();
                         commonViewModel.updateOfferImages(MultipartBody.Part.createFormData("offerimage[]", file.getName(),
                                         RequestBody.create(MediaType.parse("multipart/form-data"), file)),
@@ -226,28 +222,28 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
             case R.id.imageClear:
                 file = null;
                 binding.addImg.setVisibility(View.VISIBLE);
-                binding.uploadshopImg.setVisibility(View.GONE);
+                binding.uploadshopLinear.setVisibility(View.GONE);
                 binding.imageClear.setVisibility(View.GONE);
                 binding.editImg.setImageDrawable(null);
                 break;
             case R.id.offerClose1:
                 file = null;
                 binding.addofferImg1.setVisibility(View.VISIBLE);
-                binding.uploadofferImg1.setVisibility(View.GONE);
+                binding.uploadOfferLinear1.setVisibility(View.GONE);
                 binding.offerClose1.setVisibility(View.GONE);
                 binding.editofferImg1.setImageDrawable(null);
                 break;
             case R.id.offerClose2:
                 file = null;
                 binding.addofferImg2.setVisibility(View.VISIBLE);
-                binding.uploadofferImg2.setVisibility(View.GONE);
+                binding.uploadOfferLinear2.setVisibility(View.GONE);
                 binding.offerClose2.setVisibility(View.GONE);
                 binding.editofferImg2.setImageDrawable(null);
                 break;
             case R.id.offerClose3:
                 file = null;
                 binding.addofferImg3.setVisibility(View.VISIBLE);
-                binding.uploadofferImg3.setVisibility(View.GONE);
+                binding.uploadOfferLinear3.setVisibility(View.GONE);
                 binding.offerClose3.setVisibility(View.GONE);
                 binding.editofferImg3.setImageDrawable(null);
                 break;
@@ -264,7 +260,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         if("success".equals(jsonObject.getString("status"))) {
                             if(editImage.equals("shopImg")) {
                                 binding.addImg.setVisibility(View.GONE);
-                                binding.uploadshopImg.setVisibility(View.GONE);
+                                binding.uploadshopLinear.setVisibility(View.GONE);
                                 binding.editDelete.setVisibility(View.VISIBLE);
                                 binding.imageClear.setVisibility(View.GONE);
                                 binding.editDelete.setTag(jsonObject.getInt("data"));
@@ -277,6 +273,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         throw new RuntimeException(e);
                     }
                 }
+                hideProgress();
             }
         });
     }
@@ -289,20 +286,20 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         if("success".equals(jsonObject.getString("status"))) {
                             if(editImage.equals("offerImg1")) {
                                 binding.addofferImg1.setVisibility(View.GONE);
-                                binding.uploadofferImg1.setVisibility(View.GONE);
+                                binding.uploadOfferLinear1.setVisibility(View.GONE);
                                 binding.offerClose1.setVisibility(View.GONE);
                                 binding.editofferDelete1.setVisibility(View.VISIBLE);
                                 binding.editofferDelete1.setTag(jsonObject.getInt("data"));
                             }
                             else if(editImage.equals("offerImg2")) {
                                 binding.addofferImg2.setVisibility(View.GONE);
-                                binding.uploadofferImg2.setVisibility(View.GONE);
+                                binding.uploadOfferLinear2.setVisibility(View.GONE);
                                 binding.offerClose2.setVisibility(View.GONE);
                                 binding.editofferDelete2.setVisibility(View.VISIBLE);
                                 binding.editofferDelete2.setTag(jsonObject.getInt("data"));
                             } else if(editImage.equals("offerImg3")) {
                                 binding.addofferImg3.setVisibility(View.GONE);
-                                binding.uploadofferImg3.setVisibility(View.GONE);
+                                binding.uploadOfferLinear3.setVisibility(View.GONE);
                                 binding.offerClose3.setVisibility(View.GONE);
                                 binding.editofferDelete3.setVisibility(View.VISIBLE);
                                 binding.editofferDelete3.setTag(jsonObject.getInt("data"));
@@ -315,6 +312,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         throw new RuntimeException(e);
                     }
                 }
+                hideProgress();
             }
         });
     }
@@ -327,20 +325,20 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         if("success".equals(jsonObject.getString("status"))) {
                             if(editImage.equals("offerImg1")) {
                                 binding.addofferImg1.setVisibility(View.VISIBLE);
-                                binding.uploadofferImg1.setVisibility(View.GONE);
+                                binding.uploadOfferLinear1.setVisibility(View.GONE);
                                 binding.offerClose1.setVisibility(View.GONE);
                                 binding.editofferDelete1.setVisibility(View.GONE);
                                 binding.editofferImg1.setImageDrawable(null);
                             }
                             else if(editImage.equals("offerImg2")) {
                                 binding.addofferImg2.setVisibility(View.VISIBLE);
-                                binding.uploadofferImg2.setVisibility(View.GONE);
+                                binding.uploadOfferLinear2.setVisibility(View.GONE);
                                 binding.offerClose2.setVisibility(View.GONE);
                                 binding.editofferDelete2.setVisibility(View.GONE);
                                 binding.editofferImg2.setImageDrawable(null);
                             } else if(editImage.equals("offerImg3")) {
                                 binding.addofferImg3.setVisibility(View.VISIBLE);
-                                binding.uploadofferImg3.setVisibility(View.GONE);
+                                binding.uploadOfferLinear3.setVisibility(View.GONE);
                                 binding.offerClose3.setVisibility(View.GONE);
                                 binding.editofferDelete3.setVisibility(View.GONE);
                                 binding.editofferImg3.setImageDrawable(null);
@@ -365,7 +363,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         if("success".equals(jsonObject.getString("status"))) {
                             if(editImage.equals("shopImg")) {
                                 binding.addImg.setVisibility(View.VISIBLE);
-                                binding.uploadshopImg.setVisibility(View.GONE);
+                                binding.uploadshopLinear.setVisibility(View.GONE);
                                 binding.imageClear.setVisibility(View.GONE);
                                 binding.editDelete.setVisibility(View.GONE);
                                 binding.editImg.setImageDrawable(null);
@@ -381,6 +379,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
             }
         });
     }
+
     private void getOffersImages() {
         commonViewModel.getMutableGetOfferImages().observe(getViewLifecycleOwner(), jsonObject -> {
             if (EditImageFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
@@ -422,7 +421,6 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
     }
 
     public void getShopImages() {
-
         commonViewModel.getMutableGetShopImages().observe(getViewLifecycleOwner(), jsonObject -> {
             if (EditImageFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (jsonObject != null) {
@@ -443,6 +441,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
             }
         });
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -451,6 +450,8 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
             commonViewModel.getMutableUpdateOfferImages().removeObservers(getViewLifecycleOwner());
             commonViewModel.getMutableGetOfferImages().removeObservers(getViewLifecycleOwner());
             commonViewModel.deleteMutableOfferImageData().removeObservers(getViewLifecycleOwner());
+            commonViewModel.getMutableGetShopImages().removeObservers(getViewLifecycleOwner());
+            commonViewModel.deleteMutableShopImageData().removeObservers(getViewLifecycleOwner());
         }
     }
 
@@ -495,7 +496,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         if (path != null) {
                             file = new File(path);
                             if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
-                                Toast.makeText(getActivity(), "Please Select file below 5MB", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 //                            compressImage();
@@ -517,22 +518,22 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
 
                             if(editImage.equals("offerImg1")) {
                                 binding.addofferImg1.setVisibility(View.GONE);
-                                binding.uploadofferImg1.setVisibility(View.VISIBLE);
+                                binding.uploadOfferLinear1.setVisibility(View.VISIBLE);
                                 binding.offerClose1.setVisibility(View.VISIBLE);
 
                             } else if (editImage.equals("offerImg2")) {
                                 binding.addofferImg2.setVisibility(View.GONE);
-                                binding.uploadofferImg2.setVisibility(View.VISIBLE);
+                                binding.uploadOfferLinear2.setVisibility(View.VISIBLE);
                                 binding.offerClose2.setVisibility(View.VISIBLE);
 
                             } else if (editImage.equals("offerImg3")) {
                                 binding.addofferImg3.setVisibility(View.GONE);
-                                binding.uploadofferImg3.setVisibility(View.VISIBLE);
+                                binding.uploadOfferLinear3.setVisibility(View.VISIBLE);
                                 binding.offerClose3.setVisibility(View.VISIBLE);
                             }
                             else if (editImage.equals("shopImg")) {
                                 binding.addImg.setVisibility(View.GONE);
-                                binding.uploadshopImg.setVisibility(View.VISIBLE);
+                                binding.uploadshopLinear.setVisibility(View.VISIBLE);
                                 binding.imageClear.setVisibility(View.VISIBLE);
                             }
                         } else {

@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:text="Android Knowledge"
             android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="18sp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/userDesTxt"

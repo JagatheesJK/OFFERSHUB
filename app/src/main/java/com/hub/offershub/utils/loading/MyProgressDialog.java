@@ -29,6 +29,7 @@ public class MyProgressDialog extends Dialog {
         this.setContentView(R.layout.custom_progress_dialog);
         this.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        this.getWindow().setDimAmount(0);
         this.setCancelable(false);
 
         LottieAnimationView animationView = findViewById(R.id.animation_view);

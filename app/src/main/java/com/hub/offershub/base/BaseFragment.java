@@ -5,6 +5,7 @@ import static com.hub.offershub.utils.Constants.GALLERY_REQUEST_CODE;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
@@ -46,6 +47,7 @@ public class BaseFragment extends Fragment {
     public MyProgressDialog myProgressDialog;
     public CommonViewModel commonViewModel;
     public QueryDialogFragment queryDialogFragment;
+    public ProgressDialog progressDialog;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -53,6 +55,8 @@ public class BaseFragment extends Fragment {
         commonMethods = new CommonMethods();
         myProgressDialog = new MyProgressDialog(context);
         queryDialogFragment = new QueryDialogFragment();
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Please wait...");
     }
 
     @Override
@@ -207,5 +211,17 @@ public class BaseFragment extends Fragment {
         Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
+    }
+
+    public void showProgress() {
+        if (!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
+    }
+
+    public void hideProgress() {
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }

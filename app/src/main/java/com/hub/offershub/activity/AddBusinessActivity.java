@@ -309,7 +309,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                         if (path != null) {
                             file = new File(path);
                             if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
-                                Toast.makeText(AddBusinessActivity.this, "Please Select file below 5MB", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddBusinessActivity.this, "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 //                            compressImage();

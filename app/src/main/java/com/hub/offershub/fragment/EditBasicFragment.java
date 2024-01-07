@@ -1,43 +1,23 @@
 package com.hub.offershub.fragment;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Lifecycle;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.Task;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentEditBasicBinding;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.Utils;
-import com.hub.offershub.utils.custommap.WorkaroundMapFragment;
-import com.permissionx.guolindev.PermissionX;
 import com.skydoves.powerspinner.SpinnerAnimation;
 
 import org.json.JSONException;
@@ -80,9 +60,9 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
             if (businessModel != null) {
                 binding.shopNameEd.setText(""+businessModel.shop_name);
                 binding.mobileEd.setText(""+businessModel.mobile);
-                binding.upiEd.setText(""+businessModel.upi_details);
+                binding.upiEd.setText(""+ ((businessModel.upi_details == null || businessModel.upi_details.equals("null") || businessModel.upi_details.isEmpty()) ? "" : businessModel.upi_details));
                 binding.shopAddressEd.setText(""+businessModel.address1);
-                binding.shopAddress2Ed.setText(""+businessModel.address2);
+                binding.shopAddress2Ed.setText(""+ ((businessModel.address2 == null || businessModel.address2.equals("null") || businessModel.address2.isEmpty()) ? "" : businessModel.address2));
                 binding.cityEd.setText(""+businessModel.city);
                 binding.stateEd.setText(""+businessModel.state);
                 binding.pincodeEd.setText(""+businessModel.pincode);
@@ -95,10 +75,10 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
                 binding.offerNameEd.setText("" + offerModel.offer_name);
                 binding.offerDescEd.setText("" + offerModel.offer_desc);
                 binding.offerCategorySpinner.selectItemByIndex((selectedType - 1));
-                binding.offerPriceEd.setText("" + ((offerModel.amount == null || offerModel.amount.equals("null") || offerModel.amount.isEmpty()) ? "0" : offerModel.amount));
-                binding.offerOriginalPriceEd.setText("" + ((offerModel.original_amount == null || offerModel.original_amount.equals("null") || offerModel.original_amount.isEmpty()) ? "0" : offerModel.original_amount));
-                binding.offerOfferPriceEd.setText("" + ((offerModel.offer_amount == null || offerModel.offer_amount.equals("null") || offerModel.offer_amount.isEmpty()) ? "0" : offerModel.offer_amount));
-                binding.flatPerEd.setText("" + ((offerModel.flat_percentage == null || offerModel.flat_percentage.equals("null") || offerModel.flat_percentage.isEmpty()) ? "0" : offerModel.flat_percentage));
+                binding.offerPriceEd.setText("" + ((offerModel.amount == null || offerModel.amount.equals("null") || offerModel.amount.isEmpty()) ? "" : offerModel.amount));
+                binding.offerOriginalPriceEd.setText("" + ((offerModel.original_amount == null || offerModel.original_amount.equals("null") || offerModel.original_amount.isEmpty()) ? "" : offerModel.original_amount));
+                binding.offerOfferPriceEd.setText("" + ((offerModel.offer_amount == null || offerModel.offer_amount.equals("null") || offerModel.offer_amount.isEmpty()) ? "" : offerModel.offer_amount));
+                binding.flatPerEd.setText("" + ((offerModel.flat_percentage == null || offerModel.flat_percentage.equals("null") || offerModel.flat_percentage.isEmpty()) ? "" : offerModel.flat_percentage));
                 if (selectedType == 1)
                     binding.plainLinear.setVisibility(View.VISIBLE);
                 else if (selectedType == 2)
@@ -137,16 +117,84 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
             if (binding.offerCategorySpinner.isShowing())
                 binding.offerCategorySpinner.dismiss();
         });
+
+        binding.mobileEd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that the characters within charSequence are about to be replaced with new text
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that somewhere within charSequence, the text has been changed
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+                if (input.length() < 10) {
+                    binding.mobileEd.setError("Enter Valid Mobile Number");
+                } else if ( input.length() == 10) {
+                    binding.mobileEd.setError(null);
+                }
+            }
+        });
+
+        binding.pincodeEd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that the characters within charSequence are about to be replaced with new text
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that somewhere within charSequence, the text has been changed
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+                if (input.length() < 6) {
+                    binding.pincodeEd.setError("Enter Valid PinCode");
+                } else if ( input.length() == 6) {
+                    binding.pincodeEd.setError(null);
+                }
+            }
+        });
     }
 
+    boolean isShopAllFieldsChecked = false, isOfferAllFieldsChecked = false;
+    private int priceAmount = 0, originalPrice = 0, offerPrice = 0, flatPer = 0;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shopSubmit:
-                commonViewModel.updateShopDetails(makeShopRequest(), myProgressDialog);
+                isShopAllFieldsChecked = checkShopAllFields();
+                if (isShopAllFieldsChecked) {
+                    commonViewModel.updateShopDetails(makeShopRequest(), myProgressDialog);
+                }
                 break;
             case R.id.offerSubmitBtn:
-                commonViewModel.updateOfferDetails(makeOfferRequest(), myProgressDialog);
+                isOfferAllFieldsChecked = checkOfferAllFields();
+                if (binding.offerPriceEd.length() == 0)
+                    priceAmount = 0;
+                else
+                    priceAmount = Integer.parseInt(binding.offerPriceEd.getText().toString());
+                if (binding.offerOriginalPriceEd.length() == 0)
+                    originalPrice = 0;
+                else
+                    originalPrice = Integer.parseInt(binding.offerOriginalPriceEd.getText().toString());
+                if (binding.offerOfferPriceEd.length() == 0)
+                    offerPrice = 0;
+                else
+                    offerPrice = Integer.parseInt(binding.offerOfferPriceEd.getText().toString());
+                if (binding.flatPerEd.length() == 0)
+                    flatPer = 0;
+                else
+                    flatPer = Integer.parseInt(binding.flatPerEd.getText().toString());
+                if (isOfferAllFieldsChecked) {
+                    commonViewModel.updateOfferDetails(makeOfferRequest(), myProgressDialog);
+                }
                 break;
             default:
                 break;
@@ -228,5 +276,102 @@ public class EditBasicFragment extends BaseFragment implements View.OnClickListe
             commonViewModel.getMutableUpdateShopDetails().removeObservers(getViewLifecycleOwner());
             commonViewModel.getMutableUpdateOfferDetails().removeObservers(getViewLifecycleOwner());
         }
+    }
+
+    private boolean checkShopAllFields() {
+        if (binding.shopNameEd.length() == 0) {
+            binding.shopNameEd.setError("Input required");
+            binding.shopNameEd.requestFocus();
+            return false;
+        } else {
+            binding.shopNameEd.setError(null);
+        }
+
+        if (binding.mobileEd.length() == 0) {
+            Log.e("Check_Moorthy","binding.mobileEd");
+            binding.mobileEd.setError("Input required");
+            binding.mobileEd.requestFocus();
+            return false;
+        }  else if(binding.mobileEd.length() >0 && binding.mobileEd.length() < 10 ) {
+            binding.pincodeEd.setError("Enter Valid Mobile Number");
+        }
+
+        if (binding.shopAddressEd.length() == 0) {
+            binding.shopAddressEd.setError("Input required");
+            binding.shopAddressEd.requestFocus();
+            return false;
+        }
+
+        if (binding.cityEd.length() == 0) {
+            binding.cityEd.setError("Input required");
+            binding.cityEd.requestFocus();
+            return false;
+        }
+
+        if (binding.stateEd.length() == 0) {
+            binding.stateEd.setError("Input required");
+            binding.stateEd.requestFocus();
+            return false;
+        }
+
+        if (binding.pincodeEd.length() == 0) {
+            binding.pincodeEd.setError("Input required");
+            binding.pincodeEd.requestFocus();
+            return false;
+        } else if(binding.pincodeEd.length() >0 && binding.pincodeEd.length() < 6 ) {
+            binding.pincodeEd.setError("Enter Valid PinCode");
+        }
+        return true;
+    }
+
+    private boolean checkOfferAllFields() {
+        if (binding.offerNameEd.length() == 0) {
+            binding.offerNameEd.setError("Input required");
+            binding.offerNameEd.setFocusableInTouchMode(true);
+            binding.offerNameEd.requestFocus();
+            return false;
+        }
+
+        if (binding.offerDescEd.length() == 0) {
+            binding.offerDescEd.setError("Input required");
+            binding.offerDescEd.requestFocus();
+            return false;
+        }
+
+        if (binding.offerCategorySpinner.length() == 0) {
+            binding.offerCategorySpinner.setError("Input required");
+            getActivity().runOnUiThread(() -> {
+                binding.offerCategorySpinner.requestFocus();
+                binding.offerCategorySpinner.performClick();
+            });
+            return false;
+        }
+
+        if (binding.plainLinear.getVisibility() == View.VISIBLE && binding.offerPriceEd.length() == 0) {
+            binding.offerPriceEd.setError("Input required");
+            binding.offerPriceEd.requestFocus();
+            return false;
+        }
+
+        if (binding.discountLinear.getVisibility() == View.VISIBLE && binding.offerOriginalPriceEd.length() == 0) {
+            binding.offerOriginalPriceEd.setError("Input required");
+            binding.offerOriginalPriceEd.requestFocus();
+            return false;
+        }
+
+        if (binding.discountLinear.getVisibility() == View.VISIBLE && binding.offerOfferPriceEd.length() == 0) {
+            binding.offerOfferPriceEd.setError("Input required");
+            binding.offerOfferPriceEd.requestFocus();
+            return false;
+        }
+
+        if (binding.flatPerLinear.getVisibility() == View.VISIBLE && binding.flatPerEd.length() == 0) {
+            binding.flatPerEd.setError("Input required");
+            binding.flatPerEd.requestFocus();
+            return false;
+        } else if (binding.flatPerLinear.getVisibility() == View.VISIBLE && "0".equals(binding.flatPerEd.getText().toString())) {
+            binding.flatPerEd.setError("Flat % applicable between 0 and 100");
+        }
+        return true;
     }
 }

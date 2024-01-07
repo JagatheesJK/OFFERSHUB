@@ -172,8 +172,8 @@
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleTxt"
@@ -226,21 +226,6 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/uploadshopImg"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    app:srcCompat="@drawable/ic_upload"
-                    android:visibility="gone"
-                    app:tint="@color/red"
-                    android:padding="4dp"
-                    android:background="@drawable/circle_white"
-                    android:backgroundTint="@color/black_30"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/editDelete"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -274,314 +259,447 @@
 
         </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/offerImageConstraint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/titleofferTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Choose Offer Images"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:textAlignment="center"
-            app:layout_constraintTop_toTopOf="parent"/>
-
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/offer2image"
+            android:id="@+id/uploadshopLinear"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            app:layout_constraintTop_toBottomOf="@+id/titleofferTxt">
+            android:layout_height="48dp"
+            android:background="@drawable/bg_rounded_solid_white"
+            android:backgroundTint="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/imageCard">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/imageofferCard1"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="24sp"
-                android:layout_marginBottom="6dp"
-                app:cardCornerRadius="16dp"
-                android:elevation="4dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/grey_light"
-                app:layout_constraintTop_toBottomOf="@+id/titleTxt">
+                app:srcCompat="@drawable/ic_upload"
+                app:tint="@color/white"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editofferImg1"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:scaleType="centerCrop"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/addofferImg1"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        app:srcCompat="@drawable/ic_add"
-                        app:tint="@color/white"
-                        android:padding="14dp"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/uploadofferImg1"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/ic_upload"
-                        app:tint="@color/red"
-                        android:padding="2dp"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editofferDelete1"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@drawable/ic_delete"
-                        app:tint="@color/white"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        android:padding="4dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/offerClose1"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@drawable/ic_close_circle"
-                        app:tint="@color/white"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        android:padding="4dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:id="@+id/imageofferCard2"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/uploadshopImg1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="24sp"
-                android:layout_marginBottom="6dp"
-                app:cardCornerRadius="16dp"
-                android:elevation="4dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/grey_light"
-                app:layout_constraintTop_toBottomOf="@+id/titleTxt">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editofferImg2"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:scaleType="centerCrop"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/addofferImg2"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        app:srcCompat="@drawable/ic_add"
-                        app:tint="@color/white"
-                        android:padding="14dp"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/uploadofferImg2"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/ic_upload"
-                        app:tint="@color/red"
-                        android:padding="4dp"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editofferDelete2"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@drawable/ic_delete"
-                        app:tint="@color/white"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        android:padding="4dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/offerClose2"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@drawable/ic_close_circle"
-                        app:tint="@color/white"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        android:padding="4dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
+                android:text="Upload"
+                android:textColor="@color/white"
+                android:padding="4dp"
+                android:layout_marginStart="8dp"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/offerImageConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/offer2image"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="wrap_content">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/imageofferCard3"
-                android:layout_width="180dp"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/titleofferTxt"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Choose Offer Images"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:textAlignment="center"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/offer2image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/titleofferTxt">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/imageofferCard1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="24sp"
+                    android:layout_marginBottom="6dp"
+                    app:cardCornerRadius="16dp"
+                    android:elevation="4dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/grey_light"
+                    app:layout_constraintTop_toBottomOf="@+id/titleTxt">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/editofferImg1"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/addofferImg1"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            app:srcCompat="@drawable/ic_add"
+                            app:tint="@color/white"
+                            android:padding="14dp"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/uploadofferImg1"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_upload"
+                            app:tint="@color/red"
+                            android:padding="2dp"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/editofferDelete1"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_delete"
+                            app:tint="@color/white"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            android:padding="4dp"
+                            android:visibility="gone"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/offerClose1"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_close_circle"
+                            app:tint="@color/white"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            android:padding="4dp"
+                            android:visibility="gone"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/uploadOfferLinear1"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_rounded_solid_white"
+                android:backgroundTint="@color/red"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="24sp"
-                android:layout_marginBottom="6dp"
-                app:cardCornerRadius="16dp"
-                android:elevation="4dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/grey_light"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/offer2image">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_upload"
+                    app:tint="@color/white"/>
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editofferImg3"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/uploadofferImg11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload"
+                    android:textColor="@color/white"
+                    android:padding="4dp"
+                    android:layout_marginStart="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/offer3image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/uploadOfferLinear1">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/imageofferCard2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="24sp"
+                    android:layout_marginBottom="6dp"
+                    app:cardCornerRadius="16dp"
+                    android:elevation="4dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/grey_light"
+                    app:layout_constraintTop_toBottomOf="@+id/titleTxt">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:scaleType="centerCrop"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        android:layout_height="wrap_content">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/addofferImg3"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        app:srcCompat="@drawable/ic_add"
-                        app:tint="@color/white"
-                        android:padding="14dp"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/editofferImg2"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/uploadofferImg3"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/ic_upload"
-                        app:tint="@color/red"
-                        android:padding="4dp"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/addofferImg2"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            app:srcCompat="@drawable/ic_add"
+                            app:tint="@color/white"
+                            android:padding="14dp"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/editofferDelete3"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@drawable/ic_delete"
-                        app:tint="@color/white"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        android:padding="4dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/uploadofferImg2"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_upload"
+                            app:tint="@color/red"
+                            android:padding="4dp"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/offerClose3"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@drawable/ic_close_circle"
-                        app:tint="@color/white"
-                        android:background="@drawable/circle_white"
-                        android:backgroundTint="@color/black_30"
-                        android:padding="4dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/editofferDelete2"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_delete"
+                            app:tint="@color/white"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            android:padding="4dp"
+                            android:visibility="gone"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/offerClose2"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_close_circle"
+                            app:tint="@color/white"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            android:padding="4dp"
+                            android:visibility="gone"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-            </androidx.cardview.widget.CardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/uploadOfferLinear2"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_rounded_solid_white"
+                android:backgroundTint="@color/red"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/offer3image">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_upload"
+                    app:tint="@color/white"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/uploadofferImg22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload"
+                    android:textColor="@color/white"
+                    android:padding="4dp"
+                    android:layout_marginStart="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lastOfferConstraint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/uploadOfferLinear2"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/imageofferCard3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="24sp"
+                    android:layout_marginBottom="6dp"
+                    app:cardCornerRadius="16dp"
+                    android:elevation="4dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/grey_light"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/editofferImg3"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/addofferImg3"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            app:srcCompat="@drawable/ic_add"
+                            app:tint="@color/white"
+                            android:padding="14dp"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/uploadofferImg3"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_upload"
+                            app:tint="@color/red"
+                            android:padding="4dp"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/editofferDelete3"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_delete"
+                            app:tint="@color/white"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            android:padding="4dp"
+                            android:visibility="gone"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/offerClose3"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_close_circle"
+                            app:tint="@color/white"
+                            android:background="@drawable/circle_white"
+                            android:backgroundTint="@color/black_30"
+                            android:padding="4dp"
+                            android:visibility="gone"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/uploadOfferLinear3"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_rounded_solid_white"
+                android:backgroundTint="@color/red"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/lastOfferConstraint">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_upload"
+                    app:tint="@color/white"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/uploadofferImg33"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload"
+                    android:textColor="@color/white"
+                    android:padding="4dp"
+                    android:layout_marginStart="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

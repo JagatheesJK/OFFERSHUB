@@ -25,7 +25,7 @@
 
     <item
         android:id="@+id/nav_faq"
-        android:title="FAQ" />
+        android:title="Feedback to Admin" />
 
     <item
         android:id="@+id/paymant"

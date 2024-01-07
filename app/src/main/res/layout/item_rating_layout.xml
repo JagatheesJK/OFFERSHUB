@@ -4,10 +4,12 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="8dp"
-    app:cardBackgroundColor="@color/grey_light"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginTop="8dp">
+    app:cardBackgroundColor="@color/white"
+    android:elevation="4dp"
+    app:cardElevation="4dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -63,20 +65,56 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ratingUserCommentTxt"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Very useful app, Greate job guys"
             android:layout_marginTop="12dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="@drawable/bg_rounded_8"
+            android:backgroundTint="@color/light_white"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topConstraint"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/ratingShopCommentTxt"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ratingShopCommentLinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Very useful app, Greate job guys"
-            android:textAlignment="textEnd"
+            android:orientation="vertical"
             android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@+id/ratingUserCommentTxt"/>
+            android:paddingBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ratingUserCommentTxt">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:layout_gravity="end"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="2dp"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/ratingShopCommentTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Very useful app, Greate job guys"
+                android:textAlignment="textEnd"
+                android:background="@drawable/bg_rounded_8"
+                android:backgroundTint="@color/watsapp_sender_bg"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_gravity="end"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View
             android:id="@+id/view"
@@ -84,7 +122,7 @@
             android:layout_height="1.5dp"
             android:background="@color/grey"
             android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@+id/ratingShopCommentTxt"/>
+            app:layout_constraintTop_toBottomOf="@+id/ratingShopCommentLinear"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/replyLinear"
@@ -95,12 +133,14 @@
             app:layout_constraintTop_toBottomOf="@+id/view">
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/replayImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_reply"
                 app:tint="@color/grey"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/replayTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Replay"

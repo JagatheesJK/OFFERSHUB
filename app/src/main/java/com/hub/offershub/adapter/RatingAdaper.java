@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -52,10 +53,15 @@ public class RatingAdaper extends RecyclerView.Adapter<RatingAdaper.BookViewHold
             else
                 holder.ratingUserCommentTxt.setVisibility(View.GONE);
 
-            if (model.shop_comments != null && model.shop_comments.length() > 0)
-                holder.ratingShopCommentTxt.setVisibility(View.VISIBLE);
-            else
-                holder.ratingShopCommentTxt.setVisibility(View.GONE);
+            if (model.shop_comments != null && model.shop_comments.length() > 0) {
+                holder.ratingShopCommentLinear.setVisibility(View.VISIBLE);
+                holder.replayTxt.setText("Edit");
+                holder.replayImg.setImageResource(R.drawable.ic_edit_pen);
+            } else {
+                holder.ratingShopCommentLinear.setVisibility(View.GONE);
+                holder.replayTxt.setText("Replay");
+                holder.replayImg.setImageResource(R.drawable.ic_reply);
+            }
 
             holder.replyLinear.setOnClickListener(v -> {
                 listener.onReplay(model);
@@ -73,6 +79,10 @@ public class RatingAdaper extends RecyclerView.Adapter<RatingAdaper.BookViewHold
         AppCompatTextView nameTxt, ratingTimeTxt;
         AppCompatTextView ratingUserCommentTxt, ratingShopCommentTxt;
         LinearLayoutCompat replyLinear;
+        AppCompatImageView replayImg;
+        AppCompatTextView replayTxt;
+        View view;
+        LinearLayoutCompat ratingShopCommentLinear;
         public BookViewHolder(View v) {
             super(v);
             ratingBar = v.findViewById(R.id.ratingBar);
@@ -81,6 +91,10 @@ public class RatingAdaper extends RecyclerView.Adapter<RatingAdaper.BookViewHold
             ratingUserCommentTxt = v.findViewById(R.id.ratingUserCommentTxt);
             ratingShopCommentTxt = v.findViewById(R.id.ratingShopCommentTxt);
             replyLinear = v.findViewById(R.id.replyLinear);
+            replayImg = v.findViewById(R.id.replayImg);
+            replayTxt = v.findViewById(R.id.replayTxt);
+            view = v.findViewById(R.id.view);
+            ratingShopCommentLinear = v.findViewById(R.id.ratingShopCommentLinear);
         }
     }
 
@@ -105,6 +119,8 @@ public class RatingAdaper extends RecyclerView.Adapter<RatingAdaper.BookViewHold
         Log.e("Check_Adapter", "changeData position : "+position);
         list.set(position, model);
         notifyItemChanged(position);
+        notifyItemRangeChanged(position, getItemCount());
+//        notifyDataSetChanged();
     }
 
     public interface CommentListener {

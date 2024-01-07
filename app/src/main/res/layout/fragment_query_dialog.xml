@@ -32,7 +32,7 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/feedbackLottie"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="120dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/feedback"
@@ -42,9 +42,7 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/feedbackEd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="60dp"
-        android:maxHeight="90dp"
+        android:layout_height="90dp"
         android:hint="Type something..."
         android:text=""
         android:gravity="top"

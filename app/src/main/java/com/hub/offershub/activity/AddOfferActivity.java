@@ -172,10 +172,10 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
                 if (path != null) {
                     file = new File(path);
                     if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
-                        Toast.makeText(AddOfferActivity.this, "Please Select file below 5MB", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddOfferActivity.this, "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    compressImage();
+//                    compressImage();
                     showProgress(getString(R.string.please_wait));
                     binding.offerAddImg.setVisibility(View.GONE);
                     Glide.with(AddOfferActivity.this).load(file).listener(new RequestListener<Drawable>() {
@@ -195,6 +195,44 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
                     Toast.makeText(AddOfferActivity.this, "path is null", Toast.LENGTH_SHORT).show();
                 }
             } else if (requestCode == GALLERY_REQUEST_CODE) {
+                if (data != null) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        String path = getPath(AddOfferActivity.this, uri);
+                        if (path != null) {
+                            file = new File(path);
+                            if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
+                                Toast.makeText(AddOfferActivity.this, "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+//                            compressImage();
+                            showProgress(getString(R.string.please_wait));
+                            binding.offerAddImg.setVisibility(View.GONE);
+                            Glide.with(AddOfferActivity.this).load(file.getAbsolutePath()).listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    hideProgress();
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    hideProgress();
+                                    return false;
+                                }
+                            }).into(binding.offerImg);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "path is null", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "uri is null", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "data is null", Toast.LENGTH_SHORT).show();
+                }
+                hideProgress();
+            }
+            /*else if (requestCode == GALLERY_REQUEST_CODE) {
                 if (data != null) {
                     binding.offerAddImg.setVisibility(View.GONE);
                     binding.offerImgRecycler.setVisibility(View.VISIBLE);
@@ -219,7 +257,7 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
                     Toast.makeText(AddOfferActivity.this, "data is null", Toast.LENGTH_SHORT).show();
                 }
                 hideProgress();
-            }
+            }*/
         }
     }
 

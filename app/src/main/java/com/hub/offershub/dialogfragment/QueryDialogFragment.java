@@ -20,6 +20,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.hub.offershub.R;
 import com.hub.offershub.databinding.FragmentQueryDialogBinding;
 import com.hub.offershub.listener.FeedbackListener;
+import com.hub.offershub.listener.ReplayListener;
+import com.hub.offershub.model.RatingModel;
 import com.hub.offershub.utils.loading.MyProgressDialog;
 import com.hub.offershub.viewmodel.CommonViewModel;
 
@@ -31,9 +33,11 @@ public class QueryDialogFragment extends BottomSheetDialogFragment implements Vi
     public static final String TAG = QueryDialogFragment.class.getSimpleName();
     private FragmentQueryDialogBinding binding;
     private CommonViewModel commonViewModel;
-    private String shopID;
+    private String shopID, title;
+    private RatingModel.Data replayModel;
     private MyProgressDialog myProgressDialog;
     private FeedbackListener listener;
+    private ReplayListener replayListener;
 
     public static QueryDialogFragment newInstance() {
         QueryDialogFragment fragment = new QueryDialogFragment();
@@ -71,6 +75,7 @@ public class QueryDialogFragment extends BottomSheetDialogFragment implements Vi
 
     private void init() {
         commonViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory()).get(CommonViewModel.class);
+        binding.titleTxt.setText(""+title);
     }
 
     private void setListener() {
@@ -78,9 +83,16 @@ public class QueryDialogFragment extends BottomSheetDialogFragment implements Vi
         binding.submitBtn.setOnClickListener(this);
     }
 
-    public void setData(String shop_id, FeedbackListener listener) {
+    public void setData(String title, String shop_id, FeedbackListener listener) {
+        this.title = title;
         shopID = shop_id;
         this.listener = listener;
+    }
+
+    public void setData(String title, RatingModel.Data replayModel, ReplayListener listener) {
+        this.title = title;
+        this.replayModel = replayModel;
+        this.replayListener = listener;
     }
 
     String feedbackMsg;
@@ -94,7 +106,15 @@ public class QueryDialogFragment extends BottomSheetDialogFragment implements Vi
                 feedbackMsg = binding.feedbackEd.getText().toString();
                 if (feedbackMsg.length() > 0) {
                     showDialog();
-                    commonViewModel.shopFeedback(makeAddFeedbackRequest(feedbackMsg), myProgressDialog);
+                    if (listener != null) {
+                        binding.feedbackEd.setText("");
+                        commonViewModel.shopFeedback(makeAddFeedbackRequest(feedbackMsg), myProgressDialog);
+                    } else {
+                        replayListener.onReplaySuccess(feedbackMsg);
+                        binding.feedbackEd.setText("");
+                        closeDialog();
+                        dismiss();
+                    }
                 } else
                     Toast.makeText(getActivity(), "Say something...", Toast.LENGTH_SHORT).show();
                 break;
