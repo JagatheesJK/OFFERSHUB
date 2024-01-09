@@ -36,4 +36,7 @@
     <color name="watsapp_sender_bg">#dcf8c6</color>
     <color name="watsapp_receiver_bg">#ffffff</color>
     <color name="light_white">#eaeef4</color>
+
+    <color name="accept_green">#1bc487</color>
+    <color name="reject_red">#e83345</color>
 </resources>

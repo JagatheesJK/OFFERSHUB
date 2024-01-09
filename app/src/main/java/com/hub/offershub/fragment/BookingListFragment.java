@@ -1,5 +1,6 @@
 package com.hub.offershub.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.lifecycle.Lifecycle;
@@ -9,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hub.offershub.R;
+import com.hub.offershub.activity.BookingDetailsActivity;
 import com.hub.offershub.adapter.BookingAdaper;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentBookingListBinding;
+import com.hub.offershub.listener.BookingListener;
 import com.hub.offershub.model.BookModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
@@ -20,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BookingListFragment extends BaseFragment {
+public class BookingListFragment extends BaseFragment implements View.OnClickListener, BookingListener {
 
     private FragmentBookingListBinding binding;
     private List<BookModel.Data> list = new ArrayList<>();
@@ -61,13 +65,13 @@ public class BookingListFragment extends BaseFragment {
     }
 
     private void setListener() {
-
+        binding.empty.reloadBtn.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.bookingRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new BookingAdaper(getActivity(), list);
+        adapter = new BookingAdaper(getActivity(), list, this);
         binding.bookingRecycler.setAdapter(adapter);
         setNotify();
     }
@@ -120,5 +124,21 @@ public class BookingListFragment extends BaseFragment {
         if (commonViewModel != null) {
             commonViewModel.getMutableBookingData().removeObservers(getViewLifecycleOwner());
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.reloadBtn:
+                commonViewModel.getOrderDetailsShops(makeRequest(), myProgressDialog);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onBookingSelect(BookModel.Data model) {
+        getActivity().startActivity(new Intent(getActivity(), BookingDetailsActivity.class));
     }
 }
