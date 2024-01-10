@@ -6,12 +6,15 @@ import android.os.Bundle;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.hub.offershub.R;
 import com.hub.offershub.activity.BookingDetailsActivity;
+import com.hub.offershub.activity.OtpActivity;
+import com.hub.offershub.activity.TestMainActivity2;
 import com.hub.offershub.adapter.BookingAdaper;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentBookingListBinding;
@@ -45,7 +48,7 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
         // Inflate the layout for this fragment
         binding = FragmentBookingListBinding.inflate(getLayoutInflater());
 
-        init();
+
         setListener();
         setUpRecycler();
         getBookingData();
@@ -84,6 +87,8 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
+        page_no = 0;
+        init();
         getActivity().setTitle("Booking Details");
     }
 
@@ -139,6 +144,12 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onBookingSelect(BookModel.Data model) {
-        getActivity().startActivity(new Intent(getActivity(), BookingDetailsActivity.class));
+        model.shop_id =Integer.parseInt(shopID);
+        Log.e("Check_Moorthy","model "+model.id);
+        Log.e("Check_Moorthy","model "+model.shop_id);
+        Intent i = new Intent(getActivity(), BookingDetailsActivity.class);
+        i.putExtra("booking_model",model);
+        getActivity().startActivity(i);
+
     }
 }

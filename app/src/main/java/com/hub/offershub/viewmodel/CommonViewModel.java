@@ -70,6 +70,11 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<OfferImageModel> mutableGetShopImageData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableOfferPriorityData = new MutableLiveData<>();
 
+    private final MutableLiveData<JSONObject> mutableOrderDetails_shopsVisitData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableorderDetails_mobilenumber_ViewData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableOrderDetails_shopConfirmStatusData = new MutableLiveData<>();
+
+
     public CommonViewModel(@NonNull Application application) {
         super(application);
     }
@@ -1289,6 +1294,137 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void orderDetails_shopsVisit(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKUpdate", "orderDetails_shopsVisit "+new Gson().toJson(requestData));
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.orderDetails_shopsVisit(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "orderDetails_shopsVisit onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableOrderDetails_shopsVisitData.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else
+                            mutableOrderDetails_shopsVisitData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "shopRatingReply Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void orderDetails_mobilenumber_View(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKUpdate", "orderDetails_shopsVisit "+new Gson().toJson(requestData));
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.orderDetails_mobilenumber_View(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "orderDetails_shopsVisit onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableorderDetails_mobilenumber_ViewData.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else
+                            mutableorderDetails_mobilenumber_ViewData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "shopRatingReply Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+    public void OrderDetails_shopConfirmStatusData(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKUpdate", "orderDetails_shopsVisit "+new Gson().toJson(requestData));
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.orderDetails_shopConfirmStatusData(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKUpdate", "orderDetails_shopsVisit onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableOrderDetails_shopConfirmStatusData.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else
+                            mutableOrderDetails_shopConfirmStatusData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKUpdate", "shopRatingReply Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -1385,6 +1521,17 @@ public class CommonViewModel extends AndroidViewModel {
         return mutableOfferPriorityData;
     }
 
+    public MutableLiveData<JSONObject> getMutableOrderDetails_shopsVisitData() {
+        return mutableOrderDetails_shopsVisitData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableOrderDetails_MobileNumber_ViewData() {
+        return mutableorderDetails_mobilenumber_ViewData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableOrderDetails_shopConfirmStatusData() {
+        return mutableOrderDetails_shopConfirmStatusData;
+    }
     public MutableLiveData<JSONObject> deleteMutableOfferImageData() {
         return mutableDeleteOfferImages;
     }
