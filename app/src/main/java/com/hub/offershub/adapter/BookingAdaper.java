@@ -2,6 +2,7 @@ package com.hub.offershub.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,28 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
             holder.statusTxt.setText(""+model.userstatus);
             if (model.user_ordered_date != null && model.user_ordered_date.length() > 0)
                 holder.bookingDateTxt.setText(""+ Utils.convertDateFormat(model.user_ordered_date));
+            if (0 == model.is_shop_read) {
+                holder.unreadDotImg.setVisibility(View.VISIBLE);
+                holder.offerNameTxt.setTextColor(ctx.getColor(R.color.black));
+                holder.userNameTxt.setTextColor(ctx.getColor(R.color.black));
+                holder.userMobileTxt.setTextColor(ctx.getColor(R.color.black));
+                holder.bookingDateTxt.setTextColor(ctx.getColor(R.color.black));
+
+                holder.offerNameTxt.setTypeface(null, Typeface.BOLD);
+                holder.userNameTxt.setTypeface(null, Typeface.BOLD);
+                holder.userMobileTxt.setTypeface(null, Typeface.BOLD);
+                holder.bookingDateTxt.setTypeface(null, Typeface.BOLD);
+            } else {
+                holder.unreadDotImg.setVisibility(View.GONE);
+                holder.userNameTxt.setTextColor(ctx.getColor(R.color.default_txt));
+                holder.userMobileTxt.setTextColor(ctx.getColor(R.color.default_txt));
+                holder.bookingDateTxt.setTextColor(ctx.getColor(R.color.default_txt));
+
+                holder.offerNameTxt.setTypeface(null, Typeface.BOLD);
+                holder.userNameTxt.setTypeface(null, Typeface.NORMAL);
+                holder.userMobileTxt.setTypeface(null, Typeface.NORMAL);
+                holder.bookingDateTxt.setTypeface(null, Typeface.NORMAL);
+            }
             if ("Pending".equals(model.userstatus)) {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.yellow, null)));
@@ -100,7 +123,7 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
     public class BookViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView offerNameTxt, userNameTxt;
         AppCompatTextView userMobileTxt, bookingDateTxt;
-        AppCompatImageView offerImg;
+        AppCompatImageView offerImg, unreadDotImg;
         AppCompatTextView statusTxt;
         LinearLayoutCompat buttonLinear;
         AppCompatButton rejectBtn, confirmBtn;
@@ -112,6 +135,7 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
             userMobileTxt = v.findViewById(R.id.userMobileTxt);
             bookingDateTxt = v.findViewById(R.id.bookingDateTxt);
             offerImg = v.findViewById(R.id.offerImg);
+            unreadDotImg = v.findViewById(R.id.unreadDotImg);
             statusTxt = v.findViewById(R.id.statusTxt);
             buttonLinear = v.findViewById(R.id.buttonLinear);
             rejectBtn = v.findViewById(R.id.rejectBtn);

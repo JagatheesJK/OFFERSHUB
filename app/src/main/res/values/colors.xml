@@ -39,4 +39,5 @@
 
     <color name="accept_green">#1bc487</color>
     <color name="reject_red">#e83345</color>
+    <color name="default_txt">#909090</color>
 </resources>
