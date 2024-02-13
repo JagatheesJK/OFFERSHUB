@@ -9,6 +9,7 @@ import com.hub.offershub.model.FeedbackModel;
 import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
+import com.hub.offershub.model.ShopDashboardModel;
 
 import java.util.List;
 import java.util.Map;
@@ -171,4 +172,9 @@ public interface API {
 
     @POST("orderDetails_shopConfirmStatus")
     Call<JsonElement> orderDetails_shopConfirmStatusData(@Body Map<String, Object> body);
+
+    @POST("shopDashboard")
+    Call<ShopDashboardModel> getShopsDashData(
+            @Body Map<String, Object> body
+    );
 }

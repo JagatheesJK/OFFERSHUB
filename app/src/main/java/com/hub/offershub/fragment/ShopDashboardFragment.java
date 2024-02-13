@@ -2,7 +2,7 @@ package com.hub.offershub.fragment;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,17 +27,25 @@ import com.chart.all.anychart.enums.MarkerType;
 import com.chart.all.anychart.enums.Position;
 import com.chart.all.anychart.enums.TooltipPositionMode;
 import com.chart.all.anychart.graphics.vector.Stroke;
+import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentShopDashboardBinding;
+import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.model.ShopDashboardModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ShopDashboardFragment extends Fragment {
+public class ShopDashboardFragment extends BaseFragment {
 
     private FragmentShopDashboardBinding binding;
+    private ShopDashboardModel shopDashboardModel;
+    private static BusinessModel.Data businessModel;
 
-    public static ShopDashboardFragment newInstance() {
+    public static ShopDashboardFragment newInstance(BusinessModel.Data model) {
         ShopDashboardFragment fragment = new ShopDashboardFragment();
+        businessModel = model;
         return fragment;
     }
 
@@ -46,6 +54,8 @@ public class ShopDashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentShopDashboardBinding.inflate(getLayoutInflater());
+        commonViewModel.getShopsDashData(makeRequest(), myProgressDialog);
+        getShopsDashData();
         newPieChart();
         newMultipleBarChart();
         newLineChart();
@@ -55,9 +65,7 @@ public class ShopDashboardFragment extends Fragment {
     private void newPieChart() {
         AnyChartView chart1 = new AnyChartView(requireContext());
         chart1.setProgressBar(binding.progressBar);
-
         Pie pie = AnyChart.pie();
-
         pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
             @Override
             public void onClick(Event event) {
@@ -73,9 +81,7 @@ public class ShopDashboardFragment extends Fragment {
         data.add(new ValueDataEntry("Oranges", 1200000));
 
         pie.data(data);
-
         //pie.title("Fruits imported in 2015 (in kg)");
-
         pie.labels().position("inside");
 
         //pie.legend().title().enabled(true);
@@ -99,11 +105,8 @@ public class ShopDashboardFragment extends Fragment {
         chart1.setProgressBar(binding.lineProgressBar);
 
         Cartesian cartesian = AnyChart.line();
-
         cartesian.animation(true);
-
         cartesian.padding(10d, 20d, 5d, 20d);
-
         cartesian.crosshair().enabled(true);
         cartesian.crosshair()
                 .yLabel(true)
@@ -111,7 +114,6 @@ public class ShopDashboardFragment extends Fragment {
                 .yStroke((Stroke) null, null, null, (String) null, (String) null);
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-
        // cartesian.title("Trend of Sales of the Most Popular Products of ACME Corp.");
 
         cartesian.yAxis(0).title("Number of Bottles Sold (thousands)");
@@ -199,7 +201,6 @@ public class ShopDashboardFragment extends Fragment {
         AnyChartView chart1 = new AnyChartView(requireContext());
 //        binding.anyChartView1.addView(chart1);
         chart1.setProgressBar(binding.progressBar);
-
         Cartesian cartesian = AnyChart.column();
 
         List<DataEntry> data = new ArrayList<>();
@@ -214,7 +215,6 @@ public class ShopDashboardFragment extends Fragment {
         data.add(new ValueDataEntry("Eyeshadows", 249980));
 
         Column column = cartesian.column(data);
-
         column.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)
@@ -225,9 +225,7 @@ public class ShopDashboardFragment extends Fragment {
 
         cartesian.animation(true);
         //cartesian.title("Top 10 Cosmetic Products by Revenue");
-
         cartesian.yScale().minimum(0d);
-
         //cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
@@ -243,12 +241,44 @@ public class ShopDashboardFragment extends Fragment {
     }
 
     private class CustomDataEntry extends ValueDataEntry {
-
         CustomDataEntry(String x, Number value, Number value2, Number value3) {
             super(x, value);
             setValue("value2", value2);
             setValue("value3", value3);
         }
+    }
 
+    private Map<String, Object> makeRequest() {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shop_id", businessModel.id);
+        return requestData;
+    }
+
+    private void getShopsDashData() {
+        commonViewModel.getMutableShopDashData().observe(getViewLifecycleOwner(), shopDashboardModel -> {
+            if (ShopDashboardFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (shopDashboardModel != null) {
+                    if(shopDashboardModel.status.equals("success")) {
+                        this.shopDashboardModel = shopDashboardModel;
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (commonViewModel != null) {
+            commonViewModel.getMutableShopDashData().removeObservers(getViewLifecycleOwner());
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (commonViewModel != null) {
+            commonViewModel.getMutableShopDashData().removeObservers(getViewLifecycleOwner());
+        }
     }
 }

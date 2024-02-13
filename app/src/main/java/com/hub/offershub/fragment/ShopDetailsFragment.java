@@ -13,14 +13,17 @@ import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hub.offershub.databinding.FragmentShopDetailsBinding;
+import com.hub.offershub.model.BusinessModel;
 
 public class ShopDetailsFragment extends Fragment {
 
     private FragmentShopDetailsBinding binding;
     private String[] labels = new String[]{"Shop Dashboard", "Offer Dashboard"};
+    private static BusinessModel.Data businessModel;
 
-    public static ShopDetailsFragment newInstance() {
+    public static ShopDetailsFragment newInstance(BusinessModel.Data model) {
         ShopDetailsFragment fragment = new ShopDetailsFragment();
+        businessModel = model;
         return fragment;
     }
 
@@ -55,7 +58,7 @@ public class ShopDetailsFragment extends Fragment {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return new ShopDashboardFragment();
+                    return ShopDashboardFragment.newInstance(businessModel);
                 case 1:
                     return new OfferDashboardFragment();
             }

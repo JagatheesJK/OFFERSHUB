@@ -21,6 +21,7 @@ import com.hub.offershub.model.FeedbackModel;
 import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
+import com.hub.offershub.model.ShopDashboardModel;
 import com.hub.offershub.retrofit.API;
 import com.hub.offershub.retrofit.RetrofitClient;
 import com.hub.offershub.utils.loading.MyProgressDialog;
@@ -73,7 +74,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableOrderDetails_shopsVisitData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableorderDetails_mobilenumber_ViewData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableOrderDetails_shopConfirmStatusData = new MutableLiveData<>();
-
+    private final MutableLiveData<ShopDashboardModel> mutableShopDashData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -1381,6 +1382,7 @@ public class CommonViewModel extends AndroidViewModel {
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+
     public void OrderDetails_shopConfirmStatusData(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JKUpdate", "orderDetails_shopsVisit "+new Gson().toJson(requestData));
         new AsyncTask<String, String, String>() {
@@ -1423,6 +1425,47 @@ public class CommonViewModel extends AndroidViewModel {
                 closeDialog(myProgressDialog);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void getShopsDashData(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JK", "getActiveShops");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Log.e("Check_JKUpdate", "getActiveShops onPreExecute");
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<ShopDashboardModel> call = apiInterface.getShopsDashData(requestData);
+                call.enqueue(new Callback<ShopDashboardModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ShopDashboardModel> call, @NonNull Response<ShopDashboardModel> response) {
+                        Log.e("Check_JK", "getActiveShops onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableShopDashData.postValue(response.body());
+                        } else
+                            mutableShopDashData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ShopDashboardModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JK", "getActiveShops Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
@@ -1546,6 +1589,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<OfferImageModel> getMutableGetShopImages() {
         return mutableGetShopImageData;
+    }
+
+    public MutableLiveData<ShopDashboardModel> getMutableShopDashData() {
+        return mutableShopDashData;
     }
 
     public void showDialog(MyProgressDialog myProgressDialog) {

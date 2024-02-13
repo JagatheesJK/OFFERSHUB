@@ -49,16 +49,18 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
                 R.string.nav_close);
         binding.drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShopDetailsFragment()).commit();
-            binding.navBar.setCheckedItem(R.id.nav_offer);
-        }
+
         View headerView = binding.navBar.getHeaderView(0);
         navUserImg = headerView.findViewById(R.id.userImg);
         userNameTxt = headerView.findViewById(R.id.userNameTxt);
         userDesTxt = headerView.findViewById(R.id.userDesTxt);
 
         init();
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ShopDetailsFragment.newInstance(model)).commit();
+            binding.navBar.setCheckedItem(R.id.nav_offer);
+        }
     }
 
     private void init() {
@@ -87,7 +89,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         switch (item.getItemId()) {
-            case R.id.nav_shop_dash -> fragment = new ShopDetailsFragment();
+            case R.id.nav_shop_dash -> fragment = ShopDetailsFragment.newInstance(model);
             case R.id.nav_home -> {
                 Intent intent = new Intent(DashActivity.this, TestMainActivity2.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
