@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,7 +57,11 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
         if (model != null) {
             holder.offerNameTxt.setText(""+model.offer_name);
             holder.userNameTxt.setText(""+model.name);
-            holder.userMobileTxt.setText(""+model.fullmobile);
+            if(model.is_mobilenumber_viewed ==1) {
+                holder.userMobileTxt.setText("" + model.fullmobile);
+            } else {
+                holder.userMobileTxt.setText("" + model.mobile);
+            }
             holder.statusTxt.setText(""+model.userstatus);
             if (model.user_ordered_date != null && model.user_ordered_date.length() > 0)
                 holder.bookingDateTxt.setText(""+ Utils.convertDateFormat(model.user_ordered_date));
@@ -85,7 +91,7 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.yellow, null)));
                 holder.buttonLinear.setVisibility(View.VISIBLE);
-            } else if ("Rejected".equals(model.userstatus)) {
+            } else if ("Canceled".equals(model.userstatus)) {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.red, null)));
                 holder.buttonLinear.setVisibility(View.GONE);
@@ -109,7 +115,17 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
                 }
             }).error(R.drawable.def_logo).into(holder.offerImg);
 
-            holder.itemView.setOnClickListener(v -> {
+
+            holder.mainCard.setOnClickListener(v -> {
+                holder.unreadDotImg.setVisibility(View.GONE);
+                holder.userNameTxt.setTextColor(ctx.getColor(R.color.default_txt));
+                holder.userMobileTxt.setTextColor(ctx.getColor(R.color.default_txt));
+                holder.bookingDateTxt.setTextColor(ctx.getColor(R.color.default_txt));
+
+                holder.offerNameTxt.setTypeface(null, Typeface.BOLD);
+                holder.userNameTxt.setTypeface(null, Typeface.NORMAL);
+                holder.userMobileTxt.setTypeface(null, Typeface.NORMAL);
+                holder.bookingDateTxt.setTypeface(null, Typeface.NORMAL);
                 listener.onBookingSelect(model);
             });
         }
@@ -128,8 +144,10 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
         LinearLayoutCompat buttonLinear;
         AppCompatButton rejectBtn, confirmBtn;
         ShimmerFrameLayout shimmerFrameLayout;
+        CardView mainCard;
         public BookViewHolder(View v) {
             super(v);
+            mainCard = v.findViewById(R.id.mainCard);
             offerNameTxt = v.findViewById(R.id.offerNameTxt);
             userNameTxt = v.findViewById(R.id.userNameTxt);
             userMobileTxt = v.findViewById(R.id.userMobileTxt);

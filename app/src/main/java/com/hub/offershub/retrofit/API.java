@@ -162,4 +162,13 @@ public interface API {
 
     @POST("deleteShopImage")
     Call<JsonElement> deleteShopImage(@Body Map<String, Object> body);
+
+    @POST("orderDetails_shopsVisit")
+    Call<JsonElement> orderDetails_shopsVisit(@Body Map<String, Object> body);
+
+    @POST("orderDetails_mobilenumber_View")
+    Call<JsonElement> orderDetails_mobilenumber_View(@Body Map<String, Object> body);
+
+    @POST("orderDetails_shopConfirmStatus")
+    Call<JsonElement> orderDetails_shopConfirmStatusData(@Body Map<String, Object> body);
 }
