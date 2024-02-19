@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
@@ -100,6 +101,7 @@ public class OtpActivity extends BaseActivity {
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
+                Log.e("Check_JKData", "onVerificationFailed Error : "+e.getMessage());
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     Toast.makeText(OtpActivity.this, "Invalid Request", Toast.LENGTH_SHORT).show();
                 } else if (e instanceof FirebaseTooManyRequestsException) {
@@ -162,6 +164,7 @@ public class OtpActivity extends BaseActivity {
             call.enqueue(new Callback<JsonElement>() {
                 @Override
                 public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                    Log.e("Check_JKData", "RegisterAPIAsync onResponse : "+new Gson().toJson(response.body()));
                     try {
                         if (response.body() != null) {
                             Log.e("Check_Moorthy","res" +response.body().toString());
@@ -180,13 +183,14 @@ public class OtpActivity extends BaseActivity {
                             }
                         }
                     } catch (Exception e) {
+                        Log.e("Check_JKData", "RegisterAPIAsync onResponse Catch : "+e.getMessage());
                         Log.e("Check_Moorthy","res" +response.body().toString());
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
-
+                    Log.e("Check_JKData", "RegisterAPIAsync onFailure : "+t.getMessage());
                 }
             });
             return null;

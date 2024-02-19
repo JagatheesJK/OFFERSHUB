@@ -6,7 +6,7 @@ public class ShopDashboardModel {
     public String status;
     public String message;
     public Data data;
-    public List<BarChart> barchart;
+    public List<BarChart> visitchart;
     public List<AgeChart> agechart;
     public List<PieChart> genderpiechart;
 
@@ -19,7 +19,7 @@ public class ShopDashboardModel {
         public int totalorders;
         public int repeatedusers;
         public int totalusers;
-        public int avgrating;
+        public String avgrating;
         public int usersrated;
     }
 
