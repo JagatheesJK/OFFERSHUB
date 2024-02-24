@@ -77,7 +77,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 Log.e("Check_JK", "Type : "+model.offer_type+" IF ");
                 holder.amountLinear.setVisibility(View.VISIBLE);
                 holder.discountLinear.setVisibility(View.GONE);
-                holder.offerPrice.setText(""+model.amount);
+                holder.offerPrice.setText("₹ "+model.amount);
             } else if (2 == model.offer_type) {
                 Log.e("Check_JK", "Type : "+model.offer_type+" ELSE IF ");
                 holder.amountLinear.setVisibility(View.GONE);
@@ -115,8 +115,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                         ctx.getResources(), R.color.green, null)));
             }
             holder.originalAmountTxt.setPaintFlags(holder.originalAmountTxt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.originalAmountTxt.setText(""+model.original_amount);
-            holder.discountPriceTxt.setText(""+model.offer_amount);
+            holder.originalAmountTxt.setText("₹ "+model.original_amount);
+            holder.discountPriceTxt.setText("₹ "+model.offer_amount);
             holder.discountOfferTxt.setText("Off "+model.offer_percentage+"%");
 
             holder.offerSwitch.setOnClickListener(v -> {

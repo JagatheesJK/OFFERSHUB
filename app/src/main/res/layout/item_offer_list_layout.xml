@@ -164,23 +164,14 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/offerType">
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/offerPriceRupeeImg"
-                                android:layout_width="11dp"
-                                android:layout_height="11dp"
-                                app:srcCompat="@drawable/ic_rupees"
-                                app:tint="@color/grey"
-                                android:layout_gravity="center"
-                                android:gravity="center"/>
-
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/offerPrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="780.0"
+                                android:text="₹ 780.0"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:layout_marginStart="1dp"/>
+                                android:layout_marginStart="3dp"/>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -214,25 +205,21 @@
                                     android:id="@+id/originalAmountTxt"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="250"
+                                    android:text="₹ 250"
                                     android:textSize="15dp"
                                     android:layout_gravity="center"
-                                    android:drawableLeft="@drawable/ic_rupee_small"
-                                    android:drawablePadding="1dp"
                                     android:layout_marginEnd="4dp"/>
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/discountPriceTxt"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="780.0"
+                                    android:text="₹ 780.0"
                                     android:textStyle="bold"
                                     android:textSize="18dp"
                                     android:textColor="@color/black"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:drawableLeft="@drawable/ic_rupee_small"
-                                    android:drawablePadding="1dp"
                                     android:layout_marginStart="4dp"/>
 
                             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -293,6 +280,7 @@
             android:layout_marginTop="12dp"
             android:weightSum="3"
             android:gravity="center"
+            android:background="@color/light_grey"
             app:layout_constraintTop_toBottomOf="@id/mainConstraint">
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -302,7 +290,9 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="16dp"
@@ -321,7 +311,7 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="28dp"
+                android:layout_height="match_parent"
                 android:background="@color/grey"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -331,7 +321,9 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="16dp"
@@ -350,7 +342,7 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="28dp"
+                android:layout_height="match_parent"
                 android:background="@color/grey"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -360,7 +352,9 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="16dp"

@@ -5,13 +5,13 @@ import static com.hub.offershub.utils.Constants.GALLERY_REQUEST_CODE;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -35,12 +34,15 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -126,7 +128,17 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         getAmenitiesData();
         getAddShopData();
         setListener();
-        setMap();
+
+        PermissionX.init(AddBusinessActivity.this)
+                .permissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                .request((allGranted, grantedList, deniedList) -> {
+                    if (allGranted) {
+                        setMap();
+                    } else {
+                        Toast.makeText(this, "Need Location permission", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         setUpRecycler();
     }
 
@@ -477,6 +489,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void mapInit() {
+        Log.e("Check_JKLocation", "mapInit");
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -489,7 +502,33 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(getApplicationContext())
                 .checkLocationSettings(builder.build());
-        result.addOnCompleteListener(task -> {});
+        result.addOnCompleteListener(task -> {
+            try {
+                LocationSettingsResponse response = task.getResult(ApiException.class);
+                Log.e("Check_JKLocation", "mapInit TRY : "+response.getLocationSettingsStates());
+                if (ActivityCompat.checkSelfPermission(AddBusinessActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(AddBusinessActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+            } catch (ApiException e) {
+                Log.e("Check_JKLocation", "mapInit Catch : "+e.getMessage()+"  ");
+                switch (e.getStatusCode()) {
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        try {
+                            ResolvableApiException resolvable = (ResolvableApiException) e;
+                            resolvable.startResolutionForResult(
+                                    AddBusinessActivity.this,
+                                    2024);
+                        } catch (IntentSender.SendIntentException exception) {
+                            // Ignore the error.
+                        } catch (ClassCastException exception) {
+                            // Ignore, should be an impossible error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        break;
+                }
+            }
+        });
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
@@ -513,43 +552,40 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             }
         });
 
-        PermissionX.init(AddBusinessActivity.this)
-                .permissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-                .request((allGranted, grantedList, deniedList) -> {
-                    if (allGranted) {
-                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
-                        mMap.setMyLocationEnabled(true);
-                        googleMap.getUiSettings().setZoomControlsEnabled(true);
-                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(19), 1000, null);
-                        fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(AddBusinessActivity.this, "Error "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                if (marker != null) {
-                                    marker.remove();
-                                }
-                                markerOptions = new MarkerOptions();
-                                markerOptions.title(""+location.getLatitude()+", "+location.getLongitude());
-//                                markerOptions.draggable(true);
-                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                                markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
-                                marker = mMap.addMarker(markerOptions);
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19));
-                            }
-                        });
-
-                    } else {
-
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(19), 1000, null);
+        fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddBusinessActivity.this, "Error "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    Log.e("Check_JKLocation", "onMapReady location : "+location);
+                    Log.e("Check_JKLocation", "onMapReady : "+new Gson().toJson(location));
+                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    if (marker != null) {
+                        marker.remove();
                     }
-                });
+                    markerOptions = new MarkerOptions();
+                    markerOptions.title(""+location.getLatitude()+", "+location.getLongitude());
+//                                markerOptions.draggable(true);
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
+                    marker = mMap.addMarker(markerOptions);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19));
+                } else {
+                    Toast.makeText(AddBusinessActivity.this, "Location not available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     void initApiClient() {

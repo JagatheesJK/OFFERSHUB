@@ -401,7 +401,7 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/pieChart"
+                    android:id="@+id/ageBarChart"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:layout_marginTop="8dp">

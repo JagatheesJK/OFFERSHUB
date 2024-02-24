@@ -75,6 +75,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableorderDetails_mobilenumber_ViewData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableOrderDetails_shopConfirmStatusData = new MutableLiveData<>();
     private final MutableLiveData<ShopDashboardModel> mutableShopDashData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableLoginCheck = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -1468,6 +1469,53 @@ public class CommonViewModel extends AndroidViewModel {
 
     }
 
+    public void loginCheck(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JK", "loginCheck requestData : "+new Gson().toJson(requestData));
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Log.e("Check_JKUpdate", "loginCheck onPreExecute");
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.loginCheck(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JK", "loginCheck onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableLoginCheck.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                mutableLoginCheck.postValue(null);
+                            }
+                        } else
+                            mutableLoginCheck.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JK", "loginCheck Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -1593,6 +1641,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<ShopDashboardModel> getMutableShopDashData() {
         return mutableShopDashData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableLoginCheck() {
+        return mutableLoginCheck;
     }
 
     public void showDialog(MyProgressDialog myProgressDialog) {

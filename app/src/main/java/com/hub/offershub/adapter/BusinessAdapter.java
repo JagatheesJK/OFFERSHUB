@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -95,11 +96,11 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
                 listener.onItemSelected(model);
             });
 
-            holder.editImg.setOnClickListener(v -> {
+            holder.editLinear.setOnClickListener(v -> {
                 listener.onItemEdited(model);
             });
 
-            holder.deleteImg.setOnClickListener(v -> {
+            holder.deleteLinear.setOnClickListener(v -> {
                 listener.onItemRemoved(model);
             });
         }
@@ -118,8 +119,9 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView businessNameTxt, addressTxt;
         AppCompatTextView categoryTxt, rateTxt, statusTxt;
-        AppCompatImageView shopImg, editImg, deleteImg;
+        AppCompatImageView shopImg;
         ShimmerFrameLayout shimmerFrameLayout;
+        LinearLayoutCompat editLinear, deleteLinear;
         public ViewHolder(View v) {
             super(v);
             businessNameTxt = v.findViewById(R.id.businessNameTxt);
@@ -127,10 +129,10 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             categoryTxt = v.findViewById(R.id.categoryTxt);
             rateTxt = v.findViewById(R.id.rateTxt);
             statusTxt = v.findViewById(R.id.statusTxt);
-            editImg = v.findViewById(R.id.editImg);
-            deleteImg = v.findViewById(R.id.deleteImg);
             shopImg = v.findViewById(R.id.shopImg);
             shimmerFrameLayout = v.findViewById(R.id.shimmerFrameLayout);
+            editLinear = v.findViewById(R.id.editLinear);
+            deleteLinear = v.findViewById(R.id.deleteLinear);
         }
     }
 }

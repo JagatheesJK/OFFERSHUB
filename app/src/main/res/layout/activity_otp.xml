@@ -74,7 +74,9 @@
             android:layout_height="wrap_content"
             android:text="Verify"
             android:textColor="@color/white"
-            android:background="@color/red"/>
+            android:background="@color/red"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

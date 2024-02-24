@@ -22,6 +22,7 @@ import com.hub.offershub.databinding.ActivityDashBinding;
 import com.hub.offershub.fragment.BookingListFragment;
 import com.hub.offershub.fragment.FeedbackFragment;
 import com.hub.offershub.fragment.OfferListFragment;
+import com.hub.offershub.fragment.PaymentFragment;
 import com.hub.offershub.fragment.RatingFragment;
 import com.hub.offershub.fragment.ShopDetailsFragment;
 import com.hub.offershub.model.BusinessModel;
@@ -100,7 +101,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_booking_details -> fragment = BookingListFragment.newInstance(model.id);
             case R.id.nav_rating_review -> fragment = RatingFragment.newInstance(model.id);
             case R.id.nav_faq -> fragment = FeedbackFragment.newInstance(model.id);
-            case R.id.paymant -> Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+            case R.id.paymant -> fragment = PaymentFragment.newInstance();
         }
 
         if (fragment != null) {

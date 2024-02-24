@@ -177,4 +177,9 @@ public interface API {
     Call<ShopDashboardModel> getShopsDashData(
             @Body Map<String, Object> body
     );
+
+    @POST("loginCheck")
+    Call<JsonElement> loginCheck(
+            @Body Map<String, Object> body
+    );
 }

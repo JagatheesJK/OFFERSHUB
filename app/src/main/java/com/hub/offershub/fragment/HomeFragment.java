@@ -1,6 +1,8 @@
 package com.hub.offershub.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private PagerAdapter adapter;
+    boolean isGpsEnabled;
 
     private String[] labels = new String[]{"Active", "InActive"};
 
@@ -53,6 +57,10 @@ public class HomeFragment extends Fragment {
 
     private void init() {
         binding.pager.setAdapter(new ViewPagerFragmentAdapter(getActivity()));
+
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        Log.e("Check_JKLocation", "isGpsEnabled : "+isGpsEnabled);
     }
 
     private class ViewPagerFragmentAdapter extends FragmentStateAdapter {

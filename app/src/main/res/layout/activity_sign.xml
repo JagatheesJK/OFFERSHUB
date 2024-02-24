@@ -66,7 +66,9 @@
             android:layout_height="wrap_content"
             android:text="Next"
             android:textColor="@color/white"
-            android:background="@color/red"/>
+            android:background="@color/red"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -79,6 +81,10 @@
         android:textColor="@color/black"
         android:textAlignment="center"
         android:layout_marginTop="14dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
         app:layout_constraintTop_toBottomOf="@+id/nextLinear"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout

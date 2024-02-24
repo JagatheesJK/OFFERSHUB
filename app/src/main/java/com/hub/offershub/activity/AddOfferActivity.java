@@ -357,7 +357,6 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.offerSubmitBtn:
                 isAllFieldsChecked = CheckAllFields();
-                binding.offerSubmitBtn.setEnabled(false);
                 if (binding.offerPriceEd.length() == 0)
                     priceAmount = 0;
                 else
@@ -375,6 +374,7 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
                 else
                     flatPer = Integer.parseInt(binding.flatPerEd.getText().toString());
                 if (isAllFieldsChecked) {
+                    binding.offerSubmitBtn.setEnabled(false);
                     callAddOffer();
                 }
                 break;

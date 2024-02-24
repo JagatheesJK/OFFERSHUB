@@ -15,232 +15,277 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/imgCard"
-            android:layout_width="120dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="10dp"
-            android:elevation="0dp"
-            app:cardElevation="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmerFrameLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:shimmer_repeat_mode="restart"
-                app:shimmer_shape="linear">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/shopImgShimmer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/shimmer_grey"/>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </com.facebook.shimmer.ShimmerFrameLayout>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/shopImg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/def_logo"
-                android:scaleType="centerCrop" />
-
-        </androidx.cardview.widget.CardView>
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
+            android:id="@+id/mainConstraint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toEndOf="@id/imgCard"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="8dp"
             app:layout_constraintTop_toTopOf="parent">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imgCard"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                app:cardCornerRadius="10dp"
+                android:elevation="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerFrameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:shimmer_repeat_mode="restart"
+                    app:shimmer_shape="linear">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/shopImgShimmer"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/shimmer_grey"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/shopImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/def_logo"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/topConstraint"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iconLinear"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@id/imgCard"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/businessNameTxt"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/topConstraint"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Business Name"
-                    android:textSize="16dp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/categoryTxt1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Category"
-                    android:visibility="gone"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/businessNameTxt"/>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/categoryTxt1">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        app:srcCompat="@drawable/ic_location"
-                        app:tint="@color/grey"
-                        android:layout_gravity="top"/>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/addressTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Address"
-                        android:textSize="12dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="-3dp"
-                        android:layout_gravity="top"/>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/arrowImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/double_arrow_left_24"
-                android:rotation="180"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rateConstraint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/topConstraint">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        app:srcCompat="@drawable/ic_star"
-                        app:tint="@color/yellow"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/businessNameTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Business Name"
+                        android:textSize="16dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/rateTxt"
+                        android:id="@+id/categoryTxt1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0 (10)"
+                        android:text="Category"
+                        android:visibility="gone"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/businessNameTxt"/>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/categoryTxt1">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            app:srcCompat="@drawable/ic_location"
+                            app:tint="@color/grey"
+                            android:layout_gravity="top"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/addressTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Address"
+                            android:textSize="12dp"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginTop="-3dp"
+                            android:layout_gravity="top"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/arrowImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/double_arrow_left_24"
+                    android:rotation="180"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/rateConstraint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/topConstraint">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            app:srcCompat="@drawable/ic_star"
+                            app:tint="@color/yellow"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/rateTxt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 (10)"
+                            android:textSize="11sp"
+                            android:layout_marginStart="6dp"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/rateConstraint">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/categoryTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="badge"
+                        android:textColor="@color/white"
                         android:textSize="11sp"
-                        android:layout_marginStart="6dp"/>
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:background="@drawable/bg_rounded_8"
+                        android:backgroundTint="@color/red"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/statusTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="pending"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_rounded_8"
+                        android:backgroundTint="@color/yellow"
+                        app:layout_constraintStart_toEndOf="@+id/categoryTxt"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/rateConstraint">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/categoryTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="badge"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:background="@drawable/bg_rounded_8"
-                    android:backgroundTint="@color/red"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/statusTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="pending"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_rounded_8"
-                    android:backgroundTint="@color/yellow"
-                    app:layout_constraintStart_toEndOf="@+id/categoryTxt"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/iconLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="12sp"
+            android:background="@color/light_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mainConstraint">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/iconLinear"
+                android:id="@+id/editLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:gravity="center"
+                android:layout_weight="1"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/editImg"
-                    android:layout_width="17dp"
-                    android:layout_height="17dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     app:srcCompat="@drawable/ic_pen"
-                    app:tint="@color/grey"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:tint="@color/grey"/>
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/deleteImg"
-                    android:layout_width="20dp"
-                    android:layout_height="24dp"
-                    app:srcCompat="@drawable/ic_delete"
-                    app:tint="@color/grey"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_marginStart="28dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:textSize="16dp"
+                    android:layout_marginStart="12dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grey"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/deleteLinear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@drawable/ic_delete"
+                    app:tint="@color/grey"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete"
+                    android:textSize="16dp"
+                    android:layout_marginStart="12dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
