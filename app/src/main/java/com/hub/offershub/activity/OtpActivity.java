@@ -149,6 +149,12 @@ public class OtpActivity extends BaseActivity {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress("Please wait...");
+        }
+
+        @Override
         protected String doInBackground(String... strings) {
             API apiInterface = RetrofitClient.getApiClient().create(API.class);
             Call<JsonElement> call;
@@ -195,6 +201,12 @@ public class OtpActivity extends BaseActivity {
                 }
             });
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            hideProgress();
         }
     }
 }

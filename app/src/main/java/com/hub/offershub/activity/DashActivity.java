@@ -39,7 +39,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     private BusinessModel.Data model;
 
     private CircleImageView navUserImg;
-    private AppCompatTextView userNameTxt, userDesTxt;
+    private AppCompatTextView userNameTxt, userDesTxt, subcriptionStatusTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
         navUserImg = headerView.findViewById(R.id.userImg);
         userNameTxt = headerView.findViewById(R.id.userNameTxt);
         userDesTxt = headerView.findViewById(R.id.userDesTxt);
+        subcriptionStatusTxt = headerView.findViewById(R.id.subcriptionStatusTxt);
 
         init();
 
@@ -77,6 +78,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
         if (model != null) {
             userNameTxt.setText(""+model.shop_name);
             userDesTxt.setText(""+ AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.MOBILE));
+            subcriptionStatusTxt.setText(""+ model.subscription_status);
             commonMethods.imageCircle(DashActivity.this, navUserImg, model.image_url);
         }
     }

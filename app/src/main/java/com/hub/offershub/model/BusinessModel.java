@@ -52,6 +52,8 @@ public class BusinessModel implements Parcelable {
         public String city;
         public String state;
         public String pincode;
+        public String subscription_status;
+        public String subscription_end_date;
         public String categoryname;
         public String shopstatus;
         public String adminverifystatus;
@@ -72,6 +74,8 @@ public class BusinessModel implements Parcelable {
             city = in.readString();
             state = in.readString();
             pincode = in.readString();
+            subscription_status = in.readString();
+            subscription_end_date = in.readString();
             categoryname = in.readString();
             shopstatus = in.readString();
             adminverifystatus = in.readString();
@@ -111,6 +115,8 @@ public class BusinessModel implements Parcelable {
             dest.writeString(city);
             dest.writeString(state);
             dest.writeString(pincode);
+            dest.writeString(subscription_status);
+            dest.writeString(subscription_end_date);
             dest.writeString(categoryname);
             dest.writeString(shopstatus);
             dest.writeString(adminverifystatus);

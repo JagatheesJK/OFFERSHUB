@@ -58,14 +58,15 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         if (model != null) {
             holder.statusTxt.setVisibility(isActive ? View.GONE : View.VISIBLE);
             holder.businessNameTxt.setText(""+model.shop_name);
-            addr1 = (((model.address1 != null) && (model.address1.length() != 0)) ? model.address1 : "");
-            addr2 = (((model.address2 != null) && (model.address2.length() != 0)) ? model.address2 : "");
-            city = (((model.city != null) &&  (model.city.length() != 0)) ? model.city : "");
+            addr1 = (((model.address1 != null) && (model.address1.length() != 0)) ? model.address1+", " : "");
+            addr2 = (((model.address2 != null) && (model.address2.length() != 0)) ? model.address2+", " : "");
+            city = (((model.city != null) &&  (model.city.length() != 0)) ? model.city+", " : "");
             state = (((model.state != null) && (model.state.length() != 0)) ? model.state : "");
-            holder.addressTxt.setText(""+addr1+", "+addr2+", "+city+", "+state);
+            holder.addressTxt.setText(""+addr1+addr2+city+state);
             holder.categoryTxt.setText(""+model.categoryname);
             holder.rateTxt.setText(""+model.total_rate+" ("+model.avg_rating+")");
             holder.statusTxt.setText(""+model.adminverifystatus);
+            holder.paymentStatusTxt.setText(""+model.subscription_status);
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
             holder.shimmerFrameLayout.startShimmer();
             Glide.with(ctx).load(model.image_url).listener(new RequestListener<Drawable>() {
@@ -118,7 +119,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView businessNameTxt, addressTxt;
-        AppCompatTextView categoryTxt, rateTxt, statusTxt;
+        AppCompatTextView categoryTxt, rateTxt, statusTxt, paymentStatusTxt;
         AppCompatImageView shopImg;
         ShimmerFrameLayout shimmerFrameLayout;
         LinearLayoutCompat editLinear, deleteLinear;
@@ -129,6 +130,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             categoryTxt = v.findViewById(R.id.categoryTxt);
             rateTxt = v.findViewById(R.id.rateTxt);
             statusTxt = v.findViewById(R.id.statusTxt);
+            paymentStatusTxt = v.findViewById(R.id.paymentStatusTxt);
             shopImg = v.findViewById(R.id.shopImg);
             shimmerFrameLayout = v.findViewById(R.id.shimmerFrameLayout);
             editLinear = v.findViewById(R.id.editLinear);
