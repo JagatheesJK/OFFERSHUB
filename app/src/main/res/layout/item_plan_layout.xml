@@ -15,10 +15,10 @@
     android:background="@drawable/bg_rounded">
 
     <RadioButton
+        android:id="@+id/planRadio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:checked="true"
         android:layout_marginStart="8dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +37,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/plantitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Subscription Basic"
@@ -46,6 +47,7 @@
                 android:singleLine="true"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Plan"
@@ -59,6 +61,7 @@
                 android:backgroundTint="@color/colorPrimary"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Basic channels with ads"
@@ -76,6 +79,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planAmt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₹ 19.90"
@@ -84,6 +88,7 @@
                 android:layout_gravity="end"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planDays"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/month"

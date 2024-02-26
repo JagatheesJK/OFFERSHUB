@@ -23,9 +23,14 @@ public class ShopDashboardModel {
         public int usersrated;
     }
 
-    public class BarChart {
+    public static class BarChart {
         public String day;
         public int count;
+
+        public BarChart(String s, int i) {
+            this.count = i;
+            this.day = s;
+        }
     }
 
     public class AgeChart {

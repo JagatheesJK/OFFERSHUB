@@ -10,6 +10,7 @@ import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
 import com.hub.offershub.model.ShopDashboardModel;
+import com.hub.offershub.model.SubscriptionPackageResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -182,4 +183,7 @@ public interface API {
     Call<JsonElement> loginCheck(
             @Body Map<String, Object> body
     );
+
+    @GET("getMasterSubscriptionPackage")
+    Call<SubscriptionPackageResponse> getSubscriptionDetails();
 }

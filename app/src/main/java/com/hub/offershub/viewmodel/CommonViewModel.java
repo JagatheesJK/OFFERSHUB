@@ -22,6 +22,7 @@ import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
 import com.hub.offershub.model.ShopDashboardModel;
+import com.hub.offershub.model.SubscriptionPackageResponse;
 import com.hub.offershub.retrofit.API;
 import com.hub.offershub.retrofit.RetrofitClient;
 import com.hub.offershub.utils.loading.MyProgressDialog;
@@ -76,6 +77,8 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableOrderDetails_shopConfirmStatusData = new MutableLiveData<>();
     private final MutableLiveData<ShopDashboardModel> mutableShopDashData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableLoginCheck = new MutableLiveData<>();
+    private final MutableLiveData<SubscriptionPackageResponse> mutableSubscriptionData = new MutableLiveData<>();
+
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -1516,6 +1519,46 @@ public class CommonViewModel extends AndroidViewModel {
 
     }
 
+    public void getSubscriptionDetails(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JK", "getSubscriptionDetails");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<SubscriptionPackageResponse> call = apiInterface.getSubscriptionDetails();
+                call.enqueue(new Callback<SubscriptionPackageResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<SubscriptionPackageResponse> call, @NonNull Response<SubscriptionPackageResponse> response) {
+                        Log.e("Check_JK", "getInActiveShops onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableSubscriptionData.postValue(response.body());
+                        } else
+                            mutableSubscriptionData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<SubscriptionPackageResponse> call, @NonNull Throwable t) {
+                        Log.e("Check_JK", "mutableSubscriptionData Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -1641,6 +1684,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<ShopDashboardModel> getMutableShopDashData() {
         return mutableShopDashData;
+    }
+
+    public MutableLiveData<SubscriptionPackageResponse> getMutableSubscriptionData() {
+        return mutableSubscriptionData;
     }
 
     public MutableLiveData<JSONObject> getMutableLoginCheck() {

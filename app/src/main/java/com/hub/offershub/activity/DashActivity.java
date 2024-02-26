@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -26,10 +27,12 @@ import com.hub.offershub.fragment.PaymentFragment;
 import com.hub.offershub.fragment.RatingFragment;
 import com.hub.offershub.fragment.ShopDetailsFragment;
 import com.hub.offershub.model.BusinessModel;
+import com.razorpay.PaymentData;
+import com.razorpay.PaymentResultWithDataListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DashActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class DashActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, PaymentResultWithDataListener {
 
     private ActivityDashBinding binding;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -121,5 +124,20 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onPaymentSuccess(String s, PaymentData paymentData) {
+        Log.e("Check_pay ","onPaymentSuccess "+s);
+        Intent intent = new Intent(DashActivity.this, TestMainActivity2.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onPaymentError(int i, String s, PaymentData paymentData) {
+        Log.e("Check_pay ","onPaymentError "+s);
+
     }
 }
