@@ -404,6 +404,18 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
 
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/offerImgStatus1"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_pending_status"
+                            android:tint="@color/yellow"
+                            android:visibility="visible"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -529,6 +541,18 @@
                             android:layout_marginEnd="4dp"
                             android:layout_marginTop="4dp"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/offerImgStatus2"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_pending_status"
+                            android:tint="@color/yellow"
+                            android:visibility="visible"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -660,6 +684,18 @@
                             android:layout_marginEnd="4dp"
                             android:layout_marginTop="4dp"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/offerImgStatus3"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_pending_status"
+                            android:tint="@color/yellow"
+                            android:visibility="visible"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

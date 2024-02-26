@@ -212,6 +212,23 @@
                         app:layout_constraintStart_toEndOf="@+id/categoryTxt"
                         app:layout_constraintTop_toTopOf="parent"/>
 
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/paymentStatusTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Expired"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_rounded_8"
+                        android:backgroundTint="@color/yellow"
+                        app:layout_constraintStart_toEndOf="@+id/statusTxt"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

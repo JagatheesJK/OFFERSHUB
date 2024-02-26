@@ -301,7 +301,7 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
     private void callAddOffer() {
         Log.e("Check_JK", "callAddOffer ID --> "+shopID);
         if(file != null) {
-            MultipartBody.Part filePart = MultipartBody.Part.createFormData("offerimage", file.getName(),
+            MultipartBody.Part filePart = MultipartBody.Part.createFormData("offerimage[0]", file.getName(),
                     RequestBody.create(MediaType.parse("multipart/form-data"), file));
             AddOfferDataRequestBody addOfferDataRequestBody = new AddOfferDataRequestBody();
             addOfferDataRequestBody.shop_id = shopID;

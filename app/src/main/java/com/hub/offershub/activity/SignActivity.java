@@ -88,8 +88,10 @@ public class SignActivity extends BaseActivity {
             binding.mobileEd.setError("Input required");
             binding.mobileEd.requestFocus();
             return false;
-        }  else if(binding.mobileEd.length() > 0 && binding.mobileEd.length() < 10 ) {
+        }
+        if (binding.mobileEd.length() > 0 && binding.mobileEd.length() < 10 ) {
             binding.mobileEd.setError("Enter Valid Mobile Number");
+            return false;
         }
 
         // after all validation return true.
