@@ -187,8 +187,8 @@ public class ShopDashboardFragment extends BaseFragment {
 
     private Map<String, Object> makeRequest() {
         Map<String, Object> requestData = new HashMap<>();
-        //requestData.put("shop_id", businessModel.id);
-        requestData.put("shop_id", 1);
+        requestData.put("shop_id", businessModel.id);
+       // requestData.put("shop_id", 1);
         return requestData;
     }
 
