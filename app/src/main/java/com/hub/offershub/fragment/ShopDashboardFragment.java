@@ -25,10 +25,12 @@ import com.chart.all.anychart.enums.Position;
 import com.chart.all.anychart.enums.TooltipPositionMode;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentShopDashboardBinding;
@@ -59,6 +61,12 @@ public class ShopDashboardFragment extends BaseFragment {
         binding = FragmentShopDashboardBinding.inflate(getLayoutInflater());
         commonViewModel.getShopsDashData(makeRequest(), myProgressDialog);
         getShopsDashData();
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+
+            binding.swipeRefresh.setRefreshing(false);
+            commonViewModel.getShopsDashData(makeRequest(), myProgressDialog);
+            getShopsDashData();
+        });
         return binding.getRoot();
     }
 
@@ -231,11 +239,19 @@ public class ShopDashboardFragment extends BaseFragment {
                             dataSet.setBarBorderColor(ContextCompat.getColor(getContext(), R.color.colorPromo));
                             dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorFeatured));
                             dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-
+                            dataSet.setValueFormatter(new ValueFormatter() {
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    // Format value as integer
+                                    return String.valueOf((int) value);
+                                }
+                            });
                             BarData barData = new BarData(dataSet);
                             binding.ageBarChart.setData(barData);
                             binding.ageBarChart.setVisibleXRange(0f, 6f);
                             binding.ageBarChart.getDescription().setEnabled(false);
+                            binding.ageBarChart.getAxisRight().setEnabled(false);
+
                             // Customize chart appearance
                             // ...
 
@@ -246,7 +262,14 @@ public class ShopDashboardFragment extends BaseFragment {
                             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
                             xAxis.setGranularity(1f);
                             xAxis.setDrawGridLines(false);
-
+                            YAxis yAxis = binding.ageBarChart.getAxisLeft(); // Or getAxisRight() if needed
+                            yAxis.setValueFormatter(new ValueFormatter() {
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    // Convert float value to integer
+                                    return String.valueOf((int) value);
+                                }
+                            }); yAxis.setDrawGridLines(false);
 
                             // Customize legend
                             Legend legend = binding.ageBarChart.getLegend();
@@ -282,23 +305,37 @@ public class ShopDashboardFragment extends BaseFragment {
                             dataSet.setBarBorderColor(ContextCompat.getColor(getContext(), R.color.colorPromo));
                             dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorFeatured));
                             dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                            dataSet.setValueFormatter(new ValueFormatter() {
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    // Format value as integer
+                                    return String.valueOf((int) value);
+                                }
+                            });
 
                             BarData barData = new BarData(dataSet);
                             binding.barChart.setData(barData);
                             binding.barChart.setVisibleXRange(0f, 7f);
                             binding.barChart.getDescription().setEnabled(false);
-
-                            // Customize chart appearance
-                            // ...
+                            binding.barChart.getAxisRight().setEnabled(false);
 
                             // Customize X-axis
                             XAxis xAxis = binding.barChart.getXAxis();
                             xAxis.setTextSize(10f); // Set your desired label text size here
                             xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-                            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+                            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                             xAxis.setGranularity(1f);
                             xAxis.setDrawGridLines(false);
 
+                            YAxis yAxis = binding.barChart.getAxisLeft(); // Or getAxisRight() if needed
+                            yAxis.setValueFormatter(new ValueFormatter() {
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    // Convert float value to integer
+                                    return String.valueOf((int) value);
+                                }
+                            });
+                            yAxis.setDrawGridLines(false);
 
                             // Customize legend
                             Legend legend = binding.barChart.getLegend();
