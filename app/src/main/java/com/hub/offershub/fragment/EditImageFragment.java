@@ -5,11 +5,13 @@ import static com.hub.offershub.utils.Constants.CAMERA_REQUEST_CODE;
 import static com.hub.offershub.utils.Constants.GALLERY_REQUEST_CODE;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -225,6 +227,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 binding.uploadshopLinear.setVisibility(View.GONE);
                 binding.imageClear.setVisibility(View.GONE);
                 binding.editImg.setImageDrawable(null);
+                binding.shopImgStatus.setVisibility(View.GONE);
                 break;
             case R.id.offerClose1:
                 file = null;
@@ -232,6 +235,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 binding.uploadOfferLinear1.setVisibility(View.GONE);
                 binding.offerClose1.setVisibility(View.GONE);
                 binding.editofferImg1.setImageDrawable(null);
+                binding.offerImgStatus1.setVisibility(View.GONE);
                 break;
             case R.id.offerClose2:
                 file = null;
@@ -239,6 +243,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 binding.uploadOfferLinear2.setVisibility(View.GONE);
                 binding.offerClose2.setVisibility(View.GONE);
                 binding.editofferImg2.setImageDrawable(null);
+                binding.offerImgStatus2.setVisibility(View.GONE);
                 break;
             case R.id.offerClose3:
                 file = null;
@@ -246,6 +251,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 binding.uploadOfferLinear3.setVisibility(View.GONE);
                 binding.offerClose3.setVisibility(View.GONE);
                 binding.editofferImg3.setImageDrawable(null);
+                binding.offerImgStatus3.setVisibility(View.GONE);
                 break;
             default:
                 break;
@@ -290,6 +296,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                 binding.offerClose1.setVisibility(View.GONE);
                                 binding.editofferDelete1.setVisibility(View.VISIBLE);
                                 binding.editofferDelete1.setTag(jsonObject.getInt("data"));
+                                binding.offerImgStatus1.setVisibility(View.GONE);
                             }
                             else if(editImage.equals("offerImg2")) {
                                 binding.addofferImg2.setVisibility(View.GONE);
@@ -297,12 +304,14 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                 binding.offerClose2.setVisibility(View.GONE);
                                 binding.editofferDelete2.setVisibility(View.VISIBLE);
                                 binding.editofferDelete2.setTag(jsonObject.getInt("data"));
+                                binding.offerImgStatus2.setVisibility(View.GONE);
                             } else if(editImage.equals("offerImg3")) {
                                 binding.addofferImg3.setVisibility(View.GONE);
                                 binding.uploadOfferLinear3.setVisibility(View.GONE);
                                 binding.offerClose3.setVisibility(View.GONE);
                                 binding.editofferDelete3.setVisibility(View.VISIBLE);
                                 binding.editofferDelete3.setTag(jsonObject.getInt("data"));
+                                binding.offerImgStatus3.setVisibility(View.GONE);
                             }
                         } else {
 
@@ -329,6 +338,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                 binding.offerClose1.setVisibility(View.GONE);
                                 binding.editofferDelete1.setVisibility(View.GONE);
                                 binding.editofferImg1.setImageDrawable(null);
+                                binding.offerImgStatus1.setVisibility(View.GONE);
                             }
                             else if(editImage.equals("offerImg2")) {
                                 binding.addofferImg2.setVisibility(View.VISIBLE);
@@ -336,12 +346,14 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                 binding.offerClose2.setVisibility(View.GONE);
                                 binding.editofferDelete2.setVisibility(View.GONE);
                                 binding.editofferImg2.setImageDrawable(null);
+                                binding.offerImgStatus2.setVisibility(View.GONE);
                             } else if(editImage.equals("offerImg3")) {
                                 binding.addofferImg3.setVisibility(View.VISIBLE);
                                 binding.uploadOfferLinear3.setVisibility(View.GONE);
                                 binding.offerClose3.setVisibility(View.GONE);
                                 binding.editofferDelete3.setVisibility(View.GONE);
                                 binding.editofferImg3.setImageDrawable(null);
+                                binding.offerImgStatus3.setVisibility(View.GONE);
                             }
                         } else {
 
@@ -367,6 +379,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                 binding.imageClear.setVisibility(View.GONE);
                                 binding.editDelete.setVisibility(View.GONE);
                                 binding.editImg.setImageDrawable(null);
+                                binding.shopImgStatus.setVisibility(View.GONE);
                             }
                         } else {
 
@@ -393,21 +406,57 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                     binding.addofferImg1.setVisibility(View.GONE);
                                     binding.editofferDelete1.setVisibility(View.VISIBLE);
                                     binding.editofferDelete1.setTag(jsonObject.data.get(i).id);
+                                    binding.offerImgStatus1.setVisibility(View.VISIBLE);
+                                    if ("Verified".equals(jsonObject.data.get(i).adminverifystatus)) {
+                                        binding.offerImgStatus1.setImageResource(R.drawable.ic_approval_badge);
+                                        int tintColor = ContextCompat.getColor(getActivity(), R.color.green);
+                                        binding.offerImgStatus1.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+                                    } else if ("Rejected".equals(jsonObject.data.get(i).adminverifystatus)) {
+                                        binding.offerImgStatus1.setImageResource(R.drawable.ic_reject_badge);
+                                        binding.offerImgStatus1.setColorFilter(null);
+                                    } else {
+                                        binding.offerImgStatus1.setImageResource(R.drawable.ic_pending_status);
+                                        int tintColor = ContextCompat.getColor(getActivity(), R.color.yellow);
+                                        binding.offerImgStatus1.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+                                    }
                                     Glide.with(getActivity()).load(Uri.parse(jsonObject.data.get(i).image_stored_path)).into(binding.editofferImg1);
                                 } else if (i==1) {
                                     binding.addofferImg2.setVisibility(View.GONE);
                                     binding.editofferDelete2.setVisibility(View.VISIBLE);
                                     binding.editofferDelete2.setTag(jsonObject.data.get(i).id);
+                                    if ("Verified".equals(jsonObject.data.get(i).adminverifystatus)) {
+                                        binding.offerImgStatus2.setImageResource(R.drawable.ic_approval_badge);
+                                        int tintColor = ContextCompat.getColor(getActivity(), R.color.green);
+                                        binding.offerImgStatus2.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+                                    } else if ("Rejected".equals(jsonObject.data.get(i).adminverifystatus)) {
+                                        binding.offerImgStatus2.setImageResource(R.drawable.ic_reject_badge);
+                                        binding.offerImgStatus2.setColorFilter(null);
+                                    } else {
+                                        binding.offerImgStatus2.setImageResource(R.drawable.ic_pending_status);
+                                        int tintColor = ContextCompat.getColor(getActivity(), R.color.yellow);
+                                        binding.offerImgStatus2.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+                                    }
                                     Glide.with(getActivity()).load(Uri.parse(jsonObject.data.get(i).image_stored_path)).into(binding.editofferImg2);
                                 }
                                 else if (i==2) {
                                     binding.addofferImg3.setVisibility(View.GONE);
                                     binding.editofferDelete3.setVisibility(View.VISIBLE);
                                     binding.editofferDelete3.setTag(jsonObject.data.get(i).id);
+                                    if ("Verified".equals(jsonObject.data.get(i).adminverifystatus)) {
+                                        binding.offerImgStatus3.setImageResource(R.drawable.ic_approval_badge);
+                                        int tintColor = ContextCompat.getColor(getActivity(), R.color.green);
+                                        binding.offerImgStatus3.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+                                    } else if ("Rejected".equals(jsonObject.data.get(i).adminverifystatus)) {
+                                        binding.offerImgStatus3.setImageResource(R.drawable.ic_reject_badge);
+                                        binding.offerImgStatus3.setColorFilter(null);
+                                    } else {
+                                        binding.offerImgStatus3.setImageResource(R.drawable.ic_pending_status);
+                                        int tintColor = ContextCompat.getColor(getActivity(), R.color.yellow);
+                                        binding.offerImgStatus3.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+                                    }
                                     Glide.with(getActivity()).load(Uri.parse(jsonObject.data.get(i).image_stored_path)).into(binding.editofferImg3);
                                 }
                             }
-
                         } else {
 
                         }
@@ -429,6 +478,19 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                             binding.addImg.setVisibility(View.GONE);
                             binding.editDelete.setVisibility(View.VISIBLE);
                             binding.editDelete.setTag(jsonObject.data.get(0).id);
+                            binding.shopImgStatus.setVisibility(View.VISIBLE);
+                            if ("Verified".equals(jsonObject.data.get(0).adminverifystatus)) {
+                                binding.shopImgStatus.setImageResource(R.drawable.ic_approval_badge);
+                                int tintColor = ContextCompat.getColor(getActivity(), R.color.green);
+                                binding.shopImgStatus.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+                            } else if ("Rejected".equals(jsonObject.data.get(0).adminverifystatus)) {
+                                binding.shopImgStatus.setImageResource(R.drawable.ic_reject_badge);
+                                binding.shopImgStatus.setColorFilter(null);
+                            } else {
+                                binding.shopImgStatus.setImageResource(R.drawable.ic_pending_status);
+                                int tintColor = ContextCompat.getColor(getActivity(), R.color.yellow);
+                                binding.shopImgStatus.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+                            }
                             Glide.with(getActivity()).load(Uri.parse(jsonObject.data.get(0).image_stored_path)).into(binding.editImg);
                         } else {
 

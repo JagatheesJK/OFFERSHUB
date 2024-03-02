@@ -66,6 +66,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             holder.categoryTxt.setText(""+model.categoryname);
             holder.rateTxt.setText(""+model.total_rate+" ("+model.avg_rating+")");
             holder.statusTxt.setText(""+model.adminverifystatus);
+            holder.subcriptionEndDateTxt.setText(""+model.subscription_end_date);
             holder.paymentStatusTxt.setText(""+model.subscription_status);
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
             holder.shimmerFrameLayout.startShimmer();
@@ -118,7 +119,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        AppCompatTextView businessNameTxt, addressTxt;
+        AppCompatTextView businessNameTxt, addressTxt, subcriptionEndDateTxt;
         AppCompatTextView categoryTxt, rateTxt, statusTxt, paymentStatusTxt;
         AppCompatImageView shopImg;
         ShimmerFrameLayout shimmerFrameLayout;
@@ -131,6 +132,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             rateTxt = v.findViewById(R.id.rateTxt);
             statusTxt = v.findViewById(R.id.statusTxt);
             paymentStatusTxt = v.findViewById(R.id.paymentStatusTxt);
+            subcriptionEndDateTxt = v.findViewById(R.id.subcriptionEndDateTxt);
             shopImg = v.findViewById(R.id.shopImg);
             shimmerFrameLayout = v.findViewById(R.id.shimmerFrameLayout);
             editLinear = v.findViewById(R.id.editLinear);
