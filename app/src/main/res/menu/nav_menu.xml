@@ -31,4 +31,12 @@
         android:id="@+id/paymant"
         android:title="Payment" />
 
+    <item
+        android:id="@+id/billing"
+        android:title="Billing History" />
+
+    <item
+        android:id="@+id/uploadImage"
+        android:title="Upload Image In User App" />
+
 </menu>

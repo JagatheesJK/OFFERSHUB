@@ -27,7 +27,7 @@
                     android:id="@+id/amititiesCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="24dp"
+                    app:cardCornerRadius="8dp"
                     android:elevation="3dp"
                     app:cardElevation="3dp"
                     android:layout_margin="4dp"
@@ -77,11 +77,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Submit"
+                    android:textColor="@color/white"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="4dp"
-                    android:background="@drawable/bg_rounded_solid_white"
+                    android:background="@drawable/bg_rounded_solid_white_8"
+                    android:backgroundTint="@color/red"
                     app:layout_constraintTop_toBottomOf="@+id/amititiesCard"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -99,7 +101,7 @@
                     android:id="@+id/mapCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="24dp"
+                    app:cardCornerRadius="8dp"
                     android:elevation="3dp"
                     app:cardElevation="3dp"
                     android:layout_margin="4dp"
@@ -126,7 +128,7 @@
                             android:id="@+id/mapImg"
                             android:name="com.google.android.gms.maps.SupportMapFragment"
                             android:layout_width="match_parent"
-                            android:layout_height="230dp"
+                            android:layout_height="250dp"
                             class="com.hub.offershub.utils.custommap.WorkaroundMapFragment"
                             app:layout_constraintTop_toBottomOf="@+id/locationTxt"/>
 
@@ -139,11 +141,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Submit"
+                    android:textColor="@color/white"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="4dp"
-                    android:background="@drawable/bg_rounded_solid_white"
+                    android:background="@drawable/bg_rounded_solid_white_8"
+                    android:backgroundTint="@color/red"
                     app:layout_constraintTop_toBottomOf="@+id/mapCard"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 

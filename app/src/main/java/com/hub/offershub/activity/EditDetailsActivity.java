@@ -42,7 +42,7 @@ public class EditDetailsActivity extends BaseActivity implements View.OnClickLis
         shopData = getIntent().getParcelableExtra("shop_model");
         offerData = getIntent().getParcelableExtra("offer_model");
         isShop = getIntent().getBooleanExtra("isShop", false);
-        binding.toolbarLayout.toolbarTitle.setText("Edit Business");
+        binding.toolbarLayout.toolbarTitle.setText("Edit Details");
         binding.pager.setAdapter(new ViewPagerFragmentAdapter(EditDetailsActivity.this));
         labelData.add(0, "Basic");
         labelData.add(1, "Image");

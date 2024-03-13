@@ -64,7 +64,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             state = (((model.state != null) && (model.state.length() != 0)) ? model.state : "");
             holder.addressTxt.setText(""+addr1+addr2+city+state);
             holder.categoryTxt.setText(""+model.categoryname);
-            holder.rateTxt.setText(""+model.total_rate+" ("+model.avg_rating+")");
+            holder.rateTxt.setText(""+model.avg_rating+" ("+model.total_rate+")");
             holder.statusTxt.setText(""+model.adminverifystatus);
             holder.subcriptionEndDateTxt.setText(""+model.subscription_end_date);
             holder.paymentStatusTxt.setText(""+model.subscription_status);

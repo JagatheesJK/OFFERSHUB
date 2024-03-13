@@ -2,6 +2,7 @@ package com.hub.offershub.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
@@ -30,15 +31,13 @@ import com.hub.offershub.model.BusinessModel;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class DashActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, PaymentResultWithDataListener {
 
     private ActivityDashBinding binding;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private BusinessModel.Data model;
 
-    private CircleImageView navUserImg;
+    private AppCompatImageView navUserImg;
     private AppCompatTextView userNameTxt, userDesTxt, subcriptionStatusTxt;
 
     @Override
@@ -79,7 +78,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             userNameTxt.setText(""+model.shop_name);
             userDesTxt.setText(""+ AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.MOBILE));
             subcriptionStatusTxt.setText(""+ model.subscription_status);
-            commonMethods.imageCircle(DashActivity.this, navUserImg, model.image_url);
+            commonMethods.imageLoaderView(DashActivity.this, navUserImg, model.image_url);
         }
     }
 

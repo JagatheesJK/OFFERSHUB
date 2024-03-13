@@ -21,7 +21,7 @@
         android:id="@+id/otpTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OTP VERIFY"
+        android:text="OTP VERIFICATION"
         android:textSize="20dp"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -74,10 +74,19 @@
             android:layout_height="wrap_content"
             android:text="Verify"
             android:textColor="@color/white"
-            android:background="@color/red"
+            android:background="@drawable/bg_rounded_solid_white_8"
+            android:backgroundTint="@color/red"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resend OTP"
+        android:layout_marginTop="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/verifyLinear"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
