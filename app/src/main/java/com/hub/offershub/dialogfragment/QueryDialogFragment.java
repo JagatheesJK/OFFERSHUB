@@ -76,6 +76,12 @@ public class QueryDialogFragment extends BottomSheetDialogFragment implements Vi
     private void init() {
         commonViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory()).get(CommonViewModel.class);
         binding.titleTxt.setText(""+title);
+
+        if (title.equals("Feedback")) {
+            binding.feedbackEd.setHint("Your Feedback...");
+        } else {
+            binding.feedbackEd.setHint("Your Replay...");
+        }
     }
 
     private void setListener() {

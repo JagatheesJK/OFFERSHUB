@@ -98,6 +98,7 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
                 if (bookModel != null) {
                     if ("success".equals(bookModel.status)) {
                         if (bookModel.data != null) {
+                            binding.totalOrderCountTxt.setText("Total Orders : "+bookModel.count);
                             if (page_no == 0)
                                 list.clear();
                             binding.empty.emptyConstraint.setVisibility(View.GONE);

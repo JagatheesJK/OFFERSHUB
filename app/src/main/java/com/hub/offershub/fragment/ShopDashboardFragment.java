@@ -1,6 +1,5 @@
 package com.hub.offershub.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -61,8 +60,8 @@ public class ShopDashboardFragment extends BaseFragment {
         binding = FragmentShopDashboardBinding.inflate(getLayoutInflater());
         commonViewModel.getShopsDashData(makeRequest(), myProgressDialog);
         getShopsDashData();
-        binding.swipeRefresh.setOnRefreshListener(() -> {
 
+        binding.swipeRefresh.setOnRefreshListener(() -> {
             binding.swipeRefresh.setRefreshing(false);
             commonViewModel.getShopsDashData(makeRequest(), myProgressDialog);
             getShopsDashData();
@@ -78,6 +77,8 @@ public class ShopDashboardFragment extends BaseFragment {
         binding.totalOrderCountTxt.setText(""+shopDashboardModel.data.totalorders);
         binding.repeatUserVisitTxt.setText(""+shopDashboardModel.data.repeatedusers);
         binding.totalUserVisitTxt.setText(""+shopDashboardModel.data.totalusers);
+
+        ratingData();
     }
 
     private void ageBarChart() {
@@ -119,6 +120,7 @@ public class ShopDashboardFragment extends BaseFragment {
         AnyChartView chart1 = new AnyChartView(requireContext());
         chart1.setProgressBar(binding.genderProgressBar);
         Pie pie = AnyChart.pie();
+        pie.legend(false);
         pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
             @Override
             public void onClick(Event event) {
@@ -126,8 +128,18 @@ public class ShopDashboardFragment extends BaseFragment {
             }
         });
 
+        if (shopDashboardModel.genderpiechart.size() > 0)
+            binding.genderPercentageConstraint.setVisibility(View.VISIBLE);
+        else
+            binding.genderPercentageConstraint.setVisibility(View.GONE);
+
         List<DataEntry> data = new ArrayList<>();
         for (int i = 0; i < shopDashboardModel.genderpiechart.size(); i++) {
+            if (i == 0) {
+                binding.genderWomenValue.setText(getWomenPercentage(shopDashboardModel.genderpiechart.get(0).value, shopDashboardModel.genderpiechart.get(1).value)+"%");
+            } else if (i == 1) {
+                binding.genderMenValue.setText(getMenPercentage(shopDashboardModel.genderpiechart.get(0).value, shopDashboardModel.genderpiechart.get(1).value)+"%");
+            }
             data.add(new ValueDataEntry(shopDashboardModel.genderpiechart.get(i).gender, shopDashboardModel.genderpiechart.get(i).value));
         }
         /*data.add(new ValueDataEntry("Apples", 6371664));
@@ -191,7 +203,16 @@ public class ShopDashboardFragment extends BaseFragment {
         //binding.anyChartView1.addView(chart1);
     }
 
-
+    private void ratingData() {
+        binding.ratingTotalTxt.setText(""+shopDashboardModel.data.avgrating);
+        binding.totalRatingCountTxt.setText(""+shopDashboardModel.data.usersrated);
+        binding.ratingTotalStar.setRating(Float.parseFloat(shopDashboardModel.data.avgrating));
+        binding.rating5Txt.setText(""+shopDashboardModel.ratingdata.rating5);
+        binding.rating4Txt.setText(""+shopDashboardModel.ratingdata.rating4);
+        binding.rating3Txt.setText(""+shopDashboardModel.ratingdata.rating3);
+        binding.rating2Txt.setText(""+shopDashboardModel.ratingdata.rating2);
+        binding.rating1Txt.setText(""+shopDashboardModel.ratingdata.rating1);
+    }
 
     private Map<String, Object> makeRequest() {
         Map<String, Object> requestData = new HashMap<>();
@@ -206,21 +227,6 @@ public class ShopDashboardFragment extends BaseFragment {
                 if (shopDashboardModel != null) {
                     if(shopDashboardModel.status.equals("success")) {
                         this.shopDashboardModel = shopDashboardModel;
-                        /*this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 01",5));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 02",3));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 03",2));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 04",10));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 05",1));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 06",5));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 07",6));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 08",100));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 12",120));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 14",150));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 15",26));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 17",50));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 22",83));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 24",57));
-                        this.shopDashboardModel.visitchart.add(new ShopDashboardModel.BarChart("Feb 01",5));*/
 
                         initUI();
                         if (!shopDashboardModel.agechart.isEmpty()) {
@@ -251,9 +257,6 @@ public class ShopDashboardFragment extends BaseFragment {
                             binding.ageBarChart.setVisibleXRange(0f, 6f);
                             binding.ageBarChart.getDescription().setEnabled(false);
                             binding.ageBarChart.getAxisRight().setEnabled(false);
-
-                            // Customize chart appearance
-                            // ...
 
                             // Customize X-axis
                             XAxis xAxis = binding.ageBarChart.getXAxis();
@@ -363,10 +366,26 @@ public class ShopDashboardFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("Shop Dashboard");
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (commonViewModel != null) {
             commonViewModel.getMutableShopDashData().removeObservers(getViewLifecycleOwner());
         }
+    }
+
+    private int getMenPercentage(int men, int women) {
+        int totalCount = men + women;
+        return (int) ((double) men / totalCount * 100);
+    }
+
+    private int getWomenPercentage(int men, int women) {
+        int totalCount = men + women;
+        return (int) ((double) women / totalCount * 100);
     }
 }

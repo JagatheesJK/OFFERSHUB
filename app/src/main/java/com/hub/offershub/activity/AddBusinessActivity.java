@@ -558,7 +558,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         }
         mMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(19), 1000, null);
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(18), 1000, null);
         fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -580,7 +580,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
                     marker = mMap.addMarker(markerOptions);
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
                 } else {
                     Toast.makeText(AddBusinessActivity.this, "Location not available", Toast.LENGTH_SHORT).show();
                 }
@@ -624,7 +624,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         markerOptions.position(new LatLng(latLng.latitude, latLng.longitude));
         marker = mMap.addMarker(markerOptions);
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
 
         currentLat = latLng.latitude;
         currentLong = latLng.longitude;

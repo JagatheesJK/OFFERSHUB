@@ -272,6 +272,33 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/shopImgNotifyTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageCard">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" *"
+                android:textColor="@color/red"
+                android:layout_gravity="center"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Maximum upload size 2MB"
+                android:textColor="@color/red"
+                android:textSize="11sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/uploadshopLinear"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -282,7 +309,7 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/imageCard">
+            app:layout_constraintTop_toBottomOf="@+id/shopImgNotifyTxt">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
@@ -435,6 +462,33 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/offer2ImgNotifyTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@+id/offer2image">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" *"
+                    android:textColor="@color/red"
+                    android:layout_gravity="center"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum upload size 2MB"
+                    android:textColor="@color/red"
+                    android:textSize="11sp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/uploadOfferLinear1"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -445,7 +499,7 @@
                 android:layout_marginTop="24dp"
                 android:gravity="center"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/offer2image">
+                app:layout_constraintTop_toBottomOf="@+id/offer2ImgNotifyTxt">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
@@ -574,6 +628,33 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/offer3ImgNotifyTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@+id/offer3image">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" *"
+                    android:textColor="@color/red"
+                    android:layout_gravity="center"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum upload size 2MB"
+                    android:textColor="@color/red"
+                    android:textSize="11sp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/uploadOfferLinear2"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -584,7 +665,7 @@
                 android:layout_marginTop="24dp"
                 android:gravity="center"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/offer3image">
+                app:layout_constraintTop_toBottomOf="@+id/offer3ImgNotifyTxt">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
@@ -717,6 +798,33 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/lastOfferImgNotifyTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@+id/lastOfferConstraint">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" *"
+                    android:textColor="@color/red"
+                    android:layout_gravity="center"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum upload size 2MB"
+                    android:textColor="@color/red"
+                    android:textSize="11sp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/uploadOfferLinear3"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -727,7 +835,7 @@
                 android:layout_marginTop="24dp"
                 android:gravity="center"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/lastOfferConstraint">
+                app:layout_constraintTop_toBottomOf="@+id/lastOfferImgNotifyTxt">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"

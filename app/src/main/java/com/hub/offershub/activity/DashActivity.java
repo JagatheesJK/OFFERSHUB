@@ -26,6 +26,7 @@ import com.hub.offershub.fragment.FeedbackFragment;
 import com.hub.offershub.fragment.OfferListFragment;
 import com.hub.offershub.fragment.PaymentFragment;
 import com.hub.offershub.fragment.RatingFragment;
+import com.hub.offershub.fragment.ShopDashboardFragment;
 import com.hub.offershub.fragment.ShopDetailsFragment;
 import com.hub.offershub.model.BusinessModel;
 import com.razorpay.PaymentData;
@@ -62,7 +63,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
         init();
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ShopDetailsFragment.newInstance(model)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ShopDashboardFragment.newInstance(model)).commit();
             binding.navBar.setCheckedItem(R.id.nav_offer);
         }
     }
@@ -94,7 +95,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         switch (item.getItemId()) {
-            case R.id.nav_shop_dash -> fragment = ShopDetailsFragment.newInstance(model);
+            case R.id.nav_shop_dash -> fragment = ShopDashboardFragment.newInstance(model);
             case R.id.nav_home -> {
                 Intent intent = new Intent(DashActivity.this, TestMainActivity2.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

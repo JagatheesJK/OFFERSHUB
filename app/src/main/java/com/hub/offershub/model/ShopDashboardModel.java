@@ -9,6 +9,7 @@ public class ShopDashboardModel {
     public List<BarChart> visitchart;
     public List<AgeChart> agechart;
     public List<PieChart> genderpiechart;
+    public Rating ratingdata;
 
     public class Data {
         public int shopvisitcount;
@@ -41,5 +42,13 @@ public class ShopDashboardModel {
     public class PieChart {
         public String gender;
         public int value;
+    }
+
+    public class Rating {
+        public String rating5;
+        public String rating4;
+        public String rating3;
+        public String rating2;
+        public String rating1;
     }
 }

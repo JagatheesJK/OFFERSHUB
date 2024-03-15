@@ -250,4 +250,10 @@ public class OfferDashboardFragment extends Fragment {
             setValue("value3", value3);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("Offer Dashboard");
+    }
 }

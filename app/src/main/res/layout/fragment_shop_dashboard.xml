@@ -5,475 +5,1025 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.ShopDashboardFragment">
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/topConstraint"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/linear1"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/topConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="2"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_marginTop="4dp"
+                    android:visibility="visible"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/linear1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
+                        android:weightSum="2"
                         android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp">
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <androidx.appcompat.widget.LinearLayoutCompat
+                        <androidx.cardview.widget.CardView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
                             android:layout_gravity="center"
-                            android:gravity="center"
-                            android:padding="20dp">
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="100dp"
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Total \nOffers"
-                                android:textAlignment="center"/>
+                                android:orientation="vertical"
+                                android:gravity="center">
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/totalOffersTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp"/>
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total Offers"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey"/>
 
-                        </androidx.appcompat.widget.LinearLayoutCompat>
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
 
-                    </androidx.cardview.widget.CardView>
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="26dp"
+                                        android:layout_height="26dp"
+                                        app:srcCompat="@drawable/offer"
+                                        android:tint="@color/grey"/>
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp">
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/totalOffersTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="16sp"/>
 
-                        <androidx.appcompat.widget.LinearLayoutCompat
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
                             android:layout_gravity="center"
-                            android:gravity="center"
-                            android:padding="20dp">
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="100dp"
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Total Shop Visits"
-                                android:textAlignment="center"/>
+                                android:orientation="vertical">
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/totalShopVisitTxt"
-                                android:layout_width="wrap_content"
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total Shop Visits"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey"/>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="26dp"
+                                        android:layout_height="26dp"
+                                        app:srcCompat="@drawable/store"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/totalShopVisitTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="16sp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/linear2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2"
+                        android:gravity="center"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@+id/linear1">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp"/>
+                                android:orientation="vertical">
 
-                        </androidx.appcompat.widget.LinearLayoutCompat>
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Contact Count"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey"/>
 
-                    </androidx.cardview.widget.CardView>
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="26dp"
+                                        android:layout_height="26dp"
+                                        app:srcCompat="@drawable/contact"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/contactVisitTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="16sp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Map Visit Count"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey"/>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="26dp"
+                                        android:layout_height="26dp"
+                                        app:srcCompat="@drawable/map"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/mapVisitTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="16sp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/linear3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@+id/linear2">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total Offers Visit"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey"/>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="26dp"
+                                        android:layout_height="26dp"
+                                        app:srcCompat="@drawable/eye"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/totalOffersVisitTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="16sp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Order count"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey"/>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="26dp"
+                                        android:layout_height="26dp"
+                                        app:srcCompat="@drawable/orders"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/totalOrderCountTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="16sp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/linear4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@+id/linear3">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Unique user visit"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey"/>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="26dp"
+                                        android:layout_height="26dp"
+                                        app:srcCompat="@drawable/unique_users"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/totalUserVisitTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="16sp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Repeat user visit"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey"/>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="26dp"
+                                        android:layout_height="26dp"
+                                        app:srcCompat="@drawable/repeated_users"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/repeatUserVisitTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="16sp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/linear2"
+                    android:id="@+id/linear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:gravity="center"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintTop_toBottomOf="@+id/linear1">
+                    android:orientation="vertical"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintTop_toBottomOf="@+id/topConstraint">
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp">
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/barChartll"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_marginTop="12dp"
+                        android:paddingStart="12sp"
+                        android:paddingEnd="12sp"
+                        android:orientation="vertical"
+                        android:visibility="visible">
 
-                        <androidx.appcompat.widget.LinearLayoutCompat
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Visitors"
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/barChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_grey"
+                        android:layout_marginTop="16dp"/>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/ageBarChartll"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_marginTop="12dp"
+                        android:paddingStart="12sp"
+                        android:paddingEnd="12sp"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Age Range"
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/ageBarChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_grey"
+                        android:layout_marginTop="16dp"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/genderPieChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="12dp"
+                        android:paddingStart="12sp"
+                        android:paddingEnd="12sp"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/genderTitleTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Gender"
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/genderPercentageConstraint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="8dp"
+                            android:translationZ="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:id="@+id/womenLinear"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/menLinear"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/genderWomenValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="50%"
+                                    android:textSize="24dp"
+                                    android:textStyle="bold"
+                                    android:textColor="#1876d2"/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Women"/>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:id="@+id/menLinear"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                app:layout_constraintStart_toEndOf="@+id/womenLinear"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/genderMenValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="50%"
+                                    android:textSize="24dp"
+                                    android:textStyle="bold"
+                                    android:textColor="#63b5f6"/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Men"/>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <FrameLayout
+                            android:id="@+id/gender_chart_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"
+                            app:layout_constraintTop_toBottomOf="@+id/genderTitleTxt"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ProgressBar
+                            android:id="@+id/gender_progress_bar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_grey"
+                        android:layout_marginTop="16dp"/>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/ratingLinear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="20dp"
+                        android:paddingStart="12sp"
+                        android:paddingEnd="12sp"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ratings"
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
                             android:gravity="center"
-                            android:padding="20dp">
+                            android:weightSum="3"
+                            android:layout_marginTop="8dp">
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="100dp"
-                                android:layout_height="wrap_content"
-                                android:text="Contact \nCount"
-                                android:textAlignment="center"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/contactVisitTxt"
+                            <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp"/>
+                                android:layout_weight="1.5"
+                                android:orientation="vertical"
+                                android:gravity="center">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/ratingTotalTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="4.4"
+                                    android:textSize="36dp"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:textAlignment="center"/>
+
+                                <androidx.appcompat.widget.AppCompatRatingBar
+                                    android:id="@+id/ratingTotalStar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="2dp"
+                                    android:minWidth="2dp"
+                                    android:numStars="5"
+                                    android:rating="2"
+                                    android:stepSize="0.5"
+                                    style="?android:attr/ratingBarStyleSmall"
+                                    android:progressTint="@color/yellow"/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/totalRatingCountTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="10,00,000"
+                                    android:textAlignment="center"
+                                    android:layout_marginTop="4dp"/>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/grey_light"/>
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:orientation="vertical"
+                                android:layout_marginStart="20sp">
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="5"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="-4dp"/>
+
+                                    <androidx.appcompat.widget.AppCompatRatingBar
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:minHeight="2dp"
+                                        android:minWidth="2dp"
+                                        android:numStars="5"
+                                        android:rating="5"
+                                        android:layout_marginStart="8dp"
+                                        android:scaleX=".75"
+                                        android:scaleY=".75"
+                                        android:transformPivotX="0dp"
+                                        android:transformPivotY="0dp"
+                                        android:isIndicator="true"
+                                        style="?android:attr/ratingBarStyleIndicator"
+                                        android:progressTint="@color/yellow"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/rating5Txt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="100"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="-36dp"
+                                        android:layout_marginTop="-4dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="4"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="-4dp"/>
+
+                                    <androidx.appcompat.widget.AppCompatRatingBar
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:minHeight="2dp"
+                                        android:minWidth="2dp"
+                                        android:numStars="5"
+                                        android:rating="4"
+                                        android:scaleX=".75"
+                                        android:scaleY=".75"
+                                        android:transformPivotX="0dp"
+                                        android:transformPivotY="0dp"
+                                        android:isIndicator="true"
+                                        android:layout_marginStart="8dp"
+                                        style="?android:attr/ratingBarStyleIndicator"
+                                        android:progressTint="@color/yellow"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/rating4Txt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="100"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="-36dp"
+                                        android:layout_marginTop="-4dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="3"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="-4dp"/>
+
+                                    <androidx.appcompat.widget.AppCompatRatingBar
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:minHeight="2dp"
+                                        android:minWidth="2dp"
+                                        android:numStars="5"
+                                        android:rating="3"
+                                        android:scaleX=".75"
+                                        android:scaleY=".75"
+                                        android:transformPivotX="0dp"
+                                        android:transformPivotY="0dp"
+                                        android:isIndicator="true"
+                                        android:layout_marginStart="8dp"
+                                        style="?android:attr/ratingBarStyleIndicator"
+                                        android:progressTint="@color/yellow"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/rating3Txt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="100"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="-36dp"
+                                        android:layout_marginTop="-4dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="2"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="-4dp"/>
+
+                                    <androidx.appcompat.widget.AppCompatRatingBar
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:minHeight="2dp"
+                                        android:minWidth="2dp"
+                                        android:numStars="5"
+                                        android:rating="2"
+                                        android:scaleX=".75"
+                                        android:scaleY=".75"
+                                        android:transformPivotX="0dp"
+                                        android:transformPivotY="0dp"
+                                        android:isIndicator="true"
+                                        android:layout_marginStart="8dp"
+                                        style="?android:attr/ratingBarStyleIndicator"
+                                        android:progressTint="@color/yellow"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/rating2Txt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="100"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="-36dp"
+                                        android:layout_marginTop="-4dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="1"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="-4dp"/>
+
+                                    <androidx.appcompat.widget.AppCompatRatingBar
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:numStars="5"
+                                        android:rating="1"
+                                        android:scaleX=".75"
+                                        android:scaleY=".75"
+                                        android:transformPivotX="0dp"
+                                        android:transformPivotY="0dp"
+                                        android:isIndicator="true"
+                                        android:layout_marginStart="8dp"
+                                        style="?android:attr/ratingBarStyleIndicator"
+                                        android:progressTint="@color/yellow"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/rating1Txt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="100"
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="-36dp"
+                                        android:layout_marginTop="-4dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp">
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:padding="20dp">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="100dp"
-                                android:layout_height="wrap_content"
-                                android:text="Map Visit \nCount"
-                                android:textAlignment="center"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/mapVisitTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp"/>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    </androidx.cardview.widget.CardView>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/linear3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintTop_toBottomOf="@+id/linear2">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp">
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:padding="20dp">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="100dp"
-                                android:layout_height="wrap_content"
-                                android:text="Total Offers Visit"
-                                android:textAlignment="center"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/totalOffersVisitTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp"/>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp">
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:padding="20dp">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="100dp"
-                                android:layout_height="wrap_content"
-                                android:text="Booking / order count"
-                                android:textAlignment="center"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/totalOrderCountTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp"/>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    </androidx.cardview.widget.CardView>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/linear4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintTop_toBottomOf="@+id/linear3">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp">
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:padding="20dp">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="100dp"
-                                android:layout_height="wrap_content"
-                                android:text="Unique user visit"
-                                android:textAlignment="center"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/totalUserVisitTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp"/>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp">
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:padding="20dp">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="100dp"
-                                android:layout_height="wrap_content"
-                                android:text="Repeat user visit"
-                                android:textAlignment="center"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/repeatUserVisitTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp"/>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    </androidx.cardview.widget.CardView>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/linear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/topConstraint">
+        </androidx.core.widget.NestedScrollView>
 
-                <!--<androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/barChart"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="8dp">
-
-                    <FrameLayout
-                        android:id="@+id/any_chart_view1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>-->
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/barChartll"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_marginTop="8dp">
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChart"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/ageBarChartll"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="8dp">
-                    <com.github.mikephil.charting.charts.BarChart
-                        android:id="@+id/ageBarChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <!--<androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/ageBarChart"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="8dp">
-
-                    <FrameLayout
-                        android:id="@+id/any_chart_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>-->
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/genderPieChart"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="8dp">
-
-                    <FrameLayout
-                        android:id="@+id/gender_chart_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <ProgressBar
-                        android:id="@+id/gender_progress_bar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

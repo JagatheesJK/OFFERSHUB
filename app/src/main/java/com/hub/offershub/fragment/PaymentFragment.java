@@ -16,17 +16,13 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
-import com.hub.offershub.adapter.OfferAdapter;
 import com.hub.offershub.adapter.SubScriptionAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentPaymentBinding;
 import com.hub.offershub.listener.onPlanSelectListener;
-import com.hub.offershub.model.BusinessModel;
-import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
-import com.hub.offershub.utils.loading.MyProgressDialog;
 import com.razorpay.Checkout;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
@@ -44,7 +40,6 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
     SubScriptionAdapter adapter;
     public String mobileRandom;
-
 
     public static PaymentFragment newInstance() {
         PaymentFragment fragment = new PaymentFragment();
@@ -67,11 +62,13 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
         commonViewModel.getSubscriptionDetails(myProgressDialog);
         getInActiveData();
     }
+
     public String generateRandomNumbers(int count) {
         return RandomStringUtils.randomNumeric(count);
     }
-    private void setListener() {
 
+    private void setListener() {
+        binding.continueBtn.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
@@ -81,17 +78,27 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
         binding.planRecycler.setAdapter(adapter);
         setNotify();
     }
+
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.continueBtn:
+                if (adapter != null) {
+                    GenerateOrder generateOrder = new GenerateOrder(adapter.getSelectedModel());
+                    generateOrder.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "order_generation");
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void setNotify() {
         binding.planRecycler.getRecycledViewPool().clear();
         adapter.notifyDataSetChanged();
     }
-    private List<SubscriptionPackageResponse.SubscriptionPackage> list = new ArrayList<>();
 
+    private List<SubscriptionPackageResponse.SubscriptionPackage> list = new ArrayList<>();
     private void getInActiveData() {
         commonViewModel.getMutableSubscriptionData().observe(getViewLifecycleOwner(), subscriptionPackageResponse -> {
             if (PaymentFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
@@ -113,8 +120,8 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
 
     @Override
     public void onPlanSelect(SubscriptionPackageResponse.SubscriptionPackage model) {
-        GenerateOrder generateOrder = new GenerateOrder(model);
-        generateOrder.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "order_generation");
+        /*GenerateOrder generateOrder = new GenerateOrder(model);
+        generateOrder.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "order_generation");*/
     }
 
     public class GenerateOrder extends AsyncTask<String, Void, String> {
@@ -128,8 +135,6 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            /*BaseBottomSheet.java line 1
-            com.tastielivefriends.connectworld.base.BaseBottomSheet.showProgress*/
             if(!PaymentFragment.this.isDetached())
                 showProgress();
         }
@@ -140,7 +145,7 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
                 JSONObject orderRequest = new JSONObject();
                 orderRequest.put("amount", model.price);
                 orderRequest.put("currency", "INR");
-                orderRequest.put("receipt",orderId );
+                orderRequest.put("receipt", orderId);
                 orderRequest.put("payment_capture", true);
 
                 RazorpayClient razorpayClient = new RazorpayClient(Constants.razorpay_key_id
@@ -159,20 +164,19 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
         @Override
         protected void onPostExecute(String orderId) {
             super.onPostExecute(orderId);
-            /*BaseBottomSheet.java line 2
-            com.tastielivefriends.connectworld.base.BaseBottomSheet.hideProgress*/
             if(!PaymentFragment.this.isDetached()) {
                 hideProgress();
             }
             if(orderId!=null) {
                 initializeRazorPay(model, orderId, "upi");
             }
-
         }
     }
+
     public String generateRandomId(int MAX_LENGTH) {
         return RandomStringUtils.randomAlphanumeric(MAX_LENGTH).toUpperCase();
     }
+
     private void initializeRazorPay(SubscriptionPackageResponse.SubscriptionPackage model, String orderId, String method) {
         Checkout checkout = new Checkout();
         checkout.setKeyID(Constants.razorpay_key_id);
@@ -204,5 +208,11 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
             Toast.makeText(getActivity(), e.getMessage()+"", Toast.LENGTH_SHORT).show();
             //setResultAndFinish(null,null, false, false);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("Payment");
     }
 }

@@ -26,7 +26,11 @@ import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.utils.CommonMethods;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHolder> {
 
@@ -66,7 +70,13 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             holder.categoryTxt.setText(""+model.categoryname);
             holder.rateTxt.setText(""+model.avg_rating+" ("+model.total_rate+")");
             holder.statusTxt.setText(""+model.adminverifystatus);
-            holder.subcriptionEndDateTxt.setText(""+model.subscription_end_date);
+            long remainingDays = getCalculatedDate(model.subscription_end_date, getCurrentDate());
+            if (!"Expired".equals(model.subscription_status) && remainingDays <= 10) {
+                holder.subcriptionEndDateTxt.setVisibility(View.VISIBLE);
+                holder.subcriptionEndDateTxt.setText("Expiry in "+remainingDays+" Days");
+            } else {
+                holder.subcriptionEndDateTxt.setVisibility(View.GONE);
+            }
             holder.paymentStatusTxt.setText(""+model.subscription_status);
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
             holder.shimmerFrameLayout.startShimmer();
@@ -138,5 +148,28 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             editLinear = v.findViewById(R.id.editLinear);
             deleteLinear = v.findViewById(R.id.deleteLinear);
         }
+    }
+
+    public long getCalculatedDate(String endDate, String currentDate) {
+        // Define date format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            // Parse strings to Date objects
+            Date endDateObj = dateFormat.parse(endDate);
+            Date currentDateObj = dateFormat.parse(currentDate);
+            // Calculate difference in milliseconds
+            long differenceInMillis = endDateObj.getTime() - currentDateObj.getTime();
+            // Convert milliseconds to days
+            long remainingDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis);
+            return remainingDays;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(new Date());
     }
 }

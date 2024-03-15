@@ -5,38 +5,47 @@
 
     <item
         android:id="@+id/nav_home"
-        android:title="Home" />
+        android:title="Home"
+        android:icon="@drawable/home"/>
 
     <item
         android:id="@+id/nav_shop_dash"
-        android:title="Dashboard" />
+        android:title="Dashboard"
+        android:icon="@drawable/dashboard"/>
 
     <item
         android:id="@+id/nav_offer"
-        android:title="Offers" />
+        android:title="Offers"
+        android:icon="@drawable/offer"/>
 
     <item
         android:id="@+id/nav_booking_details"
-        android:title="Booking Details" />
+        android:title="Booking Details"
+        android:icon="@drawable/booking"/>
 
     <item
         android:id="@+id/nav_rating_review"
-        android:title="Rating &amp; Review" />
+        android:title="Rating &amp; Review"
+        android:icon="@drawable/rating"/>
 
     <item
         android:id="@+id/nav_faq"
-        android:title="Feedback to Admin" />
+        android:title="Feedback to Admin"
+        android:icon="@drawable/feedback"/>
 
     <item
         android:id="@+id/paymant"
-        android:title="Payment" />
+        android:title="Payment"
+        android:icon="@drawable/payment"/>
 
     <item
         android:id="@+id/billing"
-        android:title="Billing History" />
+        android:title="Billing History"
+        android:icon="@drawable/billing"/>
 
     <item
         android:id="@+id/uploadImage"
-        android:title="Upload Image In User App" />
+        android:title="Upload Image In User App"
+        android:icon="@drawable/receipt"/>
 
 </menu>
