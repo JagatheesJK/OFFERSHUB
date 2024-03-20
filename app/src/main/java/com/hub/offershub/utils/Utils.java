@@ -9,6 +9,7 @@ import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.activity.SignActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Utils {
@@ -36,5 +37,12 @@ public class Utils {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static String milliToDate(long milliSeconds) {
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        return format.format(calendar.getTime());
     }
 }

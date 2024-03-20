@@ -21,11 +21,18 @@ public class BookModel {
         public int offer_id;
         public String offer_name;
         public String offer_desc;
+        public int offer_type;
+        public String amount;
+        public String original_amount;
+        public String offer_amount;
+        public String offer_percentage;
+        public String flat_percentage;
+        public String image_url;
         public String name;
         public long fullmobile;
         public String mobile;
-        public String userstatus;
-        public String shopstatus;
+        public String userorder_status;
+        public String shoporder_status;
         public int shop_id;
 
         protected Data(Parcel in) {
@@ -39,11 +46,18 @@ public class BookModel {
             offer_id = in.readInt();
             offer_name = in.readString();
             offer_desc = in.readString();
+            offer_type = in.readInt();
+            amount = in.readString();
+            original_amount = in.readString();
+            offer_amount = in.readString();
+            offer_percentage = in.readString();
+            flat_percentage = in.readString();
+            image_url = in.readString();
             name = in.readString();
             fullmobile = in.readLong();
             mobile = in.readString();
-            userstatus = in.readString();
-            shopstatus = in.readString();
+            userorder_status = in.readString();
+            shoporder_status = in.readString();
         }
 
         @Override
@@ -58,11 +72,18 @@ public class BookModel {
             dest.writeInt(offer_id);
             dest.writeString(offer_name);
             dest.writeString(offer_desc);
+            dest.writeInt(offer_type);
+            dest.writeString(amount);
+            dest.writeString(original_amount);
+            dest.writeString(offer_amount);
+            dest.writeString(offer_percentage);
+            dest.writeString(flat_percentage);
+            dest.writeString(image_url);
             dest.writeString(name);
             dest.writeLong(fullmobile);
             dest.writeString(mobile);
-            dest.writeString(userstatus);
-            dest.writeString(shopstatus);
+            dest.writeString(userorder_status);
+            dest.writeString(shoporder_status);
         }
 
         @Override

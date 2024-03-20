@@ -48,7 +48,6 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
         // Inflate the layout for this fragment
         binding = FragmentBookingListBinding.inflate(getLayoutInflater());
 
-
         setListener();
         setUpRecycler();
         getBookingData();

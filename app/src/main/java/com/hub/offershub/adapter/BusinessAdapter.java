@@ -73,11 +73,25 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             long remainingDays = getCalculatedDate(model.subscription_end_date, getCurrentDate());
             if (!"Expired".equals(model.subscription_status) && remainingDays <= 10) {
                 holder.subcriptionEndDateTxt.setVisibility(View.VISIBLE);
-                holder.subcriptionEndDateTxt.setText("Expiry in "+remainingDays+" Days");
+                if (remainingDays == 0)
+                    holder.subcriptionEndDateTxt.setText("Expires Today");
+                else
+                    holder.subcriptionEndDateTxt.setText("Expires in "+remainingDays+" Days");
             } else {
                 holder.subcriptionEndDateTxt.setVisibility(View.GONE);
             }
             holder.paymentStatusTxt.setText(""+model.subscription_status);
+            if ("Free".equals(model.subscription_status)) {
+                holder.paymentStatusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                        ctx.getResources(), R.color.yellow, null)));
+            } else if ("Paid".equals(model.subscription_status)) {
+                holder.paymentStatusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                        ctx.getResources(), R.color.green, null)));
+            } else {
+                holder.paymentStatusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                        ctx.getResources(), R.color.red, null)));
+            }
+
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
             holder.shimmerFrameLayout.startShimmer();
             Glide.with(ctx).load(model.image_url).listener(new RequestListener<Drawable>() {

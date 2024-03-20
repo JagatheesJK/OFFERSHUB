@@ -193,7 +193,7 @@
                         android:paddingTop="1dp"
                         android:paddingBottom="1dp"
                         android:background="@drawable/bg_rounded_8"
-                        android:backgroundTint="@color/red"
+                        android:backgroundTint="#6C7A89"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 

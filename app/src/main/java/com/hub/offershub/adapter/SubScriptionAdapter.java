@@ -68,13 +68,9 @@ public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapte
             }
         });
 
-        /*holder.viewMoreLinear.setOnClickListener(v -> {
-            if (selectedPosition == position) {
-                holder.planDesc.setMaxLines(400);
-            } else {
-                holder.planDesc.setMaxLines(2);
-            }
-        });*/
+        holder.viewMoreLinear.setOnClickListener(v -> {
+            listener.onPlanViewMore(model);
+        });
     }
 
     @Override

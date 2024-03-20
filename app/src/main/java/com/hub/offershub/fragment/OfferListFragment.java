@@ -13,20 +13,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.hub.offershub.R;
-import com.hub.offershub.activity.AddBusinessActivity;
 import com.hub.offershub.activity.AddOfferActivity;
+import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentOfferListBinding;
+import com.hub.offershub.dialogfragment.PaymentDialogFragment;
+import com.hub.offershub.model.BusinessModel;
 
-public class OfferListFragment extends Fragment {
+public class OfferListFragment extends BaseFragment {
 
     private FragmentOfferListBinding binding;
     private String[] labels = new String[]{"Active", "InActive"};
     private static String shopID;
+    private static BusinessModel.Data model;
 
-    public static OfferListFragment newInstance(String shop_id) {
+    public static OfferListFragment newInstance(BusinessModel.Data bussinessModel) {
         OfferListFragment fragment = new OfferListFragment();
-        shopID = shop_id;
+        model = bussinessModel;
+        shopID = bussinessModel.id;
         return fragment;
     }
 
@@ -44,9 +47,14 @@ public class OfferListFragment extends Fragment {
         binding.pager.setCurrentItem(0, false);
 
         binding.floatingBtn.setOnClickListener(v -> {
-            Intent i = new Intent(getActivity(), AddOfferActivity.class);
-            i.putExtra("shop_id", shopID);
-            startActivity(i);
+            if ("Expired".equals(model.subscription_status)) {
+                if (!paymentDialogFragment.isAdded())
+                    paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
+            } else {
+                Intent i = new Intent(getActivity(), AddOfferActivity.class);
+                i.putExtra("shop_id", shopID);
+                startActivity(i);
+            }
         });
         return binding.getRoot();
     }
@@ -66,9 +74,9 @@ public class OfferListFragment extends Fragment {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return ActiveOfferFragment.newInstance(shopID);
+                    return ActiveOfferFragment.newInstance(model);
                 case 1:
-                    return InActiveOfferFragment.newInstance(shopID);
+                    return InActiveOfferFragment.newInstance(model);
             }
             return new ActiveBusinessFragment();
         }

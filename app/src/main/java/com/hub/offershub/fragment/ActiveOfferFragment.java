@@ -18,6 +18,7 @@ import com.hub.offershub.activity.EditDetailsActivity;
 import com.hub.offershub.adapter.OfferAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentActiveOfferBinding;
+import com.hub.offershub.dialogfragment.PaymentDialogFragment;
 import com.hub.offershub.listener.OfferListener;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
@@ -38,10 +39,12 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
     private OfferAdapter adapter;
     private int page_no = 0;
     private static String shopID = "";
+    private static BusinessModel.Data businessModel;
 
-    public static ActiveOfferFragment newInstance(String shop_id) {
+    public static ActiveOfferFragment newInstance(BusinessModel.Data model) {
         ActiveOfferFragment fragment = new ActiveOfferFragment();
-        shopID = shop_id;
+        businessModel = model;
+        shopID = model.id;
         return fragment;
     }
 
@@ -187,19 +190,29 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onOfferSelect(OfferModel.Data model, String priority) {
-        commonViewModel.offerPriority(makePriorityRequest(model.offer_id, priority), myProgressDialog);
+        if ("Expired".equals(businessModel.subscription_status)) {
+            if (!paymentDialogFragment.isAdded())
+                paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
+        } else {
+            commonViewModel.offerPriority(makePriorityRequest(model.offer_id, priority), myProgressDialog);
+        }
 //        loadFragment(new ShopDetailsFragment());
     }
 
     @Override
     public void onOfferEdit(Object obj) {
-        OfferModel.Data model = (OfferModel.Data) obj;
-        BusinessModel.Data businessModel = null;
-        Intent i = new Intent(getActivity(), EditDetailsActivity.class);
-        i.putExtra("offer_model", model);
-        i.putExtra("shop_model", businessModel);
-        i.putExtra("isShop", false);
-        startActivity(i);
+        if ("Expired".equals(businessModel.subscription_status)) {
+            if (!paymentDialogFragment.isAdded())
+                paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
+        } else {
+            OfferModel.Data model = (OfferModel.Data) obj;
+            BusinessModel.Data businessModel = null;
+            Intent i = new Intent(getActivity(), EditDetailsActivity.class);
+            i.putExtra("offer_model", model);
+            i.putExtra("shop_model", businessModel);
+            i.putExtra("isShop", false);
+            startActivity(i);
+        }
     }
 
     OfferModel.Data deleteModel;
@@ -213,10 +226,15 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onOfferInSight(Object obj) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_container, new OfferDashboardFragment());
-        transaction.commit();
+        if ("Expired".equals(businessModel.subscription_status)) {
+            if (!paymentDialogFragment.isAdded())
+                paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
+        } else {
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.fragment_container, new OfferDashboardFragment());
+            transaction.commit();
+        }
     }
 
     @Override

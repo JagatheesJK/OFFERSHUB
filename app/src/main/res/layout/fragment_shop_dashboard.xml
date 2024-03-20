@@ -727,7 +727,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="4dp"
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
                         android:orientation="vertical">
@@ -1015,6 +1015,38 @@
                             </androidx.appcompat.widget.LinearLayoutCompat>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_grey"
+                        android:layout_marginTop="16dp"/>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/ordersBarChartLinear"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:paddingStart="12sp"
+                        android:paddingEnd="12sp"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Orders"
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/orderBarChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 

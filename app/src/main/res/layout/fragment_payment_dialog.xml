@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp"
+    android:background="@drawable/bg_rounded_top_only"
+    tools:context=".dialogfragment.PaymentDialogFragment">
+
+    <!--<ir.neo.stepbarview.StepBarView
+        android:id="@+id/stepBarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:sbv_steps_size="14dp"
+        app:sbv_steps_reached_colors="@color/colorPrimary"
+        app:sbv_steps_line_reached_colors="@color/colorPrimary"
+        app:sbv_steps_line_unreached_colors="#dbcecece"
+        app:sbv_steps_unreached_colors="#dbcecece"
+        app:sbv_steps_text_color="@color/white"
+        app:sbv_max_count="4"
+        app:sbv_steps_text_size="0dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:sbv_steps_line_margin_left="8dp"
+        app:sbv_steps_line_margin_right="8dp"
+        app:sbv_is_fixed_steps_line_width="true"
+        app:sbv_steps_line_width="80dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>-->
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/titleTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CHOOSE YOUR PLAN"
+        android:textColor="@color/black"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/planRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_plan_layout"
+        tools:itemCount="3"
+        android:layout_marginTop="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/titleTxt"
+        app:layout_constraintBottom_toTopOf="@+id/continueBtn"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/continueBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:textColor="@color/white"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_rounded_solid_white_8"
+        android:backgroundTint="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/planRecycler"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

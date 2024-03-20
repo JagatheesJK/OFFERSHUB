@@ -62,11 +62,21 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
             } else {
                 holder.userMobileTxt.setText("" + model.mobile);
             }
-            holder.statusTxt.setText(""+model.userstatus);
+            holder.statusTxt.setText("Pending");
+            if ("0".equals(model.userorder_status)) {
+                holder.statusTxt.setText("Order Canceled");
+            } else {
+                if ("0".equals(model.shoporder_status))
+                    holder.statusTxt.setText("Pending");
+                else if ("1".equals(model.shoporder_status))
+                    holder.statusTxt.setText("Confirmed");
+                else
+                    holder.statusTxt.setText("Rejected");
+            }
             if (model.user_ordered_date != null && model.user_ordered_date.length() > 0)
                 holder.bookingDateTxt.setText(""+ Utils.convertDateFormat(model.user_ordered_date));
             if (0 == model.is_shop_read) {
-                holder.unreadDotImg.setVisibility(View.VISIBLE);
+                holder.unreadDotImg.setImageResource(R.drawable.ic_open_eye);
                 holder.offerNameTxt.setTextColor(ctx.getColor(R.color.black));
                 holder.userNameTxt.setTextColor(ctx.getColor(R.color.black));
                 holder.userMobileTxt.setTextColor(ctx.getColor(R.color.black));
@@ -77,7 +87,7 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
                 holder.userMobileTxt.setTypeface(null, Typeface.BOLD);
                 holder.bookingDateTxt.setTypeface(null, Typeface.BOLD);
             } else {
-                holder.unreadDotImg.setVisibility(View.GONE);
+                holder.unreadDotImg.setImageResource(R.drawable.ic_close_eye);
                 holder.userNameTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.userMobileTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.bookingDateTxt.setTextColor(ctx.getColor(R.color.default_txt));
@@ -87,21 +97,26 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
                 holder.userMobileTxt.setTypeface(null, Typeface.NORMAL);
                 holder.bookingDateTxt.setTypeface(null, Typeface.NORMAL);
             }
-            if ("Pending".equals(model.userstatus)) {
-                holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                        ctx.getResources(), R.color.yellow, null)));
-                holder.buttonLinear.setVisibility(View.VISIBLE);
-            } else if ("Canceled".equals(model.userstatus)) {
+            if ("0".equals(model.userorder_status)) {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.red, null)));
-                holder.buttonLinear.setVisibility(View.GONE);
             } else {
-                holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                        ctx.getResources(), R.color.green, null)));
-                holder.buttonLinear.setVisibility(View.GONE);
+                if ("0".equals(model.shoporder_status)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.yellow, null)));
+//                holder.buttonLinear.setVisibility(View.VISIBLE);
+                } else if ("2".equals(model.shoporder_status)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.red, null)));
+//                holder.buttonLinear.setVisibility(View.GONE);
+                } else {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.green, null)));
+//                holder.buttonLinear.setVisibility(View.GONE);
+                }
             }
             holder.shimmerFrameLayout.startShimmer();
-            Glide.with(ctx).load("").listener(new RequestListener<Drawable>() {
+            Glide.with(ctx).load(model.image_url).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     return false;
@@ -114,7 +129,6 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
                     return false;
                 }
             }).error(R.drawable.def_logo).into(holder.offerImg);
-
 
             holder.mainCard.setOnClickListener(v -> {
                 holder.unreadDotImg.setVisibility(View.GONE);

@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hub.offershub.R;
+import com.hub.offershub.dialogfragment.PaymentDialogFragment;
 import com.hub.offershub.dialogfragment.QueryDialogFragment;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.utils.CommonMethods;
@@ -48,6 +49,7 @@ public class BaseFragment extends Fragment {
     public CommonViewModel commonViewModel;
     public QueryDialogFragment queryDialogFragment;
     public ProgressDialog progressDialog;
+    public PaymentDialogFragment paymentDialogFragment;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -57,6 +59,7 @@ public class BaseFragment extends Fragment {
         queryDialogFragment = new QueryDialogFragment();
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Please wait...");
+        paymentDialogFragment = new PaymentDialogFragment();
     }
 
     @Override

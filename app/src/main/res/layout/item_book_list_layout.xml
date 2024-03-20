@@ -66,7 +66,8 @@
                         android:id="@+id/offerImg"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/def_logo"/>
+                        app:srcCompat="@drawable/def_logo"
+                        android:scaleType="centerCrop"/>
 
                 </androidx.cardview.widget.CardView>
 
@@ -86,7 +87,7 @@
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/offerNameTxt"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Offer Name jdnfjsdhfbjsdhfsjhdbfsjdnfjfnsdfjshjndfsjshdfsdjnjdffdsjnjnsjdjhjfdjdsjnsdjndsfjnjsddjdfsjjfsdndfjnjjsdhdjhffdjshsdjfsdfjhgdggffdfg"
                             android:textSize="16dp"
@@ -94,25 +95,6 @@
                             android:textStyle="bold"
                             android:singleLine="true"
                             android:layout_marginEnd="4dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/statusTxt"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/statusTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pending"
-                            android:textSize="12dp"
-                            android:textColor="@color/white"
-                            android:background="@drawable/bg_rounded_solid_white"
-                            android:backgroundTint="@color/yellow"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"
-                            android:paddingTop="6dp"
-                            android:paddingBottom="6dp"
-                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -139,6 +121,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/userNameTxt"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/bottomConstraint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -154,17 +137,53 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
 
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bottomConstraint">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/statusTxt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Pending"
+                            android:textSize="11dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:background="@drawable/bg_rounded_solid_white"
+                            android:backgroundTint="@color/yellow"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/unreadDotImg"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/ic_open_eye"/>
+
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="More Details."
-                            android:textColor="#1b76cf"
-                            android:textSize="10sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            android:layout_weight="1"
+                            android:text="More Details >"
+                            android:textColor="#387ADF"
+                            android:textStyle="bold"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"/>
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,6 +195,7 @@
                 android:layout_height="wrap_content"
                 android:weightSum="2"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/topConstraint"
                 app:layout_constraintBottom_toBottomOf="parent">
 
@@ -206,17 +226,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/unreadDotImg"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:tint="@color/red"
-        android:translationZ="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/mainCard"
-        app:layout_constraintEnd_toEndOf="@+id/mainCard"
-        app:layout_constraintStart_toEndOf="@+id/mainCard"
-        app:layout_constraintTop_toTopOf="@+id/mainCard"
-        app:srcCompat="@drawable/circle_white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

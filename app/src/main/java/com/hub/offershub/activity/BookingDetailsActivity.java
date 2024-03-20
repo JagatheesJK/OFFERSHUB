@@ -1,20 +1,17 @@
 package com.hub.offershub.activity;
 
 import android.content.res.ColorStateList;
-import android.net.Uri;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Lifecycle;
 
-import com.bumptech.glide.Glide;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityBookingDetailsBinding;
-import com.hub.offershub.fragment.ActiveOfferFragment;
 import com.hub.offershub.model.BookModel;
 
 import org.json.JSONException;
@@ -26,6 +23,7 @@ public class BookingDetailsActivity extends BaseActivity {
 
     private ActivityBookingDetailsBinding binding;
     BookModel.Data model;
+    private boolean isAccept = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +46,9 @@ public class BookingDetailsActivity extends BaseActivity {
             binding.offerDescTxt.setText(model.offer_desc);
            // Glide.with(BookingDetailsActivity.this).load().into(binding.offerImg);
             binding.userNameTxt.setText(model.name);
-            binding.productNameTxt.setText(model.offer_name);
-            if(1 == model.is_mobilenumber_viewed ) {
+            binding.offerNameTxt.setText(model.offer_name);
+            commonMethods.imageLoaderView(this, binding.offerImg, model.image_url);
+            if(1 == model.is_mobilenumber_viewed) {
                 binding.userMobileTxt.setText(""+model.fullmobile);
                 binding.mobileEye.setVisibility(View.GONE);
             } else {
@@ -58,27 +57,52 @@ public class BookingDetailsActivity extends BaseActivity {
             }
             binding.dateTxt.setText(model.user_ordered_date);
 
-            if ("Pending".equals(model.userstatus)) {
-
-                binding.linearRejAccept.setVisibility(View.VISIBLE);
-                binding.statusShowTV.setVisibility(View.GONE);
-            } else if ("Canceled".equals(model.userstatus)) {
-
-                binding.linearRejAccept.setVisibility(View.GONE);
-                binding.statusShowTV.setVisibility(View.VISIBLE);
-                binding.statusShowTV.setText(""+model.userstatus);
-                binding.statusShowTV.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                        getResources(), R.color.red, null)));
+            if (1 == model.offer_type) {
+                Log.e("Check_JK", "Type : "+model.offer_type+" IF ");
+                binding.amountLinear.setVisibility(View.VISIBLE);
+                binding.discountLinear.setVisibility(View.GONE);
+                binding.offerPrice.setText("₹ "+model.amount);
+                binding.offerPrice.setTextColor(getColor(R.color.black));
+            } else if (2 == model.offer_type) {
+                Log.e("Check_JK", "Type : "+model.offer_type+" ELSE IF ");
+                binding.amountLinear.setVisibility(View.GONE);
+                binding.discountLinear.setVisibility(View.VISIBLE);
             } else {
-                binding.linearRejAccept.setVisibility(View.GONE);
-                binding.statusShowTV.setVisibility(View.VISIBLE);
-                binding.statusShowTV.setText(""+model.userstatus);
-                binding.statusShowTV.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                        getResources(), R.color.green, null)));
+                Log.e("Check_JK", "Type : "+model.offer_type+" ELSE ");
+                binding.amountLinear.setVisibility(View.VISIBLE);
+                binding.discountLinear.setVisibility(View.GONE);
+                binding.offerPrice.setText("Flat "+model.flat_percentage+"%");
+                binding.offerPrice.setTextColor(getColor(R.color.green));
             }
 
+            binding.originalAmountTxt.setPaintFlags(binding.originalAmountTxt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            binding.originalAmountTxt.setText("₹ "+model.original_amount);
+            binding.discountPriceTxt.setText("₹ "+model.offer_amount);
+            binding.discountOfferTxt.setText("OFF "+model.offer_percentage+"%");
 
+            if ("0".equals(model.userorder_status)) {
+                binding.linearRejAccept.setVisibility(View.GONE);
+                binding.statusTxt.setText("Order Canceled");
+            } else {
+                if ("0".equals(model.shoporder_status)) {
+                    binding.linearRejAccept.setVisibility(View.VISIBLE);
+                    binding.statusTxt.setText("Pending");
+                    binding.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            getResources(), R.color.yellow, null)));
+                } else if ("2".equals(model.shoporder_status)) {
+                    binding.linearRejAccept.setVisibility(View.GONE);
+                    binding.statusTxt.setText("Canceled");
+                    binding.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            getResources(), R.color.red, null)));
+                } else {
+                    binding.linearRejAccept.setVisibility(View.GONE);
+                    binding.statusTxt.setText("Confirmed");
+                    binding.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            getResources(), R.color.green, null)));
+                }
+            }
         }
+
         binding.backarrow.setOnClickListener(v->{
             finish();
         });
@@ -91,6 +115,7 @@ public class BookingDetailsActivity extends BaseActivity {
         });
 
         binding.rejectBtn.setOnClickListener(v->{
+            isAccept = false;
             Map<String, Object> requestData = new HashMap<>();
             requestData.put("shop_id", model.shop_id);
             requestData.put("order_id", model.id);
@@ -100,6 +125,7 @@ public class BookingDetailsActivity extends BaseActivity {
         });
 
         binding.acceptBtn.setOnClickListener(v->{
+            isAccept = true;
             Map<String, Object> requestData = new HashMap<>();
             requestData.put("shop_id", model.shop_id);
             requestData.put("order_id", model.id);
@@ -137,7 +163,6 @@ public class BookingDetailsActivity extends BaseActivity {
                         if(jsonObject.getString("status").equals("success")) {
                             binding.mobileEye.setVisibility(View.GONE);
                             binding.userMobileTxt.setText(""+model.fullmobile);
-
                         } else {
 
                         }
@@ -149,7 +174,6 @@ public class BookingDetailsActivity extends BaseActivity {
             }
         });
     }
-
 
     private void getMutableOrderDetails_shopConfirmStatusData() {
         commonViewModel.getMutableOrderDetails_shopConfirmStatusData().observe(this, jsonObject -> {
@@ -157,8 +181,16 @@ public class BookingDetailsActivity extends BaseActivity {
                 if (jsonObject != null) {
                     try {
                         if(jsonObject.getString("status").equals("success")) {
-
-
+                            if (isAccept) {
+                                binding.statusTxt.setText("Confirmed");
+                                binding.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                                        getResources(), R.color.green, null)));
+                            } else {
+                                binding.statusTxt.setText("Rejected");
+                                binding.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                                        getResources(), R.color.red, null)));
+                            }
+                            binding.linearRejAccept.setVisibility(View.GONE);
                         } else {
 
                         }
@@ -170,7 +202,6 @@ public class BookingDetailsActivity extends BaseActivity {
             }
         });
     }
-
 
     @Override
     protected void onResume() {

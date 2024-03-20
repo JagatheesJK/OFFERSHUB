@@ -214,10 +214,68 @@ public class ShopDashboardFragment extends BaseFragment {
         binding.rating1Txt.setText(""+shopDashboardModel.ratingdata.rating1);
     }
 
+    private void ordersDetailsBar() {
+        binding.orderBarChart.setVisibility(View.VISIBLE);
+        List<BarEntry> entries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        for (int i = 0; i < shopDashboardModel.orderdetails.size() ; i++) {
+            // Add data to entries list
+            entries.add(new BarEntry(i, shopDashboardModel.orderdetails.get(i).count));
+            labels.add(shopDashboardModel.orderdetails.get(i).day);
+        }
+        BarDataSet dataSet = new BarDataSet(entries, "Visits");
+
+        // Customize dataset as needed
+        dataSet.setBarBorderColor(ContextCompat.getColor(getContext(), R.color.colorPromo));
+        dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorFeatured));
+        dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // Format value as integer
+                return String.valueOf((int) value);
+            }
+        });
+
+        BarData barData = new BarData(dataSet);
+        binding.orderBarChart.setData(barData);
+        binding.orderBarChart.setVisibleXRange(0f, 7f);
+        binding.orderBarChart.getDescription().setEnabled(false);
+        binding.orderBarChart.getAxisRight().setEnabled(false);
+
+        // Customize X-axis
+        XAxis xAxis = binding.orderBarChart.getXAxis();
+        xAxis.setTextSize(10f); // Set your desired label text size here
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setDrawGridLines(false);
+
+        YAxis yAxis = binding.orderBarChart.getAxisLeft(); // Or getAxisRight() if needed
+        yAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // Convert float value to integer
+                return String.valueOf((int) value);
+            }
+        });
+        yAxis.setDrawGridLines(false);
+
+        // Customize legend
+        Legend legend = binding.orderBarChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP); // Set legend position
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT); // Set legend position
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Set legend orientation
+        legend.setDrawInside(false);
+
+        binding.orderBarChart.invalidate();
+    }
+
     private Map<String, Object> makeRequest() {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("shop_id", businessModel.id);
-       // requestData.put("shop_id", 1);
+//        requestData.put("shop_id", 16);
         return requestData;
     }
 
@@ -351,6 +409,11 @@ public class ShopDashboardFragment extends BaseFragment {
                             //newMultipleBarChart();
                         } else
                             binding.barChart.setVisibility(View.GONE);
+                        if (!shopDashboardModel.orderdetails.isEmpty()) {
+                            binding.ordersBarChartLinear.setVisibility(View.VISIBLE);
+                            ordersDetailsBar();
+                        } else
+                            binding.ordersBarChartLinear.setVisibility(View.GONE);
                     }
                 }
             }

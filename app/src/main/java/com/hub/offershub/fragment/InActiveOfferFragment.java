@@ -17,6 +17,7 @@ import com.hub.offershub.activity.EditDetailsActivity;
 import com.hub.offershub.adapter.OfferAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentInActiveOfferBinding;
+import com.hub.offershub.dialogfragment.PaymentDialogFragment;
 import com.hub.offershub.listener.OfferListener;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
@@ -37,10 +38,12 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     private OfferAdapter adapter;
     private int page_no = 0;
     private static String shopID;
+    private static BusinessModel.Data businessModel;
 
-    public static InActiveOfferFragment newInstance(String shop_id) {
+    public static InActiveOfferFragment newInstance(BusinessModel.Data model) {
         InActiveOfferFragment fragment = new InActiveOfferFragment();
-        shopID = shop_id;
+        businessModel = model;
+        shopID = model.id;
         return fragment;
     }
 
@@ -161,13 +164,18 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onOfferEdit(Object obj) {
-        OfferModel.Data model = (OfferModel.Data) obj;
-        BusinessModel.Data businessModel = null;
-        Intent i = new Intent(getActivity(), EditDetailsActivity.class);
-        i.putExtra("offer_model", model);
-        i.putExtra("shop_model", businessModel);
-        i.putExtra("isShop", false);
-        startActivity(i);
+        if ("Expired".equals(businessModel.subscription_status)) {
+            if (!paymentDialogFragment.isAdded())
+                paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
+        } else {
+            OfferModel.Data model = (OfferModel.Data) obj;
+            BusinessModel.Data businessModel = null;
+            Intent i = new Intent(getActivity(), EditDetailsActivity.class);
+            i.putExtra("offer_model", model);
+            i.putExtra("shop_model", businessModel);
+            i.putExtra("isShop", false);
+            startActivity(i);
+        }
     }
 
     OfferModel.Data deleteModel;
