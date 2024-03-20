@@ -76,7 +76,7 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
             if (model.user_ordered_date != null && model.user_ordered_date.length() > 0)
                 holder.bookingDateTxt.setText(""+ Utils.convertDateFormat(model.user_ordered_date));
             if (0 == model.is_shop_read) {
-                holder.unreadDotImg.setImageResource(R.drawable.ic_open_eye);
+                holder.unreadDotImg.setImageResource(R.drawable.ic_close_eye);
                 holder.offerNameTxt.setTextColor(ctx.getColor(R.color.black));
                 holder.userNameTxt.setTextColor(ctx.getColor(R.color.black));
                 holder.userMobileTxt.setTextColor(ctx.getColor(R.color.black));
@@ -87,7 +87,7 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
                 holder.userMobileTxt.setTypeface(null, Typeface.BOLD);
                 holder.bookingDateTxt.setTypeface(null, Typeface.BOLD);
             } else {
-                holder.unreadDotImg.setImageResource(R.drawable.ic_close_eye);
+                holder.unreadDotImg.setImageResource(R.drawable.ic_open_eye);
                 holder.userNameTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.userMobileTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.bookingDateTxt.setTextColor(ctx.getColor(R.color.default_txt));
@@ -131,7 +131,6 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
             }).error(R.drawable.def_logo).into(holder.offerImg);
 
             holder.mainCard.setOnClickListener(v -> {
-                holder.unreadDotImg.setVisibility(View.GONE);
                 holder.userNameTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.userMobileTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.bookingDateTxt.setTextColor(ctx.getColor(R.color.default_txt));

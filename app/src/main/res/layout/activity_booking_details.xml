@@ -415,6 +415,8 @@
                 android:id="@+id/bookingStatusConstraint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dateConstraint"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -449,49 +451,55 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/grey_light"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintTop_toBottomOf="@+id/statusTxt"/>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/linearRejAccept"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:layout_marginTop="16sp"
+                android:orientation="vertical"
+                android:layout_marginTop="2sp"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/bookingStatusConstraint"
                 app:layout_constraintBottom_toBottomOf="parent">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/rejectBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Reject"
-                    android:textColor="@color/white"
-                    android:layout_marginEnd="4dp"
-                    android:background="@drawable/bg_rounded_8"
-                    android:backgroundTint="@color/reject_red"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_light"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"/>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/acceptBtn"
-                    android:layout_width="0dp"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Accept"
-                    android:textColor="@color/white"
-                    android:layout_marginStart="4dp"
-                    android:background="@drawable/bg_rounded_8"
-                    android:backgroundTint="@color/accept_green"/>
+                    android:weightSum="2"
+                    android:layout_marginTop="10dp">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/rejectBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Reject"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/bg_rounded_8"
+                        android:backgroundTint="@color/reject_red"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/acceptBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Accept"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/bg_rounded_8"
+                        android:backgroundTint="@color/accept_green"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

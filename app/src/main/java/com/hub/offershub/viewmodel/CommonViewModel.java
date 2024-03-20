@@ -78,7 +78,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<ShopDashboardModel> mutableShopDashData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableLoginCheck = new MutableLiveData<>();
     private final MutableLiveData<SubscriptionPackageResponse> mutableSubscriptionData = new MutableLiveData<>();
-
+    private final MutableLiveData<BookModel> mutableNotifyData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -1559,6 +1559,45 @@ public class CommonViewModel extends AndroidViewModel {
 
     }
 
+    public void getNotify(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JK", "getNotify");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<BookModel> call = apiInterface.getNotify(requestData);
+                call.enqueue(new Callback<BookModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<BookModel> call, @NonNull Response<BookModel> response) {
+                        Log.e("Check_JK", "getNotify onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableNotifyData.postValue(response.body());
+                        } else
+                            mutableNotifyData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<BookModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JK", "getNotify Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -1692,6 +1731,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<JSONObject> getMutableLoginCheck() {
         return mutableLoginCheck;
+    }
+
+    public MutableLiveData<BookModel> getMutableNotifyData() {
+        return mutableNotifyData;
     }
 
     public void showDialog(MyProgressDialog myProgressDialog) {

@@ -34,6 +34,7 @@ public class BookModel {
         public String userorder_status;
         public String shoporder_status;
         public int shop_id;
+        public String shop_name;
 
         protected Data(Parcel in) {
             id = in.readInt();
@@ -58,6 +59,7 @@ public class BookModel {
             mobile = in.readString();
             userorder_status = in.readString();
             shoporder_status = in.readString();
+            shop_name = in.readString();
         }
 
         @Override
@@ -84,6 +86,7 @@ public class BookModel {
             dest.writeString(mobile);
             dest.writeString(userorder_status);
             dest.writeString(shoporder_status);
+            dest.writeString(shop_name);
         }
 
         @Override

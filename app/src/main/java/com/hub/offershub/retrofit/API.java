@@ -186,4 +186,9 @@ public interface API {
 
     @GET("getMasterSubscriptionPackage")
     Call<SubscriptionPackageResponse> getSubscriptionDetails();
+
+    @POST("getNotification")
+    Call<BookModel> getNotify(
+            @Body Map<String, Object> body
+    );
 }

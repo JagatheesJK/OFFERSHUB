@@ -70,6 +70,7 @@ public class ShopDashboardFragment extends BaseFragment {
     }
 
     private void initUI() {
+        binding.totalFavotiteTxt.setText(""+shopDashboardModel.data.totalfavorite);
         binding.totalOffersVisitTxt.setText(""+shopDashboardModel.data.offervisitcount);
         binding.totalShopVisitTxt.setText(""+shopDashboardModel.data.shopvisitcount);
         binding.contactVisitTxt.setText(""+shopDashboardModel.data.contactvisitcount);

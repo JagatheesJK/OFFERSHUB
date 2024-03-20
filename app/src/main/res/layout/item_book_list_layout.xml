@@ -154,15 +154,15 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Pending"
-                            android:textSize="11dp"
+                            android:textSize="10dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:background="@drawable/bg_rounded_solid_white"
                             android:backgroundTint="@color/yellow"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp" />
+                            android:paddingStart="2dp"
+                            android:paddingEnd="2dp"
+                            android:paddingTop="1dp"
+                            android:paddingBottom="1dp" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/unreadDotImg"

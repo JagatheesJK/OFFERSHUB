@@ -38,7 +38,73 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/store"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Shop Visits"
+                                        android:textAlignment="center"
+                                        android:textSize="12sp"
+                                        android:layout_marginStart="6dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:padding="20dp">
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/totalShopVisitTxt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="12dp"
                             android:layout_weight="1"
@@ -54,77 +120,32 @@
                                 android:orientation="vertical"
                                 android:gravity="center">
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Total Offers"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
-                                    android:background="@drawable/bg_rounded_top_only"
-                                    android:backgroundTint="@color/light_grey"/>
-
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
                                     android:gravity="center"
-                                    android:padding="20dp">
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
+                                    android:background="@drawable/bg_rounded_top_only"
+                                    android:backgroundTint="@color/light_grey">
 
                                     <androidx.appcompat.widget.AppCompatImageView
-                                        android:layout_width="26dp"
-                                        android:layout_height="26dp"
-                                        app:srcCompat="@drawable/offer"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/favorite"
                                         android:tint="@color/grey"/>
 
                                     <androidx.appcompat.widget.AppCompatTextView
-                                        android:id="@+id/totalOffersTxt"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="0"
-                                        android:textSize="15dp"
-                                        android:textColor="@color/black"
+                                        android:text="Favorite"
                                         android:textAlignment="center"
-                                        android:textStyle="bold"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="16sp"/>
+                                        android:textSize="12sp"
+                                        android:layout_marginStart="6dp"/>
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="12dp"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="6dp"
-                            android:layout_marginEnd="6dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="4dp">
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Total Shop Visits"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
-                                    android:background="@drawable/bg_rounded_top_only"
-                                    android:backgroundTint="@color/light_grey"/>
-
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -132,14 +153,8 @@
                                     android:gravity="center"
                                     android:padding="20dp">
 
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:layout_width="26dp"
-                                        android:layout_height="26dp"
-                                        app:srcCompat="@drawable/store"
-                                        android:tint="@color/grey"/>
-
                                     <androidx.appcompat.widget.AppCompatTextView
-                                        android:id="@+id/totalShopVisitTxt"
+                                        android:id="@+id/totalFavotiteTxt"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="0"
@@ -147,8 +162,7 @@
                                         android:textColor="@color/black"
                                         android:textAlignment="center"
                                         android:textStyle="bold"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="16sp"/>
+                                        android:layout_gravity="center"/>
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -168,7 +182,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/linear1">
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="12dp"
                             android:layout_weight="1"
@@ -183,17 +197,31 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Contact Count"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
                                     android:background="@drawable/bg_rounded_top_only"
-                                    android:backgroundTint="@color/light_grey"/>
+                                    android:backgroundTint="@color/light_grey">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/contact"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Contacts"
+                                        android:textAlignment="center"
+                                        android:textSize="12sp"
+                                        android:layout_marginStart="6dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
 
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
@@ -201,12 +229,6 @@
                                     android:orientation="horizontal"
                                     android:gravity="center"
                                     android:padding="20dp">
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:layout_width="26dp"
-                                        android:layout_height="26dp"
-                                        app:srcCompat="@drawable/contact"
-                                        android:tint="@color/grey"/>
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/contactVisitTxt"
@@ -217,8 +239,7 @@
                                         android:textColor="@color/black"
                                         android:textAlignment="center"
                                         android:textStyle="bold"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="16sp"/>
+                                        android:layout_gravity="center"/>
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -227,7 +248,7 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="12dp"
                             android:layout_weight="1"
@@ -242,17 +263,31 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Map Visit Count"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
                                     android:background="@drawable/bg_rounded_top_only"
-                                    android:backgroundTint="@color/light_grey"/>
+                                    android:backgroundTint="@color/light_grey">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/map"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Map Visit"
+                                        android:textAlignment="center"
+                                        android:textSize="12sp"
+                                        android:layout_marginStart="6dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
 
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
@@ -260,12 +295,6 @@
                                     android:orientation="horizontal"
                                     android:gravity="center"
                                     android:padding="20dp">
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:layout_width="26dp"
-                                        android:layout_height="26dp"
-                                        app:srcCompat="@drawable/map"
-                                        android:tint="@color/grey"/>
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/mapVisitTxt"
@@ -276,8 +305,7 @@
                                         android:textColor="@color/black"
                                         android:textAlignment="center"
                                         android:textStyle="bold"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="16sp"/>
+                                        android:layout_gravity="center"/>
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -296,7 +324,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/linear2">
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="12dp"
                             android:layout_weight="1"
@@ -311,17 +339,31 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Total Offers Visit"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
                                     android:background="@drawable/bg_rounded_top_only"
-                                    android:backgroundTint="@color/light_grey"/>
+                                    android:backgroundTint="@color/light_grey">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/eye"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Total Offers Visit"
+                                        android:textAlignment="center"
+                                        android:textSize="12sp"
+                                        android:layout_marginStart="6dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
 
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
@@ -329,12 +371,6 @@
                                     android:orientation="horizontal"
                                     android:gravity="center"
                                     android:padding="20dp">
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:layout_width="26dp"
-                                        android:layout_height="26dp"
-                                        app:srcCompat="@drawable/eye"
-                                        android:tint="@color/grey"/>
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/totalOffersVisitTxt"
@@ -345,8 +381,7 @@
                                         android:textColor="@color/black"
                                         android:textAlignment="center"
                                         android:textStyle="bold"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="16sp"/>
+                                        android:layout_gravity="center"/>
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -355,7 +390,7 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="12dp"
                             android:layout_weight="1"
@@ -370,17 +405,31 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Order count"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
                                     android:background="@drawable/bg_rounded_top_only"
-                                    android:backgroundTint="@color/light_grey"/>
+                                    android:backgroundTint="@color/light_grey">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/orders"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Total Orders"
+                                        android:textAlignment="center"
+                                        android:textSize="12sp"
+                                        android:layout_marginStart="6dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
 
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
@@ -388,12 +437,6 @@
                                     android:orientation="horizontal"
                                     android:gravity="center"
                                     android:padding="20dp">
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:layout_width="26dp"
-                                        android:layout_height="26dp"
-                                        app:srcCompat="@drawable/orders"
-                                        android:tint="@color/grey"/>
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/totalOrderCountTxt"
@@ -404,8 +447,7 @@
                                         android:textColor="@color/black"
                                         android:textAlignment="center"
                                         android:textStyle="bold"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="16sp"/>
+                                        android:layout_gravity="center"/>
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -424,7 +466,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/linear3">
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="12dp"
                             android:layout_weight="1"
@@ -439,17 +481,31 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Unique user visit"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
                                     android:background="@drawable/bg_rounded_top_only"
-                                    android:backgroundTint="@color/light_grey"/>
+                                    android:backgroundTint="@color/light_grey">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/unique_users"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Unique users"
+                                        android:textAlignment="center"
+                                        android:textSize="12sp"
+                                        android:layout_marginStart="6dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
 
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
@@ -457,12 +513,6 @@
                                     android:orientation="horizontal"
                                     android:gravity="center"
                                     android:padding="20dp">
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:layout_width="26dp"
-                                        android:layout_height="26dp"
-                                        app:srcCompat="@drawable/unique_users"
-                                        android:tint="@color/grey"/>
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/totalUserVisitTxt"
@@ -473,8 +523,7 @@
                                         android:textColor="@color/black"
                                         android:textAlignment="center"
                                         android:textStyle="bold"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="16sp"/>
+                                        android:layout_gravity="center"/>
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -483,7 +532,7 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="12dp"
                             android:layout_weight="1"
@@ -498,17 +547,31 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Repeat user visit"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
                                     android:background="@drawable/bg_rounded_top_only"
-                                    android:backgroundTint="@color/light_grey"/>
+                                    android:backgroundTint="@color/light_grey">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/repeated_users"
+                                        android:tint="@color/grey"/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Repeat users"
+                                        android:textAlignment="center"
+                                        android:textSize="12sp"
+                                        android:layout_marginStart="6dp"/>
+
+                                </androidx.appcompat.widget.LinearLayoutCompat>
 
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
@@ -516,12 +579,6 @@
                                     android:orientation="horizontal"
                                     android:gravity="center"
                                     android:padding="20dp">
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:layout_width="26dp"
-                                        android:layout_height="26dp"
-                                        app:srcCompat="@drawable/repeated_users"
-                                        android:tint="@color/grey"/>
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/repeatUserVisitTxt"
@@ -532,8 +589,7 @@
                                         android:textColor="@color/black"
                                         android:textAlignment="center"
                                         android:textStyle="bold"
-                                        android:layout_gravity="center"
-                                        android:layout_marginStart="16sp"/>
+                                        android:layout_gravity="center"/>
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
