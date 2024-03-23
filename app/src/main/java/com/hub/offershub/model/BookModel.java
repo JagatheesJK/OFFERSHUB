@@ -3,13 +3,50 @@ package com.hub.offershub.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
-public class BookModel {
+public class BookModel implements Parcelable {
     public String status;
     public String message;
     public List<Data> data;
     public int count;
+    public int mobileviewedcount;
+
+    protected BookModel(Parcel in) {
+        status = in.readString();
+        message = in.readString();
+        data = in.createTypedArrayList(Data.CREATOR);
+        count = in.readInt();
+        mobileviewedcount = in.readInt();
+    }
+
+    public static final Creator<BookModel> CREATOR = new Creator<BookModel>() {
+        @Override
+        public BookModel createFromParcel(Parcel in) {
+            return new BookModel(in);
+        }
+
+        @Override
+        public BookModel[] newArray(int size) {
+            return new BookModel[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(status);
+        dest.writeString(message);
+        dest.writeTypedList(data);
+        dest.writeInt(count);
+        dest.writeInt(mobileviewedcount);
+    }
 
     public static class Data implements Parcelable {
         public int id;
@@ -35,6 +72,7 @@ public class BookModel {
         public String shoporder_status;
         public int shop_id;
         public String shop_name;
+        public String subscription_status;
 
         protected Data(Parcel in) {
             id = in.readInt();
@@ -60,6 +98,7 @@ public class BookModel {
             userorder_status = in.readString();
             shoporder_status = in.readString();
             shop_name = in.readString();
+            subscription_status = in.readString();
         }
 
         @Override
@@ -87,6 +126,7 @@ public class BookModel {
             dest.writeString(userorder_status);
             dest.writeString(shoporder_status);
             dest.writeString(shop_name);
+            dest.writeString(subscription_status);
         }
 
         @Override

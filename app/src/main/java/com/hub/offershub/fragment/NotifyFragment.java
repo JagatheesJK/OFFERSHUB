@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
+import com.hub.offershub.R;
 import com.hub.offershub.activity.BookingDetailsActivity;
 import com.hub.offershub.adapter.NotifyAdapter;
 import com.hub.offershub.base.BaseFragment;
@@ -24,12 +25,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NotifyFragment extends BaseFragment implements NotifyListener {
+public class NotifyFragment extends BaseFragment implements View.OnClickListener, NotifyListener {
 
     private FragmentNotifyBinding binding;
     private List<BookModel.Data> list = new ArrayList<>();
     private NotifyAdapter adapter;
     private int page_no = 0;
+    private int mobileviewedcount = 0;
 
     public static NotifyFragment newInstance() {
         NotifyFragment fragment = new NotifyFragment();
@@ -42,6 +44,7 @@ public class NotifyFragment extends BaseFragment implements NotifyListener {
         binding = FragmentNotifyBinding.inflate(getLayoutInflater());
 
 //        init();
+        setListener();
         setUpRecycler();
 
         binding.swipeRefresh.setOnRefreshListener(() -> {
@@ -58,6 +61,10 @@ public class NotifyFragment extends BaseFragment implements NotifyListener {
             commonViewModel.getNotify(makeRequest(), myProgressDialog);
             getNotifyData();
         }
+    }
+
+    private void setListener() {
+        binding.empty.reloadBtn.setOnClickListener(this);
     }
 
     private void setUpRecycler() {
@@ -78,6 +85,9 @@ public class NotifyFragment extends BaseFragment implements NotifyListener {
             if (NotifyFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (bookModel != null) {
                     if(bookModel.status.equals("success")) {
+                        mobileviewedcount = bookModel.mobileviewedcount;
+                        binding.totalNotifyCountTxt.setText("Total Orders : "+bookModel.count);
+                        binding.totalNotifyCountTxt.setVisibility((bookModel.count > 0) ? View.VISIBLE : View.GONE);
                         if (bookModel.data != null) {
                             if (page_no == 0)
                                 list.clear();
@@ -90,6 +100,7 @@ public class NotifyFragment extends BaseFragment implements NotifyListener {
                             binding.notifyRecycler.setVisibility(View.GONE);
                         }
                     } else {
+                        binding.totalNotifyCountTxt.setVisibility(View.GONE);
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.notifyRecycler.setVisibility(View.GONE);
                     }
@@ -130,6 +141,19 @@ public class NotifyFragment extends BaseFragment implements NotifyListener {
     public void onNotifySelect(BookModel.Data model) {
         Intent i = new Intent(getActivity(), BookingDetailsActivity.class);
         i.putExtra("booking_model", model);
+        i.putExtra("mobileviewedcount", mobileviewedcount);
         getActivity().startActivity(i);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.reloadBtn:
+                if (commonViewModel != null)
+                    commonViewModel.getNotify(makeRequest(), myProgressDialog);
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -27,6 +27,7 @@ import com.bumptech.glide.request.target.Target;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.hub.offershub.R;
 import com.hub.offershub.listener.OfferListener;
+import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.CommonMethods;
 
@@ -42,12 +43,14 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     private int selectedPosition = RecyclerView.NO_POSITION;
     String priority;
     private boolean isFirst = true;
+    private BusinessModel.Data businessModel;
 
-    public OfferAdapter(Context context, List<OfferModel.Data> list, OfferListener listener, boolean isActive) {
+    public OfferAdapter(Context context, List<OfferModel.Data> list, OfferListener listener, boolean isActive, BusinessModel.Data businessModel) {
         this.list = list;
         ctx = context;
         this.listener = listener;
         this.isActive = isActive;
+        this.businessModel = businessModel;
         commonMethods = new CommonMethods();
     }
 
@@ -122,17 +125,20 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             holder.discountOfferTxt.setText("OFF "+model.offer_percentage+"%");
 
             holder.offerSwitch.setOnClickListener(v -> {
-                Log.e("Check_JK", "Type selectedPosition Click : "+selectedPosition+" position : "+position);
-                if (selectedPosition != position) {
-                    this.selectedPosition = position;
-                    priority = "1";
+                if (!"Expired".equals(businessModel.subscription_status)) {
+                    holder.offerSwitch.setChecked(true);
+                    if (selectedPosition != position) {
+                        this.selectedPosition = position;
+                        priority = "1";
+                    } else {
+                        selectedPosition = RecyclerView.NO_POSITION;
+                        priority = "0";
+                    }
+                    notifyDataSetChanged();
                 } else {
-                    selectedPosition = RecyclerView.NO_POSITION;
-                    priority = "0";
+                    holder.offerSwitch.setChecked(false);
                 }
-                Log.e("Check_JK", "Type selectedPosition Click After : "+selectedPosition+" position : "+position);
                 listener.onOfferSelect(model, priority);
-                notifyDataSetChanged();
             });
 
             holder.itemView.setOnClickListener(v -> {

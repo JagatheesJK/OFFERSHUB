@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hub.offershub.R;
 import com.hub.offershub.dialogfragment.ExitDialogFragment;
+import com.hub.offershub.dialogfragment.PaymentDialogFragment;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.utils.CommonMethods;
 import com.hub.offershub.utils.loading.MyProgressDialog;
@@ -46,6 +47,7 @@ public class BaseActivity extends AppCompatActivity {
     public CommonMethods commonMethods;
     public ExitDialogFragment exitDialogFragment;
     public MyProgressDialog myProgressDialog;
+    public PaymentDialogFragment paymentDialogFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class BaseActivity extends AppCompatActivity {
         commonMethods = new CommonMethods();
         exitDialogFragment = new ExitDialogFragment();
         myProgressDialog = new MyProgressDialog(BaseActivity.this);
+        paymentDialogFragment = new PaymentDialogFragment();
     }
 
     public static String getPath(Context context, Uri uri) {

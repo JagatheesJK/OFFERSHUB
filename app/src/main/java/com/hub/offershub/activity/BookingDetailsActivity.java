@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityBookingDetailsBinding;
+import com.hub.offershub.dialogfragment.PaymentDialogFragment;
 import com.hub.offershub.model.BookModel;
 
 import org.json.JSONException;
@@ -23,6 +24,7 @@ public class BookingDetailsActivity extends BaseActivity {
 
     private ActivityBookingDetailsBinding binding;
     BookModel.Data model;
+    private int mobileviewedcount;
     private boolean isAccept = false;
 
     @Override
@@ -32,6 +34,7 @@ public class BookingDetailsActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         model = getIntent().getParcelableExtra("booking_model");
+        mobileviewedcount = getIntent().getIntExtra("mobileviewedcount", 0);
         getMutableOrderDetails_shopsVisitData();
         getMutableOrderDetails_MobileNumber_ViewData();
         getMutableOrderDetails_shopConfirmStatusData();
@@ -108,32 +111,50 @@ public class BookingDetailsActivity extends BaseActivity {
         });
 
         binding.mobileEye.setOnClickListener(v->{
-            Map<String, Object> requestData = new HashMap<>();
-            requestData.put("shop_id", model.shop_id);
-            requestData.put("order_id", model.id);
-            commonViewModel.orderDetails_mobilenumber_View(requestData, myProgressDialog);
+            if ("Expired".equals(model.subscription_status)) {
+                if (!paymentDialogFragment.isAdded())
+                    paymentDialogFragment.show(getSupportFragmentManager(), PaymentDialogFragment.TAG);
+            } else if ("Free".equals(model.subscription_status)) {
+                if (mobileviewedcount < 5) {
+                    commonViewModel.orderDetails_mobilenumber_View(makeRequest(true, 0), myProgressDialog);
+                } else {
+                    if (!paymentDialogFragment.isAdded())
+                        paymentDialogFragment.show(getSupportFragmentManager(), PaymentDialogFragment.TAG);
+                }
+            } else {
+                commonViewModel.orderDetails_mobilenumber_View(makeRequest(true, 0), myProgressDialog);
+            }
         });
 
         binding.rejectBtn.setOnClickListener(v->{
-            isAccept = false;
-            Map<String, Object> requestData = new HashMap<>();
-            requestData.put("shop_id", model.shop_id);
-            requestData.put("order_id", model.id);
-            requestData.put("is_accepted", 0);
-
-            commonViewModel.OrderDetails_shopConfirmStatusData(requestData, myProgressDialog);
+            if ("Expired".equals(model.subscription_status)) {
+                if (!paymentDialogFragment.isAdded())
+                    paymentDialogFragment.show(getSupportFragmentManager(), PaymentDialogFragment.TAG);
+            } else {
+                isAccept = false;
+                commonViewModel.OrderDetails_shopConfirmStatusData(makeRequest(false, 2), myProgressDialog);
+            }
         });
 
         binding.acceptBtn.setOnClickListener(v->{
-            isAccept = true;
-            Map<String, Object> requestData = new HashMap<>();
-            requestData.put("shop_id", model.shop_id);
-            requestData.put("order_id", model.id);
-            requestData.put("is_accepted", 1);
-
-            commonViewModel.OrderDetails_shopConfirmStatusData(requestData, myProgressDialog);
+            if ("Expired".equals(model.subscription_status)) {
+                if (!paymentDialogFragment.isAdded())
+                    paymentDialogFragment.show(getSupportFragmentManager(), PaymentDialogFragment.TAG);
+            } else {
+                isAccept = true;
+                commonViewModel.OrderDetails_shopConfirmStatusData(makeRequest(false, 1), myProgressDialog);
+            }
         });
 
+    }
+
+    private Map<String, Object> makeRequest(boolean isMobile, int is_accepted) {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shop_id", model.shop_id);
+        requestData.put("order_id", model.id);
+        if (!isMobile)
+            requestData.put("is_accepted", is_accepted);
+        return requestData;
     }
 
     private void getMutableOrderDetails_shopsVisitData() {

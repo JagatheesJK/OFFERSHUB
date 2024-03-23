@@ -8,7 +8,6 @@ import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hub.offershub.R;
@@ -18,7 +17,7 @@ import com.hub.offershub.utils.CommonMethods;
 
 import java.util.List;
 
-public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapter.ViewHolder> {
+public class PopupSubScriptionAdapter extends RecyclerView.Adapter<PopupSubScriptionAdapter.ViewHolder> {
 
     private List<SubscriptionPackageResponse.SubscriptionPackage> list;
     private Context ctx;
@@ -29,7 +28,7 @@ public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapte
     private boolean isFirst = true;
     SubscriptionPackageResponse.SubscriptionPackage selectedModel;
 
-    public SubScriptionAdapter(Context context, onPlanSelectListener listener, List<SubscriptionPackageResponse.SubscriptionPackage> list) {
+    public PopupSubScriptionAdapter(Context context, onPlanSelectListener listener, List<SubscriptionPackageResponse.SubscriptionPackage> list) {
         this.list = list;
         this.listener = listener;
         ctx = context;
@@ -39,7 +38,7 @@ public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_plan_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_popup_plan_layout, parent, false);
         return new ViewHolder(view);
     }
 
@@ -51,7 +50,6 @@ public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapte
                 selectedModel = model;
             if (model.isActive == 1) {
                 holder.plantitle.setText(model.packageName);
-                holder.planDesc.setText(model.desc.get(0));
                 holder.planAmt.setText("₹ "+model.price);
                 holder.planDays.setText(model.days+" days");
                 holder.planRadio.setChecked(selectedPosition == position);
@@ -66,10 +64,6 @@ public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapte
                 notifyDataSetChanged(); // Notify adapter to update checked state
             }
         });
-
-        holder.viewMoreLinear.setOnClickListener(v -> {
-            listener.onPlanViewMore(model);
-        });
     }
 
     @Override
@@ -83,17 +77,14 @@ public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         AppCompatTextView plantitle;
-        AppCompatTextView planDesc, planAmt,planDays;
+        AppCompatTextView planAmt, planDays;
         RadioButton planRadio;
-        LinearLayoutCompat viewMoreLinear;
         public ViewHolder(View v) {
             super(v);
             plantitle = v.findViewById(R.id.plantitle);
-            planDesc = v.findViewById(R.id.planDesc);
             planAmt = v.findViewById(R.id.planAmt);
             planDays = v.findViewById(R.id.planDays);
             planRadio = v.findViewById(R.id.planRadio);
-            viewMoreLinear = v.findViewById(R.id.viewMoreLinear);
         }
     }
 }

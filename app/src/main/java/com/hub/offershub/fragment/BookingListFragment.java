@@ -20,6 +20,7 @@ import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentBookingListBinding;
 import com.hub.offershub.listener.BookingListener;
 import com.hub.offershub.model.BookModel;
+import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import java.util.ArrayList;
@@ -34,11 +35,12 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
     private BookingAdaper adapter;
     private int page_no = 0;
-    private static String shopID;
+    private int mobileviewedcount = 0;
+    private static BusinessModel.Data businessModel;
 
-    public static BookingListFragment newInstance(String shop_id) {
+    public static BookingListFragment newInstance(BusinessModel.Data model) {
         BookingListFragment fragment = new BookingListFragment();
-        shopID = shop_id;
+        businessModel = model;
         return fragment;
     }
 
@@ -96,8 +98,10 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
             if (BookingListFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (bookModel != null) {
                     if ("success".equals(bookModel.status)) {
+                        mobileviewedcount = bookModel.mobileviewedcount;
                         if (bookModel.data != null) {
                             binding.totalOrderCountTxt.setText("Total Orders : "+bookModel.count);
+                            binding.totalOrderCountTxt.setVisibility((bookModel.count > 0) ? View.VISIBLE : View.GONE);
                             if (page_no == 0)
                                 list.clear();
                             binding.empty.emptyConstraint.setVisibility(View.GONE);
@@ -109,6 +113,7 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
                             binding.bookingRecycler.setVisibility(View.GONE);
                         }
                     } else {
+                        binding.totalOrderCountTxt.setVisibility(View.GONE);
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.bookingRecycler.setVisibility(View.GONE);
                     }
@@ -119,7 +124,7 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
 
     private Map<String, Object> makeRequest() {
         Map<String, Object> requestData = new HashMap<>();
-        requestData.put("shop_id", shopID);
+        requestData.put("shop_id", businessModel.id);
         return requestData;
     }
 
@@ -144,11 +149,10 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onBookingSelect(BookModel.Data model) {
-        model.shop_id =Integer.parseInt(shopID);
-        Log.e("Check_Moorthy","model "+model.id);
-        Log.e("Check_Moorthy","model "+model.shop_id);
+        model.shop_id =Integer.parseInt(businessModel.id);
         Intent i = new Intent(getActivity(), BookingDetailsActivity.class);
         i.putExtra("booking_model",model);
+        i.putExtra("mobileviewedcount", mobileviewedcount);
         getActivity().startActivity(i);
 
     }

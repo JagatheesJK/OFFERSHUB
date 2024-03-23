@@ -103,7 +103,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
                 finish();
             }
             case R.id.nav_offer -> fragment = OfferListFragment.newInstance(model);
-            case R.id.nav_booking_details -> fragment = BookingListFragment.newInstance(model.id);
+            case R.id.nav_booking_details -> fragment = BookingListFragment.newInstance(model);
             case R.id.nav_rating_review -> fragment = RatingFragment.newInstance(model.id);
             case R.id.nav_faq -> fragment = FeedbackFragment.newInstance(model.id);
             case R.id.paymant -> fragment = PaymentFragment.newInstance();

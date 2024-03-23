@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.hub.offershub.R;
 import com.hub.offershub.activity.PaymentConfirmActivity;
+import com.hub.offershub.adapter.PopupSubScriptionAdapter;
 import com.hub.offershub.adapter.SubScriptionAdapter;
 import com.hub.offershub.databinding.FragmentPaymentDialogBinding;
 import com.hub.offershub.listener.onPlanSelectListener;
@@ -35,7 +36,7 @@ public class PaymentDialogFragment extends BottomSheetDialogFragment implements 
     public static final String TAG = PaymentDialogFragment.class.getSimpleName();
     private FragmentPaymentDialogBinding binding;
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
-    SubScriptionAdapter adapter;
+    PopupSubScriptionAdapter adapter;
     public String mobileRandom;
     public CommonViewModel commonViewModel;
     public MyProgressDialog myProgressDialog;
@@ -89,7 +90,7 @@ public class PaymentDialogFragment extends BottomSheetDialogFragment implements 
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.planRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new SubScriptionAdapter(getActivity(),this, list);
+        adapter = new PopupSubScriptionAdapter(getActivity(),this, list);
         binding.planRecycler.setAdapter(adapter);
         setNotify();
     }

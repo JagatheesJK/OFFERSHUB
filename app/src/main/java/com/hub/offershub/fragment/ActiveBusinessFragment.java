@@ -19,6 +19,7 @@ import com.hub.offershub.activity.EditDetailsActivity;
 import com.hub.offershub.adapter.BusinessAdapter;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentActiveBusinessBinding;
+import com.hub.offershub.dialogfragment.PaymentDialogFragment;
 import com.hub.offershub.listener.CommonListener;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
@@ -100,19 +101,29 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     @Override
     public void onItemEdited(Object obj) {
         BusinessModel.Data model = (BusinessModel.Data) obj;
-        OfferModel.Data offerModel = null;
-        Intent i = new Intent(getActivity(), EditDetailsActivity.class);
-        i.putExtra("shop_model", model);
-        i.putExtra("offer_model", offerModel);
-        i.putExtra("isShop", true);
-        startActivity(i);
+        if ("Expired".equals(model.subscription_status)) {
+            if (!paymentDialogFragment.isAdded())
+                paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
+        } else {
+            OfferModel.Data offerModel = null;
+            Intent i = new Intent(getActivity(), EditDetailsActivity.class);
+            i.putExtra("shop_model", model);
+            i.putExtra("offer_model", offerModel);
+            i.putExtra("isShop", true);
+            startActivity(i);
+        }
     }
 
     BusinessModel.Data deleteModel;
     @Override
     public void onItemRemoved(Object obj) {
         deleteModel = (BusinessModel.Data) obj;
-        commonViewModel.getDeleteShop(makeDeleteRequest(deleteModel.id), myProgressDialog);
+        if ("Expired".equals(deleteModel.subscription_status)) {
+            if (!paymentDialogFragment.isAdded())
+                paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
+        } else {
+            commonViewModel.getDeleteShop(makeDeleteRequest(deleteModel.id), myProgressDialog);
+        }
     }
 
     private void getActiveData() {
@@ -124,6 +135,7 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
                             if (page_no == 0)
                                 list.clear();
                             binding.empty.emptyConstraint.setVisibility(View.GONE);
+                            binding.businessShimmerLayout.setVisibility(View.GONE);
                             binding.businessRecycler.setVisibility(View.VISIBLE);
                             list.addAll(businessModel.data);
                             setNotify();
