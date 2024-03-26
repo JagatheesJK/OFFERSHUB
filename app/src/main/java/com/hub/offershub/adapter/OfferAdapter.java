@@ -42,7 +42,6 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     private boolean isActive = false;
     private int selectedPosition = RecyclerView.NO_POSITION;
     String priority;
-    private boolean isFirst = true;
     private BusinessModel.Data businessModel;
 
     public OfferAdapter(Context context, List<OfferModel.Data> list, OfferListener listener, boolean isActive, BusinessModel.Data businessModel) {
@@ -65,9 +64,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OfferModel.Data model = list.get(position);
         if (model != null) {
-            if (isFirst) {
-                isFirst = false;
-                selectedPosition = (model.is_show_mainpage == 1) ? position : RecyclerView.NO_POSITION;
+            if (selectedPosition != position) {
+                if (selectedPosition == RecyclerView.NO_POSITION)
+                    selectedPosition = (model.is_show_mainpage == 1) ? position : RecyclerView.NO_POSITION;
             }
             Log.e("Check_JK", "Type selectedPosition : "+selectedPosition+" position : "+position);
             holder.statusTxt.setVisibility(isActive ? View.GONE : View.VISIBLE);

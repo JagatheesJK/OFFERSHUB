@@ -2,12 +2,11 @@ package com.hub.offershub.fragment;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.chart.all.anychart.AnyChart;
 import com.chart.all.anychart.AnyChartView;
@@ -17,27 +16,33 @@ import com.chart.all.anychart.chart.common.listener.Event;
 import com.chart.all.anychart.chart.common.listener.ListenersInterface;
 import com.chart.all.anychart.charts.Cartesian;
 import com.chart.all.anychart.charts.Pie;
+import com.chart.all.anychart.core.cartesian.series.Bar;
 import com.chart.all.anychart.core.cartesian.series.Column;
-import com.chart.all.anychart.core.cartesian.series.Line;
 import com.chart.all.anychart.data.Mapping;
 import com.chart.all.anychart.data.Set;
 import com.chart.all.anychart.enums.Anchor;
 import com.chart.all.anychart.enums.HoverMode;
-import com.chart.all.anychart.enums.MarkerType;
 import com.chart.all.anychart.enums.Position;
 import com.chart.all.anychart.enums.TooltipPositionMode;
-import com.chart.all.anychart.graphics.vector.Stroke;
+import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentOfferDashboardBinding;
+import com.hub.offershub.model.OfferDashboardModel;
+import com.hub.offershub.model.OfferModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class OfferDashboardFragment extends Fragment {
+public class OfferDashboardFragment extends BaseFragment {
 
     private FragmentOfferDashboardBinding binding;
+    private OfferDashboardModel offerDashboardModel;
+    private static OfferModel.Data offerModel;
 
-    public static OfferDashboardFragment newInstance() {
+    public static OfferDashboardFragment newInstance(OfferModel.Data model) {
         OfferDashboardFragment fragment = new OfferDashboardFragment();
+        offerModel = model;
         return fragment;
     }
 
@@ -46,36 +51,154 @@ public class OfferDashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOfferDashboardBinding.inflate(getLayoutInflater());
-        newPieChart();
-        newMultipleBarChart();
-        newLineChart();
+        commonViewModel.getOfferDashData(makeRequest(), myProgressDialog);
+        getOfferDashData();
+
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+            binding.swipeRefresh.setRefreshing(false);
+            commonViewModel.getOfferDashData(makeRequest(), myProgressDialog);
+            getOfferDashData();
+        });
         return binding.getRoot();
     }
 
-    private void newPieChart() {
+    private void initUI() {
+        binding.totalOffersVisitTxt.setText(""+offerDashboardModel.data.offervisitcount);
+        binding.totalFavotiteTxt.setText(""+offerDashboardModel.data.totalfavorite);
+        binding.totalOrdersTxt.setText(""+offerDashboardModel.data.totalorders);
+        binding.repeatUserVisitTxt.setText(""+offerDashboardModel.data.repeatedusers);
+        binding.totalUsersTxt.setText(""+offerDashboardModel.data.totalusers);
+//        binding.totalOrderCountTxt.setText(""+offerDashboardModel.data.totalorders);
+    }
+
+    private void visitorDetailsBar() {
         AnyChartView chart1 = new AnyChartView(requireContext());
-        chart1.setProgressBar(binding.progressBar);
+        chart1.setProgressBar(binding.visitorProgressBar);
+        Cartesian cartesian = AnyChart.column();
 
+        if (offerDashboardModel.visitchart.size() > 7) {
+            cartesian.xScroller(true);
+            cartesian.xScroller().orientation("top");
+            cartesian.xScroller().thumbs(true);
+            cartesian.xScroller().autoHide(true);
+        }
+
+        // set the bar height
+        cartesian.xScroller().minHeight(2);
+        cartesian.xScroller().maxHeight(35);
+
+        // prevent the range changing
+        cartesian.xScroller().allowRangeChange(false);
+        cartesian.pointWidth(40);
+        cartesian.xZoom().setToPointsCount(7, true, null);
+
+        List<DataEntry> data = new ArrayList<>();
+        for (int i=0; i < offerDashboardModel.visitchart.size(); i++) {
+            data.add(new ValueDataEntry(offerDashboardModel.visitchart.get(i).day, offerDashboardModel.visitchart.get(i).count));
+        }
+
+        Column column = cartesian.column(data);
+        column.color("#387ADF");
+//        column.labels(true); // For bar value showing
+        column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .format("{%Value}{groupsSeparator: }");
+
+        cartesian.animation(false);
+        //cartesian.title("Top 10 Cosmetic Products by Revenue");
+        cartesian.yScale().minimum(0d);
+        //cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+        cartesian.xAxis(0).labels().fontSize(11).adjustFontSize(true);
+
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+//        cartesian.xAxis(0).title("Day");
+//        cartesian.yAxis(0).title("Value");
+
+        cartesian.draw(true);
+        binding.visitorBarChart.setVisibility(View.VISIBLE);
+        chart1.setChart(cartesian);
+        binding.visitorBarChart.addView(chart1);
+    }
+
+    private void ageBarChart() {
+        AnyChartView anyChartView = new AnyChartView(requireContext());
+        anyChartView.setProgressBar(binding.ageProgressBar);
+
+        Cartesian vertical = AnyChart.vertical();
+//        vertical.xScroller(true);
+//        vertical.xScroller().orientation("top");
+//        vertical.xScroller().thumbs(false);
+
+        // prevent the range changing
+//        vertical.xScroller().allowRangeChange(false);
+        vertical.pointWidth(25);
+//        vertical.xZoom().setToPointsCount(3, true, null);
+
+        /*vertical.animation(true)
+                .title("Vertical Combination of Bar and Jump Line Chart");*/
+        List<DataEntry> data = new ArrayList<>();
+        for (int i=0; i < offerDashboardModel.agechart.size(); i++) {
+            data.add(new ValueDataEntry(offerDashboardModel.agechart.get(i).age, offerDashboardModel.agechart.get(i).value));
+        }
+
+        Set set = Set.instantiate();
+        set.data(data);
+        Mapping barData = set.mapAs("{ x: 'x', value: 'value' }");
+        Mapping jumpLineData = set.mapAs("{ x: 'x', value: 'jumpLine' }");
+
+        Bar bar = vertical.bar(barData);
+        bar.color("#387ADF");
+//        bar.labels().format("${%Value} mln");
+
+        vertical.yScale().minimum(0d);
+
+        vertical.labels(false);
+
+        vertical.interactivity().hoverMode(HoverMode.BY_X);
+
+        vertical.xAxis(true);
+        vertical.yAxis(false);
+        vertical.yAxis(0).labels().format("${%Value} mln");
+
+        anyChartView.setChart(vertical);
+        binding.ageChartView.addView(anyChartView);
+    }
+
+    private void genderPieChart() {
+        AnyChartView chart1 = new AnyChartView(requireContext());
+        chart1.setProgressBar(binding.genderProgressBar);
         Pie pie = AnyChart.pie();
-
+        pie.legend(false);
         pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
             @Override
             public void onClick(Event event) {
-                Toast.makeText(getActivity(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
             }
         });
 
+        if (offerDashboardModel.genderpiechart.size() > 0)
+            binding.genderPercentageConstraint.setVisibility(View.VISIBLE);
+        else
+            binding.genderPercentageConstraint.setVisibility(View.GONE);
+
         List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Apples", 6371664));
-        data.add(new ValueDataEntry("Pears", 789622));
-        data.add(new ValueDataEntry("Bananas", 7216301));
-        data.add(new ValueDataEntry("Grapes", 1486621));
-        data.add(new ValueDataEntry("Oranges", 1200000));
+        for (int i = 0; i < offerDashboardModel.genderpiechart.size(); i++) {
+            if (i == 0) {
+                binding.genderWomenValue.setText(getWomenPercentage(offerDashboardModel.genderpiechart.get(0).value, offerDashboardModel.genderpiechart.get(1).value)+"%");
+            } else if (i == 1) {
+                binding.genderMenValue.setText(getMenPercentage(offerDashboardModel.genderpiechart.get(0).value, offerDashboardModel.genderpiechart.get(1).value)+"%");
+            }
+            data.add(new ValueDataEntry(offerDashboardModel.genderpiechart.get(i).gender, offerDashboardModel.genderpiechart.get(i).value));
+        }
 
         pie.data(data);
-
         //pie.title("Fruits imported in 2015 (in kg)");
-
         pie.labels().position("inside");
 
         //pie.legend().title().enabled(true);
@@ -90,170 +213,132 @@ public class OfferDashboardFragment extends Fragment {
         pie.draw(true);
 //        anyChartView.setVisibility(View.VISIBLE);
         chart1.setChart(pie);
-        binding.anyChartView.addView(chart1);
+        binding.genderChartView.addView(chart1);
     }
 
-    private void newLineChart() {
+    private void orderDetailsBar() {
         AnyChartView chart1 = new AnyChartView(requireContext());
-//        AnyChartView anyChartView = binding.lineChart1;
-        chart1.setProgressBar(binding.lineProgressBar);
-
-        Cartesian cartesian = AnyChart.line();
-
-        cartesian.animation(true);
-
-        cartesian.padding(10d, 20d, 5d, 20d);
-
-        cartesian.crosshair().enabled(true);
-        cartesian.crosshair()
-                .yLabel(true)
-                // TODO ystroke
-                .yStroke((Stroke) null, null, null, (String) null, (String) null);
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-
-        // cartesian.title("Trend of Sales of the Most Popular Products of ACME Corp.");
-
-        cartesian.yAxis(0).title("Number of Bottles Sold (thousands)");
-        cartesian.xAxis(0).labels().padding(5d, 5d, 5d, 5d);
-
-        List<DataEntry> seriesData = new ArrayList<>();
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1986", 3.6, 2.3, 2.8));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1987", 7.1, 4.0, 4.1));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1988", 8.5, 6.2, 5.1));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1989", 9.2, 11.8, 6.5));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1990", 10.1, 13.0, 12.5));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1991", 11.6, 13.9, 18.0));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1992", 16.4, 18.0, 21.0));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1993", 18.0, 23.3, 20.3));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1994", 13.2, 24.7, 19.2));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1995", 12.0, 18.0, 14.4));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1996", 3.2, 15.1, 9.2));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1997", 4.1, 11.3, 5.9));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1998", 6.3, 14.2, 5.2));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("1999", 9.4, 13.7, 4.7));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2000", 11.5, 9.9, 4.2));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2001", 13.5, 12.1, 1.2));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2002", 14.8, 13.5, 5.4));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2003", 16.6, 15.1, 6.3));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2004", 18.1, 17.9, 8.9));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2005", 17.0, 18.9, 10.1));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2006", 16.6, 20.3, 11.5));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2007", 14.1, 20.7, 12.2));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2008", 15.7, 21.6, 10));
-        seriesData.add(new OfferDashboardFragment.CustomDataEntry("2009", 12.0, 22.5, 8.9));
-
-        Set set = Set.instantiate();
-        set.data(seriesData);
-        Mapping series1Mapping = set.mapAs("{ x: 'x', value: 'value' }");
-        Mapping series2Mapping = set.mapAs("{ x: 'x', value: 'value2' }");
-        Mapping series3Mapping = set.mapAs("{ x: 'x', value: 'value3' }");
-
-        Line series1 = cartesian.line(series1Mapping);
-        series1.name("Brandy");
-        series1.hovered().markers().enabled(true);
-        series1.hovered().markers()
-                .type(MarkerType.CIRCLE)
-                .size(4d);
-        series1.tooltip()
-                .position("right")
-                .anchor(Anchor.LEFT_CENTER)
-                .offsetX(5d)
-                .offsetY(5d);
-
-        Line series2 = cartesian.line(series2Mapping);
-        series2.name("Whiskey");
-        series2.hovered().markers().enabled(true);
-        series2.hovered().markers()
-                .type(MarkerType.CIRCLE)
-                .size(4d);
-        series2.tooltip()
-                .position("right")
-                .anchor(Anchor.LEFT_CENTER)
-                .offsetX(5d)
-                .offsetY(5d);
-
-        Line series3 = cartesian.line(series3Mapping);
-        series3.name("Tequila");
-        series3.hovered().markers().enabled(true);
-        series3.hovered().markers()
-                .type(MarkerType.CIRCLE)
-                .size(4d);
-        series3.tooltip()
-                .position("right")
-                .anchor(Anchor.LEFT_CENTER)
-                .offsetX(5d)
-                .offsetY(5d);
-
-        cartesian.legend().enabled(true);
-        cartesian.legend().fontSize(13d);
-        cartesian.legend().padding(0d, 0d, 10d, 0d);
-
-        cartesian.draw(true);
-//        anyChartView.setVisibility(View.VISIBLE);
-        chart1.setChart(cartesian);
-        binding.lineChart1.addView(chart1);
-    }
-
-    private void newMultipleBarChart() {
-        AnyChartView chart1 = new AnyChartView(requireContext());
-//        binding.anyChartView1.addView(chart1);
-        chart1.setProgressBar(binding.progressBar);
-
+        chart1.setProgressBar(binding.orderProgressBar);
         Cartesian cartesian = AnyChart.column();
 
+        if (offerDashboardModel.orderdetails.size() > 7) {
+            cartesian.xScroller(true);
+            cartesian.xScroller().orientation("top");
+            cartesian.xScroller().thumbs(true);
+            cartesian.xScroller().autoHide(true);
+        }
+
+        // prevent the range changing
+        cartesian.xScroller().allowRangeChange(false);
+        cartesian.pointWidth(40);
+        cartesian.xZoom().setToPointsCount(7, true, null);
+
         List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Rouge", 80540));
-        data.add(new ValueDataEntry("Foundation", 94190));
-        data.add(new ValueDataEntry("Mascara", 102610));
-        data.add(new ValueDataEntry("Lip gloss", 110430));
-        data.add(new ValueDataEntry("Lipstick", 128000));
-        data.add(new ValueDataEntry("Nail polish", 143760));
-        data.add(new ValueDataEntry("Eyebrow pencil", 170670));
-        data.add(new ValueDataEntry("Eyeliner", 213210));
-        data.add(new ValueDataEntry("Eyeshadows", 249980));
+        for (int i=0; i < offerDashboardModel.orderdetails.size(); i++) {
+            data.add(new ValueDataEntry(offerDashboardModel.orderdetails.get(i).day, offerDashboardModel.orderdetails.get(i).count));
+        }
 
         Column column = cartesian.column(data);
-
+        column.color("#387ADF");
+//        column.labels(true); // For bar value showing
         column.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0d)
                 .offsetY(5d)
-                .format("${%Value}{groupsSeparator: }");
+                .format("{%Value}{groupsSeparator: }");
 
         cartesian.animation(true);
         //cartesian.title("Top 10 Cosmetic Products by Revenue");
-
         cartesian.yScale().minimum(0d);
-
         //cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+        cartesian.xAxis(0).labels().fontSize(11).adjustFontSize(true);
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
         cartesian.interactivity().hoverMode(HoverMode.BY_X);
 
-        cartesian.xAxis(0).title("Product");
-        cartesian.yAxis(0).title("Revenue");
+//        cartesian.xAxis(0).title("Day");
+//        cartesian.yAxis(0).title("Value");
 
         cartesian.draw(true);
-        binding.anyChartView1.setVisibility(View.VISIBLE);
+        binding.orderBarChart1.setVisibility(View.VISIBLE);
         chart1.setChart(cartesian);
-        binding.anyChartView1.addView(chart1);
+        binding.orderBarChart1.addView(chart1);
     }
 
-    private class CustomDataEntry extends ValueDataEntry {
+    private Map<String, Object> makeRequest() {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("offer_id", offerModel.offer_id);
+        return requestData;
+    }
 
-        CustomDataEntry(String x, Number value, Number value2, Number value3) {
-            super(x, value);
-            setValue("value2", value2);
-            setValue("value3", value3);
-        }
+    private void getOfferDashData() {
+        commonViewModel.getMutableOfferDashData().observe(getViewLifecycleOwner(), offerDashboardModel -> {
+            if (OfferDashboardFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (offerDashboardModel != null) {
+                    if(offerDashboardModel.status.equals("success")) {
+                        this.offerDashboardModel = offerDashboardModel;
+
+                        initUI();
+                        if (!offerDashboardModel.visitchart.isEmpty()) {
+                            binding.barChartll.setVisibility(View.VISIBLE);
+                            visitorDetailsBar();
+                        } else {
+                            binding.barChartll.setVisibility(View.GONE);
+                        }
+                        if (!offerDashboardModel.agechart.isEmpty()) {
+                            binding.ageChartView.setVisibility(View.VISIBLE);
+                            ageBarChart();
+                        } else {
+                            binding.ageChartView.setVisibility(View.GONE);
+                        }
+                        if (!offerDashboardModel.genderpiechart.isEmpty()) {
+                            binding.genderPieChart.setVisibility(View.VISIBLE);
+                            genderPieChart();
+                        } else {
+                            binding.genderPieChart.setVisibility(View.GONE);
+                        }
+                        if (!offerDashboardModel.orderdetails.isEmpty()) {
+                            binding.ordersBarChartLinear.setVisibility(View.VISIBLE);
+                            orderDetailsBar();
+                        } else
+                            binding.ordersBarChartLinear.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getActivity().setTitle("Offer Dashboard");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (commonViewModel != null) {
+            commonViewModel.getMutableOfferDashData().removeObservers(getViewLifecycleOwner());
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (commonViewModel != null) {
+            commonViewModel.getMutableOfferDashData().removeObservers(getViewLifecycleOwner());
+        }
+    }
+
+    private int getMenPercentage(int men, int women) {
+        int totalCount = men + women;
+        return (int) ((double) men / totalCount * 100);
+    }
+
+    private int getWomenPercentage(int men, int women) {
+        int totalCount = men + women;
+        return (int) ((double) women / totalCount * 100);
     }
 }

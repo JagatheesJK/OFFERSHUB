@@ -13,7 +13,10 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -630,7 +633,25 @@
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/barChart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+
+                        <com.hub.offershub.utils.anyviewchart.ScrollableAnyChartView
+                            android:id="@+id/visitorBarChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="230dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintTop_toBottomOf="@+id/genderTitleTxt"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ProgressBar
+                            android:id="@+id/visitorProgressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -661,7 +682,25 @@
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/ageBarChart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+
+                        <com.hub.offershub.utils.anyviewchart.ScrollableAnyChartView
+                            android:id="@+id/ageChartView"
+                            android:layout_width="match_parent"
+                            android:layout_height="230dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintTop_toBottomOf="@+id/genderTitleTxt"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ProgressBar
+                            android:id="@+id/ageProgressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -1102,7 +1141,25 @@
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/orderBarChart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+
+                        <com.hub.offershub.utils.anyviewchart.ScrollableAnyChartView
+                            android:id="@+id/orderBarChart1"
+                            android:layout_width="match_parent"
+                            android:layout_height="230dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintTop_toBottomOf="@+id/genderTitleTxt"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ProgressBar
+                            android:id="@+id/orderProgressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 

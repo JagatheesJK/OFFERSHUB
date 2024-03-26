@@ -26,7 +26,7 @@ import com.chart.all.anychart.core.Chart;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 
-public final class AnyChartView extends FrameLayout {
+public class AnyChartView extends FrameLayout {
 
     public interface JsListener {
         void onJsLineAdd(String jsLine);

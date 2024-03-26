@@ -6,6 +6,7 @@ import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.FeedbackModel;
+import com.hub.offershub.model.OfferDashboardModel;
 import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
@@ -176,6 +177,11 @@ public interface API {
 
     @POST("shopDashboard")
     Call<ShopDashboardModel> getShopsDashData(
+            @Body Map<String, Object> body
+    );
+
+    @POST("offerInsight")
+    Call<OfferDashboardModel> getOfferDashData(
             @Body Map<String, Object> body
     );
 

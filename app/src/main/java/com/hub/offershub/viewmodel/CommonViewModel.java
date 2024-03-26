@@ -18,6 +18,7 @@ import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.CategoryResponse;
 import com.hub.offershub.model.FeedbackModel;
+import com.hub.offershub.model.OfferDashboardModel;
 import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
@@ -76,6 +77,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableorderDetails_mobilenumber_ViewData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableOrderDetails_shopConfirmStatusData = new MutableLiveData<>();
     private final MutableLiveData<ShopDashboardModel> mutableShopDashData = new MutableLiveData<>();
+    private final MutableLiveData<OfferDashboardModel> mutableOfferDashData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutableLoginCheck = new MutableLiveData<>();
     private final MutableLiveData<SubscriptionPackageResponse> mutableSubscriptionData = new MutableLiveData<>();
     private final MutableLiveData<BookModel> mutableNotifyData = new MutableLiveData<>();
@@ -1472,6 +1474,47 @@ public class CommonViewModel extends AndroidViewModel {
 
     }
 
+    public void getOfferDashData(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JK", "getOfferDashData");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Log.e("Check_JKUpdate", "getOfferDashData onPreExecute");
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<OfferDashboardModel> call = apiInterface.getOfferDashData(requestData);
+                call.enqueue(new Callback<OfferDashboardModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<OfferDashboardModel> call, @NonNull Response<OfferDashboardModel> response) {
+                        Log.e("Check_JK", "getOfferDashData onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableOfferDashData.postValue(response.body());
+                        } else
+                            mutableOfferDashData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<OfferDashboardModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JK", "getOfferDashData Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
     public void loginCheck(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
         Log.e("Check_JK", "loginCheck requestData : "+new Gson().toJson(requestData));
         new AsyncTask<String, String, String>() {
@@ -1723,6 +1766,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<ShopDashboardModel> getMutableShopDashData() {
         return mutableShopDashData;
+    }
+
+    public MutableLiveData<OfferDashboardModel> getMutableOfferDashData() {
+        return mutableOfferDashData;
     }
 
     public MutableLiveData<SubscriptionPackageResponse> getMutableSubscriptionData() {

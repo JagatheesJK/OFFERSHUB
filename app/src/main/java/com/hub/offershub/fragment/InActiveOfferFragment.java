@@ -189,10 +189,16 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onOfferInSight(Object obj) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_container, new OfferDashboardFragment());
-        transaction.commit();
+        OfferModel.Data model = (OfferModel.Data) obj;
+        if ("Expired".equals(businessModel.subscription_status)) {
+            if (!paymentDialogFragment.isAdded())
+                paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
+        } else {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.fragment_container, OfferDashboardFragment.newInstance(model));
+            transaction.commit();
+        }
     }
 
     @Override

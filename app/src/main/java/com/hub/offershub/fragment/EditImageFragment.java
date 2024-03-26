@@ -424,6 +424,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                     binding.addofferImg2.setVisibility(View.GONE);
                                     binding.editofferDelete2.setVisibility(View.VISIBLE);
                                     binding.editofferDelete2.setTag(jsonObject.data.get(i).id);
+                                    binding.offerImgStatus2.setVisibility(View.VISIBLE);
                                     if ("Verified".equals(jsonObject.data.get(i).adminverifystatus)) {
                                         binding.offerImgStatus2.setImageResource(R.drawable.ic_approval_badge);
                                         int tintColor = ContextCompat.getColor(getActivity(), R.color.green);
@@ -442,6 +443,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                     binding.addofferImg3.setVisibility(View.GONE);
                                     binding.editofferDelete3.setVisibility(View.VISIBLE);
                                     binding.editofferDelete3.setTag(jsonObject.data.get(i).id);
+                                    binding.offerImgStatus3.setVisibility(View.VISIBLE);
                                     if ("Verified".equals(jsonObject.data.get(i).adminverifystatus)) {
                                         binding.offerImgStatus3.setImageResource(R.drawable.ic_approval_badge);
                                         int tintColor = ContextCompat.getColor(getActivity(), R.color.green);

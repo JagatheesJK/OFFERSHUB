@@ -62,7 +62,7 @@ public class ShopDetailsFragment extends Fragment {
                 case 1:
                     return new OfferDashboardFragment();
             }
-            return new ActiveBusinessFragment();
+            return ShopDashboardFragment.newInstance(businessModel);
         }
 
         @Override

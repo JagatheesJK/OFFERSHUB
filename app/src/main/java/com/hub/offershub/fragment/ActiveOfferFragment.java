@@ -226,13 +226,14 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onOfferInSight(Object obj) {
+        OfferModel.Data model = (OfferModel.Data) obj;
         if ("Expired".equals(businessModel.subscription_status)) {
             if (!paymentDialogFragment.isAdded())
                 paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
         } else {
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.addToBackStack(null);
-            transaction.replace(R.id.fragment_container, new OfferDashboardFragment());
+            transaction.replace(R.id.fragment_container, OfferDashboardFragment.newInstance(model));
             transaction.commit();
         }
     }

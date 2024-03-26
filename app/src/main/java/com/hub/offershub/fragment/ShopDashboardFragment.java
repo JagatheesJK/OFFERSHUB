@@ -2,7 +2,6 @@ package com.hub.offershub.fragment;
 
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 
 import android.view.LayoutInflater;
@@ -17,20 +16,14 @@ import com.chart.all.anychart.chart.common.listener.Event;
 import com.chart.all.anychart.chart.common.listener.ListenersInterface;
 import com.chart.all.anychart.charts.Cartesian;
 import com.chart.all.anychart.charts.Pie;
+import com.chart.all.anychart.core.cartesian.series.Bar;
 import com.chart.all.anychart.core.cartesian.series.Column;
+import com.chart.all.anychart.data.Mapping;
+import com.chart.all.anychart.data.Set;
 import com.chart.all.anychart.enums.Anchor;
 import com.chart.all.anychart.enums.HoverMode;
 import com.chart.all.anychart.enums.Position;
 import com.chart.all.anychart.enums.TooltipPositionMode;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.hub.offershub.R;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentShopDashboardBinding;
 import com.hub.offershub.model.BusinessModel;
@@ -82,42 +75,119 @@ public class ShopDashboardFragment extends BaseFragment {
         ratingData();
     }
 
-    private void ageBarChart() {
+    private void visitorDetailsBar() {
         AnyChartView chart1 = new AnyChartView(requireContext());
-        //chart1.setProgressBar(binding.progressBar);
+        chart1.setProgressBar(binding.visitorProgressBar);
         Cartesian cartesian = AnyChart.column();
 
+        if (shopDashboardModel.visitchart.size() > 7) {
+            cartesian.xScroller(true);
+            cartesian.xScroller().orientation("top");
+            cartesian.xScroller().thumbs(true);
+            cartesian.xScroller().autoHide(true);
+        }
+
+        // set the bar height
+        cartesian.xScroller().minHeight(2);
+        cartesian.xScroller().maxHeight(35);
+
+        // prevent the range changing
+        cartesian.xScroller().allowRangeChange(false);
+        cartesian.pointWidth(40);
+        cartesian.xZoom().setToPointsCount(7, true, null);
+
         List<DataEntry> data = new ArrayList<>();
-        for (int i=0; i < shopDashboardModel.agechart.size(); i++) {
-            data.add(new ValueDataEntry(shopDashboardModel.agechart.get(i).age, shopDashboardModel.agechart.get(i).value));
+        for (int i=0; i < shopDashboardModel.visitchart.size(); i++) {
+            data.add(new ValueDataEntry(shopDashboardModel.visitchart.get(i).day, shopDashboardModel.visitchart.get(i).count));
         }
 
         Column column = cartesian.column(data);
+        column.color("#387ADF");
+//        column.labels(true); // For bar value showing
         column.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0d)
-                .offsetY(5d);
+                .offsetY(5d)
+                .format("{%Value}{groupsSeparator: }");
 
-        cartesian.animation(true);
+        cartesian.animation(false);
         //cartesian.title("Top 10 Cosmetic Products by Revenue");
         cartesian.yScale().minimum(0d);
         //cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+        cartesian.xAxis(0).labels().fontSize(11).adjustFontSize(true);
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
         cartesian.interactivity().hoverMode(HoverMode.BY_X);
 
-        cartesian.xAxis(0).title("Age");
-        cartesian.yAxis(0).title("Value");
+//        cartesian.xAxis(0).title("Day");
+//        cartesian.yAxis(0).title("Value");
 
         cartesian.draw(true);
-        //binding.anyChartView.setVisibility(View.VISIBLE);
+        binding.visitorBarChart.setVisibility(View.VISIBLE);
         chart1.setChart(cartesian);
-        //binding.anyChartView.addView(chart1);
+        binding.visitorBarChart.addView(chart1);
     }
 
-    private void newGenderPieChart() {
+    private void ageBarChart() {
+        AnyChartView anyChartView = new AnyChartView(requireContext());
+        anyChartView.setProgressBar(binding.ageProgressBar);
+
+        Cartesian vertical = AnyChart.vertical();
+//        vertical.xScroller(true);
+//        vertical.xScroller().orientation("top");
+//        vertical.xScroller().thumbs(false);
+
+        // prevent the range changing
+//        vertical.xScroller().allowRangeChange(false);
+        vertical.pointWidth(25);
+//        vertical.xZoom().setToPointsCount(3, true, null);
+
+        /*vertical.animation(true)
+                .title("Vertical Combination of Bar and Jump Line Chart");*/
+        List<DataEntry> data = new ArrayList<>();
+        for (int i=0; i < shopDashboardModel.agechart.size(); i++) {
+            data.add(new ValueDataEntry(shopDashboardModel.agechart.get(i).age, shopDashboardModel.agechart.get(i).value));
+        }
+
+        Set set = Set.instantiate();
+        set.data(data);
+        Mapping barData = set.mapAs("{ x: 'x', value: 'value' }");
+        Mapping jumpLineData = set.mapAs("{ x: 'x', value: 'jumpLine' }");
+
+        Bar bar = vertical.bar(barData);
+        bar.color("#387ADF");
+//        bar.labels().format("${%Value} mln");
+
+        /*JumpLine jumpLine = vertical.jumpLine(jumpLineData);
+        jumpLine.stroke("2 #60727B");
+        jumpLine.labels().enabled(false);*/
+
+        vertical.yScale().minimum(0d);
+
+        vertical.labels(false);
+
+        /*vertical.tooltip()
+                .displayMode(TooltipDisplayMode.UNION)
+                .positionMode(TooltipPositionMode.POINT)
+                .unionFormat(
+                        "function() {\n" +
+                                "      return 'Plain: $' + this.points[1].value + ' mln' +\n" +
+                                "        '\\n' + 'Fact: $' + this.points[0].value + ' mln';\n" +
+                                "    }");*/
+
+        vertical.interactivity().hoverMode(HoverMode.BY_X);
+
+        vertical.xAxis(true);
+        vertical.yAxis(false);
+        vertical.yAxis(0).labels().format("${%Value} mln");
+
+        anyChartView.setChart(vertical);
+        binding.ageChartView.addView(anyChartView);
+    }
+
+    private void genderPieChart() {
         AnyChartView chart1 = new AnyChartView(requireContext());
         chart1.setProgressBar(binding.genderProgressBar);
         Pie pie = AnyChart.pie();
@@ -168,42 +238,6 @@ public class ShopDashboardFragment extends BaseFragment {
         binding.genderChartView.addView(chart1);
     }
 
-    private void newMultipleBarChart() {
-        AnyChartView chart1 = new AnyChartView(requireContext());
-        //chart1.setProgressBar(binding.progressBar);
-        Cartesian cartesian = AnyChart.column();
-
-        List<DataEntry> data = new ArrayList<>();
-        for (int i=0; i < shopDashboardModel.visitchart.size(); i++) {
-            data.add(new ValueDataEntry(shopDashboardModel.visitchart.get(i).day, shopDashboardModel.visitchart.get(i).count));
-        }
-
-        Column column = cartesian.column(data);
-        column.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0d)
-                .offsetY(5d)
-                .format("${%Value}{groupsSeparator: }");
-
-        cartesian.animation(true);
-        //cartesian.title("Top 10 Cosmetic Products by Revenue");
-        cartesian.yScale().minimum(0d);
-        //cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-        cartesian.interactivity().hoverMode(HoverMode.BY_X);
-
-        cartesian.xAxis(0).title("Day");
-        cartesian.yAxis(0).title("Value");
-
-        cartesian.draw(true);
-        //binding.anyChartView1.setVisibility(View.VISIBLE);
-        chart1.setChart(cartesian);
-        //binding.anyChartView1.addView(chart1);
-    }
-
     private void ratingData() {
         binding.ratingTotalTxt.setText(""+shopDashboardModel.data.avgrating);
         binding.totalRatingCountTxt.setText(""+shopDashboardModel.data.usersrated);
@@ -215,62 +249,55 @@ public class ShopDashboardFragment extends BaseFragment {
         binding.rating1Txt.setText(""+shopDashboardModel.ratingdata.rating1);
     }
 
-    private void ordersDetailsBar() {
-        binding.orderBarChart.setVisibility(View.VISIBLE);
-        List<BarEntry> entries = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
+    private void orderDetailsBar() {
+        AnyChartView chart1 = new AnyChartView(requireContext());
+        chart1.setProgressBar(binding.orderProgressBar);
+        Cartesian cartesian = AnyChart.column();
 
-        for (int i = 0; i < shopDashboardModel.orderdetails.size() ; i++) {
-            // Add data to entries list
-            entries.add(new BarEntry(i, shopDashboardModel.orderdetails.get(i).count));
-            labels.add(shopDashboardModel.orderdetails.get(i).day);
+        if (shopDashboardModel.orderdetails.size() > 7) {
+            cartesian.xScroller(true);
+            cartesian.xScroller().orientation("top");
+            cartesian.xScroller().thumbs(true);
+            cartesian.xScroller().autoHide(true);
         }
-        BarDataSet dataSet = new BarDataSet(entries, "Visits");
 
-        // Customize dataset as needed
-        dataSet.setBarBorderColor(ContextCompat.getColor(getContext(), R.color.colorPromo));
-        dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorFeatured));
-        dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        dataSet.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                // Format value as integer
-                return String.valueOf((int) value);
-            }
-        });
+        // prevent the range changing
+        cartesian.xScroller().allowRangeChange(false);
+        cartesian.pointWidth(40);
+        cartesian.xZoom().setToPointsCount(7, true, null);
 
-        BarData barData = new BarData(dataSet);
-        binding.orderBarChart.setData(barData);
-        binding.orderBarChart.setVisibleXRange(0f, 7f);
-        binding.orderBarChart.getDescription().setEnabled(false);
-        binding.orderBarChart.getAxisRight().setEnabled(false);
+        List<DataEntry> data = new ArrayList<>();
+        for (int i=0; i < shopDashboardModel.orderdetails.size(); i++) {
+            data.add(new ValueDataEntry(shopDashboardModel.orderdetails.get(i).day, shopDashboardModel.orderdetails.get(i).count));
+        }
 
-        // Customize X-axis
-        XAxis xAxis = binding.orderBarChart.getXAxis();
-        xAxis.setTextSize(10f); // Set your desired label text size here
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setDrawGridLines(false);
+        Column column = cartesian.column(data);
+        column.color("#387ADF");
+//        column.labels(true); // For bar value showing
+        column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .format("{%Value}{groupsSeparator: }");
 
-        YAxis yAxis = binding.orderBarChart.getAxisLeft(); // Or getAxisRight() if needed
-        yAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                // Convert float value to integer
-                return String.valueOf((int) value);
-            }
-        });
-        yAxis.setDrawGridLines(false);
+        cartesian.animation(true);
+        //cartesian.title("Top 10 Cosmetic Products by Revenue");
+        cartesian.yScale().minimum(0d);
+        //cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+        cartesian.xAxis(0).labels().fontSize(11).adjustFontSize(true);
 
-        // Customize legend
-        Legend legend = binding.orderBarChart.getLegend();
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP); // Set legend position
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT); // Set legend position
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Set legend orientation
-        legend.setDrawInside(false);
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian.interactivity().hoverMode(HoverMode.BY_X);
 
-        binding.orderBarChart.invalidate();
+//        cartesian.xAxis(0).title("Day");
+//        cartesian.yAxis(0).title("Value");
+
+        cartesian.draw(true);
+        binding.orderBarChart1.setVisibility(View.VISIBLE);
+        chart1.setChart(cartesian);
+        binding.orderBarChart1.addView(chart1);
     }
 
     private Map<String, Object> makeRequest() {
@@ -288,131 +315,27 @@ public class ShopDashboardFragment extends BaseFragment {
                         this.shopDashboardModel = shopDashboardModel;
 
                         initUI();
-                        if (!shopDashboardModel.agechart.isEmpty()) {
-                            binding.ageBarChart.setVisibility(View.VISIBLE);
-                            List<BarEntry> entries = new ArrayList<>();
-                            List<String> labels = new ArrayList<>();
-
-                            for (int i = 0; i < shopDashboardModel.agechart.size() ; i++) {
-                                // Add data to entries list
-                                entries.add(new BarEntry(i, shopDashboardModel.agechart.get(i).value));
-                                labels.add(shopDashboardModel.agechart.get(i).age);
-                            }
-                            BarDataSet dataSet = new BarDataSet(entries, "Age");
-
-                            // Customize dataset as needed
-                            dataSet.setBarBorderColor(ContextCompat.getColor(getContext(), R.color.colorPromo));
-                            dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorFeatured));
-                            dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                            dataSet.setValueFormatter(new ValueFormatter() {
-                                @Override
-                                public String getFormattedValue(float value) {
-                                    // Format value as integer
-                                    return String.valueOf((int) value);
-                                }
-                            });
-                            BarData barData = new BarData(dataSet);
-                            binding.ageBarChart.setData(barData);
-                            binding.ageBarChart.setVisibleXRange(0f, 6f);
-                            binding.ageBarChart.getDescription().setEnabled(false);
-                            binding.ageBarChart.getAxisRight().setEnabled(false);
-
-                            // Customize X-axis
-                            XAxis xAxis = binding.ageBarChart.getXAxis();
-                            xAxis.setTextSize(10f); // Set your desired label text size here
-                            xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-                            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
-                            xAxis.setGranularity(1f);
-                            xAxis.setDrawGridLines(false);
-                            YAxis yAxis = binding.ageBarChart.getAxisLeft(); // Or getAxisRight() if needed
-                            yAxis.setValueFormatter(new ValueFormatter() {
-                                @Override
-                                public String getFormattedValue(float value) {
-                                    // Convert float value to integer
-                                    return String.valueOf((int) value);
-                                }
-                            }); yAxis.setDrawGridLines(false);
-
-                            // Customize legend
-                            Legend legend = binding.ageBarChart.getLegend();
-                            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP); // Set legend position
-                            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT); // Set legend position
-                            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Set legend orientation
-                            legend.setDrawInside(false);
-
-                            binding.ageBarChart.invalidate();
-                            //ageBarChart();
+                        if (!shopDashboardModel.visitchart.isEmpty()) {
+                            binding.barChartll.setVisibility(View.VISIBLE);
+                            visitorDetailsBar();
                         } else {
-                            binding.ageBarChart.setVisibility(View.GONE);
+                            binding.barChartll.setVisibility(View.GONE);
+                        }
+                        if (!shopDashboardModel.agechart.isEmpty()) {
+                            binding.ageChartView.setVisibility(View.VISIBLE);
+                            ageBarChart();
+                        } else {
+                            binding.ageChartView.setVisibility(View.GONE);
                         }
                         if (!shopDashboardModel.genderpiechart.isEmpty()) {
                             binding.genderPieChart.setVisibility(View.VISIBLE);
-                            newGenderPieChart();
+                            genderPieChart();
                         } else {
                             binding.genderPieChart.setVisibility(View.GONE);
                         }
-                        if (!shopDashboardModel.visitchart.isEmpty()) {
-                            binding.barChart.setVisibility(View.VISIBLE);
-                            List<BarEntry> entries = new ArrayList<>();
-                            List<String> labels = new ArrayList<>();
-
-                            for (int i = 0; i < shopDashboardModel.visitchart.size() ; i++) {
-                                // Add data to entries list
-                                entries.add(new BarEntry(i, shopDashboardModel.visitchart.get(i).count));
-                                labels.add(shopDashboardModel.visitchart.get(i).day);
-                            }
-                            BarDataSet dataSet = new BarDataSet(entries, "Visits");
-
-                            // Customize dataset as needed
-                            dataSet.setBarBorderColor(ContextCompat.getColor(getContext(), R.color.colorPromo));
-                            dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorFeatured));
-                            dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                            dataSet.setValueFormatter(new ValueFormatter() {
-                                @Override
-                                public String getFormattedValue(float value) {
-                                    // Format value as integer
-                                    return String.valueOf((int) value);
-                                }
-                            });
-
-                            BarData barData = new BarData(dataSet);
-                            binding.barChart.setData(barData);
-                            binding.barChart.setVisibleXRange(0f, 7f);
-                            binding.barChart.getDescription().setEnabled(false);
-                            binding.barChart.getAxisRight().setEnabled(false);
-
-                            // Customize X-axis
-                            XAxis xAxis = binding.barChart.getXAxis();
-                            xAxis.setTextSize(10f); // Set your desired label text size here
-                            xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-                            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                            xAxis.setGranularity(1f);
-                            xAxis.setDrawGridLines(false);
-
-                            YAxis yAxis = binding.barChart.getAxisLeft(); // Or getAxisRight() if needed
-                            yAxis.setValueFormatter(new ValueFormatter() {
-                                @Override
-                                public String getFormattedValue(float value) {
-                                    // Convert float value to integer
-                                    return String.valueOf((int) value);
-                                }
-                            });
-                            yAxis.setDrawGridLines(false);
-
-                            // Customize legend
-                            Legend legend = binding.barChart.getLegend();
-                            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP); // Set legend position
-                            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT); // Set legend position
-                            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Set legend orientation
-                            legend.setDrawInside(false);
-
-                            binding.barChart.invalidate();
-                            //newMultipleBarChart();
-                        } else
-                            binding.barChart.setVisibility(View.GONE);
                         if (!shopDashboardModel.orderdetails.isEmpty()) {
                             binding.ordersBarChartLinear.setVisibility(View.VISIBLE);
-                            ordersDetailsBar();
+                            orderDetailsBar();
                         } else
                             binding.ordersBarChartLinear.setVisibility(View.GONE);
                     }
