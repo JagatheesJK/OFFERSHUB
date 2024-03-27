@@ -31,7 +31,6 @@ public class NotifyFragment extends BaseFragment implements View.OnClickListener
     private List<BookModel.Data> list = new ArrayList<>();
     private NotifyAdapter adapter;
     private int page_no = 0;
-    private int mobileviewedcount = 0;
 
     public static NotifyFragment newInstance() {
         NotifyFragment fragment = new NotifyFragment();
@@ -85,7 +84,6 @@ public class NotifyFragment extends BaseFragment implements View.OnClickListener
             if (NotifyFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (bookModel != null) {
                     if(bookModel.status.equals("success")) {
-                        mobileviewedcount = bookModel.mobileviewedcount;
                         binding.totalNotifyCountTxt.setText("Total Orders : "+bookModel.count);
                         binding.totalNotifyCountTxt.setVisibility((bookModel.count > 0) ? View.VISIBLE : View.GONE);
                         if (bookModel.data != null) {
@@ -141,7 +139,6 @@ public class NotifyFragment extends BaseFragment implements View.OnClickListener
     public void onNotifySelect(BookModel.Data model) {
         Intent i = new Intent(getActivity(), BookingDetailsActivity.class);
         i.putExtra("booking_model", model);
-        i.putExtra("mobileviewedcount", mobileviewedcount);
         getActivity().startActivity(i);
     }
 

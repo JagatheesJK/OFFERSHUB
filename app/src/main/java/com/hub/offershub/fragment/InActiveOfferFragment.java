@@ -194,7 +194,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
             if (!paymentDialogFragment.isAdded())
                 paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
         } else {
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.addToBackStack(null);
             transaction.replace(R.id.fragment_container, OfferDashboardFragment.newInstance(model));
             transaction.commit();
@@ -205,7 +205,8 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getInActiveOffers(makeRequest(), myProgressDialog);
+                if (commonViewModel != null)
+                    commonViewModel.getInActiveOffers(makeRequest(), myProgressDialog);
                 break;
             default:
                 break;

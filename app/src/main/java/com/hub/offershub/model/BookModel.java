@@ -73,6 +73,7 @@ public class BookModel implements Parcelable {
         public int shop_id;
         public String shop_name;
         public String subscription_status;
+        public int mobilecount;
 
         protected Data(Parcel in) {
             id = in.readInt();
@@ -99,6 +100,7 @@ public class BookModel implements Parcelable {
             shoporder_status = in.readString();
             shop_name = in.readString();
             subscription_status = in.readString();
+            mobilecount = in.readInt();
         }
 
         @Override
@@ -127,6 +129,7 @@ public class BookModel implements Parcelable {
             dest.writeString(shoporder_status);
             dest.writeString(shop_name);
             dest.writeString(subscription_status);
+            dest.writeInt(mobilecount);
         }
 
         @Override

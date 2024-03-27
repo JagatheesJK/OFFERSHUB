@@ -16,7 +16,7 @@ import com.hub.offershub.adapter.ViewMorePlanAdapter;
 import com.hub.offershub.databinding.FragmentViewMorePlanDialogBinding;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 
-public class ViewMorePlanDialogFragment extends BottomSheetDialogFragment {
+public class ViewMorePlanDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     private FragmentViewMorePlanDialogBinding binding;
     private SubscriptionPackageResponse.SubscriptionPackage planModel;
@@ -45,6 +45,7 @@ public class ViewMorePlanDialogFragment extends BottomSheetDialogFragment {
         // Inflate the layout for this fragment
         binding = FragmentViewMorePlanDialogBinding.inflate(getLayoutInflater());
         init();
+        setListener();
         setUpRecycler();
         return binding.getRoot();
     }
@@ -53,11 +54,15 @@ public class ViewMorePlanDialogFragment extends BottomSheetDialogFragment {
         binding.planNameTxt.setText(""+planModel.packageName);
         binding.planCode.setText(""+planModel.packageCode);
         binding.planAmt.setText("₹ "+planModel.price);
-        binding.planDays.setText(" /"+planModel.days+" days");
+        binding.planDays.setText(" / "+planModel.days+" days");
 
         binding.closeBtn.setOnClickListener(v -> {
             dismiss();
         });
+    }
+
+    private void setListener() {
+        binding.continueBtn.setOnClickListener(this);
     }
 
     public void setPlanModel(SubscriptionPackageResponse.SubscriptionPackage model) {
@@ -75,5 +80,16 @@ public class ViewMorePlanDialogFragment extends BottomSheetDialogFragment {
     private void setNotify() {
         binding.planRecycler.getRecycledViewPool().clear();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.continueBtn:
+                dismiss();
+                break;
+            default:
+                break;
+        }
     }
 }

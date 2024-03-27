@@ -24,7 +24,6 @@ public class BookingDetailsActivity extends BaseActivity {
 
     private ActivityBookingDetailsBinding binding;
     BookModel.Data model;
-    private int mobileviewedcount;
     private boolean isAccept = false;
 
     @Override
@@ -34,7 +33,6 @@ public class BookingDetailsActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         model = getIntent().getParcelableExtra("booking_model");
-        mobileviewedcount = getIntent().getIntExtra("mobileviewedcount", 0);
         getMutableOrderDetails_shopsVisitData();
         getMutableOrderDetails_MobileNumber_ViewData();
         getMutableOrderDetails_shopConfirmStatusData();
@@ -50,13 +48,16 @@ public class BookingDetailsActivity extends BaseActivity {
            // Glide.with(BookingDetailsActivity.this).load().into(binding.offerImg);
             binding.userNameTxt.setText(model.name);
             binding.offerNameTxt.setText(model.offer_name);
+            binding.remainingNumberTxt.setText("Remaining " + (5 - model.mobilecount) + " numbers");
             commonMethods.imageLoaderView(this, binding.offerImg, model.image_url);
             if(1 == model.is_mobilenumber_viewed) {
                 binding.userMobileTxt.setText(""+model.fullmobile);
                 binding.mobileEye.setVisibility(View.GONE);
+                binding.remainingNumberTxt.setVisibility(View.GONE);
             } else {
                 binding.userMobileTxt.setText(""+model.mobile);
                 binding.mobileEye.setVisibility(View.VISIBLE);
+                binding.remainingNumberTxt.setVisibility(("Free".equals(model.subscription_status)) ? View.VISIBLE : View.GONE);
             }
             binding.dateTxt.setText(model.user_ordered_date);
 
@@ -115,7 +116,8 @@ public class BookingDetailsActivity extends BaseActivity {
                 if (!paymentDialogFragment.isAdded())
                     paymentDialogFragment.show(getSupportFragmentManager(), PaymentDialogFragment.TAG);
             } else if ("Free".equals(model.subscription_status)) {
-                if (mobileviewedcount < 5) {
+                if (model.mobilecount < 5) {
+                    binding.remainingNumberTxt.setVisibility(View.GONE);
                     commonViewModel.orderDetails_mobilenumber_View(makeRequest(true, 0), myProgressDialog);
                 } else {
                     if (!paymentDialogFragment.isAdded())

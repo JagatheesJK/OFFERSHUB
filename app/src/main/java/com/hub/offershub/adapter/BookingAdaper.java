@@ -88,11 +88,12 @@ public class BookingAdaper extends RecyclerView.Adapter<BookingAdaper.BookViewHo
                 holder.bookingDateTxt.setTypeface(null, Typeface.BOLD);
             } else {
                 holder.unreadDotImg.setImageResource(R.drawable.ic_open_eye);
+                holder.offerNameTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.userNameTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.userMobileTxt.setTextColor(ctx.getColor(R.color.default_txt));
                 holder.bookingDateTxt.setTextColor(ctx.getColor(R.color.default_txt));
 
-                holder.offerNameTxt.setTypeface(null, Typeface.BOLD);
+                holder.offerNameTxt.setTypeface(null, Typeface.NORMAL);
                 holder.userNameTxt.setTypeface(null, Typeface.NORMAL);
                 holder.userMobileTxt.setTypeface(null, Typeface.NORMAL);
                 holder.bookingDateTxt.setTypeface(null, Typeface.NORMAL);

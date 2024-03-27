@@ -195,7 +195,8 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getInActiveShops(makeRequest(), myProgressDialog);
+                if (commonViewModel != null)
+                    commonViewModel.getInActiveShops(makeRequest(), myProgressDialog);
                 break;
             default:
                 break;

@@ -83,7 +83,8 @@ public class FeedbackFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getShopFeedback(makeFeedbackRequest(), myProgressDialog);
+                if (commonViewModel != null)
+                    commonViewModel.getShopFeedback(makeFeedbackRequest(), myProgressDialog);
                 break;
             case R.id.createBtn:
                 if (!queryDialogFragment.isAdded()) {

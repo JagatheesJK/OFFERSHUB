@@ -66,7 +66,7 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
     private void setUpRecycler() {
         linearLayoutManager = new CustomLinearLayoutManagerWithSmoothScroller(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.planRecycler.setLayoutManager(linearLayoutManager);
-        adapter = new SubScriptionAdapter(getActivity(),this, list);
+        adapter = new SubScriptionAdapter(this, list);
         binding.planRecycler.setAdapter(adapter);
         setNotify();
     }

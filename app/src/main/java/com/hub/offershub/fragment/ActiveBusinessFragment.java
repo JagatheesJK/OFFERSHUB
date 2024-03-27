@@ -196,7 +196,8 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getActiveShops(makeRequest(), myProgressDialog);
+                if (commonViewModel != null)
+                    commonViewModel.getActiveShops(makeRequest(), myProgressDialog);
                 break;
             default:
                 break;

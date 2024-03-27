@@ -165,8 +165,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
     public void removeData(OfferModel.Data model, int position) {
         list.remove(model);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, getItemCount());
+        notifyDataSetChanged();
+//        notifyItemRemoved(position);
+//        notifyItemRangeChanged(position, getItemCount());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

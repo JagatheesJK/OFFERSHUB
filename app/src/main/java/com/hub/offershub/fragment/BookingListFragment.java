@@ -35,7 +35,6 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
     private BookingAdaper adapter;
     private int page_no = 0;
-    private int mobileviewedcount = 0;
     private static BusinessModel.Data businessModel;
 
     public static BookingListFragment newInstance(BusinessModel.Data model) {
@@ -98,7 +97,6 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
             if (BookingListFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (bookModel != null) {
                     if ("success".equals(bookModel.status)) {
-                        mobileviewedcount = bookModel.mobileviewedcount;
                         if (bookModel.data != null) {
                             binding.totalOrderCountTxt.setText("Total Orders : "+bookModel.count);
                             binding.totalOrderCountTxt.setVisibility((bookModel.count > 0) ? View.VISIBLE : View.GONE);
@@ -140,7 +138,8 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reloadBtn:
-                commonViewModel.getOrderDetailsShops(makeRequest(), myProgressDialog);
+                if (commonViewModel != null)
+                    commonViewModel.getOrderDetailsShops(makeRequest(), myProgressDialog);
                 break;
             default:
                 break;
@@ -152,7 +151,6 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
         model.shop_id =Integer.parseInt(businessModel.id);
         Intent i = new Intent(getActivity(), BookingDetailsActivity.class);
         i.putExtra("booking_model",model);
-        i.putExtra("mobileviewedcount", mobileviewedcount);
         getActivity().startActivity(i);
 
     }

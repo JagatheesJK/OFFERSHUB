@@ -97,7 +97,8 @@ public class RatingFragment extends BaseFragment implements View.OnClickListener
                 Log.e("Check_Touch", "setListener RootClick 1");
                 break;
             case R.id.reloadBtn:
-                commonViewModel.getRatingReview(makeRatingRequest(), myProgressDialog);
+                if (commonViewModel != null)
+                    commonViewModel.getRatingReview(makeRatingRequest(), myProgressDialog);
                 break;
             default:
                 break;

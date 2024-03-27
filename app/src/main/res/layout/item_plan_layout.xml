@@ -35,7 +35,8 @@
             android:layout_marginEnd="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/amountLinear"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/plantitle"
@@ -48,10 +49,10 @@
                 android:singleLine="true"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/planDesc"
+                android:id="@+id/planDays"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Basic channels with ads dfhdfghdfgsdfgdsfgdfgdfgdsfgsdfgsdfgsdfgsfgsdfgsdfgsfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfg"
+                android:text="Basic channels with ads"
                 android:layout_marginTop="8dp"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -63,7 +64,8 @@
             android:orientation="vertical"
             android:layout_marginEnd="6dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/planAmt"
@@ -75,11 +77,12 @@
                 android:layout_gravity="end"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/planDays"
+                android:id="@+id/planDays1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/month"
                 android:textSize="19dp"
+                android:visibility="gone"
                 android:layout_gravity="end"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
