@@ -126,7 +126,7 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
         protected String doInBackground(String... strings) {
             try {
                 JSONObject orderRequest = new JSONObject();
-                orderRequest.put("amount", model.price);
+                orderRequest.put("amount", (model.price * 100));
                 orderRequest.put("currency", "INR");
                 orderRequest.put("receipt", orderId);
                 orderRequest.put("payment_capture", true);

@@ -239,6 +239,7 @@ public class ShopDashboardFragment extends BaseFragment {
         pie.data(data);
         //pie.title("Fruits imported in 2015 (in kg)");
         pie.labels().position("inside");
+        pie.radius("100%");
 
         //pie.legend().title().enabled(true);
        /* pie.legend().title()
@@ -256,14 +257,19 @@ public class ShopDashboardFragment extends BaseFragment {
     }
 
     private void ratingData() {
-        binding.ratingTotalTxt.setText(""+shopDashboardModel.data.avgrating);
-        binding.totalRatingCountTxt.setText(""+shopDashboardModel.data.usersrated);
-        binding.ratingTotalStar.setRating(Float.parseFloat(shopDashboardModel.data.avgrating));
-        binding.rating5Txt.setText(""+shopDashboardModel.ratingdata.rating5);
-        binding.rating4Txt.setText(""+shopDashboardModel.ratingdata.rating4);
-        binding.rating3Txt.setText(""+shopDashboardModel.ratingdata.rating3);
-        binding.rating2Txt.setText(""+shopDashboardModel.ratingdata.rating2);
-        binding.rating1Txt.setText(""+shopDashboardModel.ratingdata.rating1);
+        if (shopDashboardModel.data.usersrated != 0) {
+            binding.ratingLinear.setVisibility(View.VISIBLE);
+            binding.ratingTotalTxt.setText(""+shopDashboardModel.data.avgrating);
+            binding.totalRatingCountTxt.setText(""+shopDashboardModel.data.usersrated);
+            binding.ratingTotalStar.setRating(Float.parseFloat(shopDashboardModel.data.avgrating));
+            binding.rating5Txt.setText(""+shopDashboardModel.ratingdata.rating5);
+            binding.rating4Txt.setText(""+shopDashboardModel.ratingdata.rating4);
+            binding.rating3Txt.setText(""+shopDashboardModel.ratingdata.rating3);
+            binding.rating2Txt.setText(""+shopDashboardModel.ratingdata.rating2);
+            binding.rating1Txt.setText(""+shopDashboardModel.ratingdata.rating1);
+        } else {
+            binding.ratingLinear.setVisibility(View.GONE);
+        }
     }
 
     private void orderDetailsBar() {
@@ -357,7 +363,10 @@ public class ShopDashboardFragment extends BaseFragment {
                             binding.ageBarChartll.setVisibility(View.GONE);
                         }
                         if (!shopDashboardModel.genderpiechart.isEmpty()) {
-                            binding.genderPieChart.setVisibility(View.VISIBLE);
+                            if (shopDashboardModel.genderpiechart.get(0).value != 0)
+                                binding.genderPieChart.setVisibility(View.VISIBLE);
+                            else
+                                binding.genderPieChart.setVisibility(View.GONE);
                             genderPieChart();
                         } else {
                             binding.genderPieChart.setVisibility(View.GONE);

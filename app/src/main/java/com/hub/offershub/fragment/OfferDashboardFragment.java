@@ -230,6 +230,7 @@ public class OfferDashboardFragment extends BaseFragment {
         pie.data(data);
         //pie.title("Fruits imported in 2015 (in kg)");
         pie.labels().position("inside");
+        pie.radius("100%");
 
         //pie.legend().title().enabled(true);
        /* pie.legend().title()
@@ -336,7 +337,10 @@ public class OfferDashboardFragment extends BaseFragment {
                             binding.ageBarChartll.setVisibility(View.GONE);
                         }
                         if (!offerDashboardModel.genderpiechart.isEmpty()) {
-                            binding.genderPieChart.setVisibility(View.VISIBLE);
+                            if (offerDashboardModel.genderpiechart.get(0).value != 0)
+                                binding.genderPieChart.setVisibility(View.VISIBLE);
+                            else
+                                binding.genderPieChart.setVisibility(View.GONE);
                             genderPieChart();
                         } else {
                             binding.genderPieChart.setVisibility(View.GONE);

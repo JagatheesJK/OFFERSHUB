@@ -3,6 +3,7 @@ package com.hub.offershub.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,6 +25,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.navigation.NavigationBarView;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
@@ -56,6 +58,12 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
     private void init() {
         binding.bottomNavigationView.setOnItemSelectedListener(this);
         binding.bottomNavigationView.setSelectedItemId(R.id.bottom_nav_home);
+
+        BadgeDrawable badgeDrawable = binding.bottomNavigationView.getOrCreateBadge(R.id.bottom_nav_notify);
+        badgeDrawable.setVisible(true);
+        // Set the background color of the badge
+        badgeDrawable.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPromo));
+        badgeDrawable.setNumber(5); // Set the number you want to display on the badge
     }
 
     @Override

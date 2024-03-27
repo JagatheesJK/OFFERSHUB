@@ -615,7 +615,7 @@
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/visitorBarChartll"
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
@@ -633,20 +633,20 @@
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/barChart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="250dp"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/light_grey"
+                            android:layout_marginTop="16dp"/>
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_grey"
-                        android:layout_marginTop="16dp"/>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/ageBarChartll"
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
@@ -664,21 +664,21 @@
                         <com.github.mikephil.charting.charts.HorizontalBarChart
                             android:id="@+id/ageBarChart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="250dp"
                             android:layout_marginStart="8dp"/>
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/light_grey"
+                            android:layout_marginTop="16dp"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_grey"
-                        android:layout_marginTop="16dp"/>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/genderPieChart"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
+                        android:layout_height="320dp"
                         android:layout_marginTop="12dp"
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
@@ -700,9 +700,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
-                            android:layout_marginBottom="8dp"
                             android:translationZ="8dp"
-                            app:layout_constraintBottom_toBottomOf="parent">
+                            app:layout_constraintTop_toBottomOf="@+id/gender_chart_view">
 
                             <androidx.appcompat.widget.LinearLayoutCompat
                                 android:id="@+id/womenLinear"
@@ -762,6 +761,7 @@
                             android:id="@+id/gender_chart_view"
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
+                            android:layout_marginTop="-50dp"
                             app:layout_constraintTop_toBottomOf="@+id/genderTitleTxt"
                             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -774,13 +774,14 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/light_grey"
+                            android:layout_marginTop="12dp"
+                            app:layout_constraintTop_toBottomOf="@+id/genderPercentageConstraint"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_grey"
-                        android:layout_marginTop="16dp"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/ratingLinear"
@@ -1076,13 +1077,13 @@
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/light_grey"
+                            android:layout_marginTop="16dp"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_grey"
-                        android:layout_marginTop="16dp"/>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/ordersBarChartLinear"

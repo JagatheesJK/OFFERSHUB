@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.activity.SignActivity;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,5 +45,30 @@ public class Utils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milliSeconds);
         return format.format(calendar.getTime());
+    }
+
+    public static String addComma(double value) {
+        // Create a NumberFormat instance with commas
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setGroupingUsed(true);
+        // Format the amount with commas
+        String formattedAmount = numberFormat.format(value);
+        return formattedAmount;
+    }
+
+    public static int removeComma(String value) {
+        // Create a NumberFormat instance with commas
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setGroupingUsed(true);
+        try {
+            // Parse the formatted amount string to a numeric value
+            Number number = numberFormat.parse(value);
+            // Retrieve the numeric value without commas
+            int amountWithoutCommas = number.intValue();
+            return amountWithoutCommas;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

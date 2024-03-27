@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseException;
@@ -81,6 +82,12 @@ public class OtpActivity extends BaseActivity {
                 }
             }
         });
+        binding.resendOtpTxt.setOnClickListener(v -> {
+            mCallbacks = null;
+            binding.resendOtpTxt.setVisibility(View.GONE);
+            callBack();
+            sendOtp("+91" + mobile);
+        });
     }
 
     private void sendOtp(String mobile) {
@@ -92,16 +99,19 @@ public class OtpActivity extends BaseActivity {
                 OtpActivity.this,               // Activity (for callback binding)
                 mCallbacks);        // OnVerificationStateChangedCallbacks
     }
+
     private void callBack() {
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
+                Log.e("Check_JKOtp", "onVerificationCompleted Code : "+credential.getSmsCode());
                 binding.pinView.setText(credential.getSmsCode());
             }
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-                Log.e("Check_JKData", "onVerificationFailed Error : "+e.getMessage());
+                Log.e("Check_JKOtp", "onVerificationFailed Error : "+e.getMessage());
+                binding.resendOtpTxt.setVisibility(View.VISIBLE);
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     Toast.makeText(OtpActivity.this, "Invalid Request", Toast.LENGTH_SHORT).show();
                 } else if (e instanceof FirebaseTooManyRequestsException) {
@@ -114,10 +124,18 @@ public class OtpActivity extends BaseActivity {
 
             @Override
             public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                Log.e("Check_JKOtp", "onCodeSent verificationId : "+verificationId);
                 mVerificationId = verificationId;
                 mResendToken = token;
                 hideProgress();
                 Toast.makeText(OtpActivity.this, "Code Sent", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeAutoRetrievalTimeOut(@NonNull String s) {
+                super.onCodeAutoRetrievalTimeOut(s);
+                binding.resendOtpTxt.setVisibility(View.VISIBLE);
+                Log.e("Check_JKOtp", "onCodeAutoRetrievalTimeOut s : "+s);
             }
         };
     }
@@ -135,7 +153,6 @@ public class OtpActivity extends BaseActivity {
             hideProgress();
         });
     }
-
 
     public class RegisterAPIAsync extends AsyncTask<String, String, String> {
         Activity activity;

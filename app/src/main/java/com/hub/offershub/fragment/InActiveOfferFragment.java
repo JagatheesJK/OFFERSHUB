@@ -101,6 +101,7 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
                             if (page_no == 0)
                                 list.clear();
                             binding.empty.emptyConstraint.setVisibility(View.GONE);
+                            binding.offerShimmerLayout.setVisibility(View.GONE);
                             binding.offerRecycler.setVisibility(View.VISIBLE);
                             list.addAll(offerModel.data);
                             setNotify();

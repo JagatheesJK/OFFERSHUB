@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.InActiveOfferFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -10,11 +11,54 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/offerRecycler"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_offer_list_layout"/>
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/offerRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    tools:listitem="@layout/item_offer_list_layout"/>
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/offerShimmerLayout"
+                    app:shimmer_repeat_mode="restart"
+                    app:shimmer_shape="linear"
+                    android:visibility="visible"
+                    app:shimmer_auto_start="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/business_list_shimmer_layout"/>
+                        <include layout="@layout/business_list_shimmer_layout"/>
+                        <include layout="@layout/business_list_shimmer_layout"/>
+                        <include layout="@layout/business_list_shimmer_layout"/>
+                        <include layout="@layout/business_list_shimmer_layout"/>
+                        <include layout="@layout/business_list_shimmer_layout"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:layout_constraintTop_toBottomOf="@+id/offerRecycler"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

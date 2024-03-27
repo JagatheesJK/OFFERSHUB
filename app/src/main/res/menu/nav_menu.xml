@@ -48,4 +48,9 @@
         android:title="Upload Image In User App"
         android:icon="@drawable/receipt"/>
 
+    <item
+        android:id="@+id/about"
+        android:title="About us"
+        android:icon="@drawable/receipt"/>
+
 </menu>
