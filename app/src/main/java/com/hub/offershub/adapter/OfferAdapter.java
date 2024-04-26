@@ -30,6 +30,7 @@ import com.hub.offershub.listener.OfferListener;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.utils.CommonMethods;
+import com.hub.offershub.utils.Utils;
 
 import java.util.List;
 
@@ -79,7 +80,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 Log.e("Check_JK", "Type : "+model.offer_type+" IF ");
                 holder.amountLinear.setVisibility(View.VISIBLE);
                 holder.discountLinear.setVisibility(View.GONE);
-                holder.offerPrice.setText("₹ "+model.amount);
+                if (model.amount != null && !"".equals(model.amount))
+                    holder.offerPrice.setText("₹ "+ Utils.addComma(Integer.parseInt(model.amount)));
                 holder.offerPrice.setTextColor(ctx.getColor(R.color.black));
             } else if (2 == model.offer_type) {
                 Log.e("Check_JK", "Type : "+model.offer_type+" ELSE IF ");
@@ -119,8 +121,10 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                         ctx.getResources(), R.color.green, null)));
             }
             holder.originalAmountTxt.setPaintFlags(holder.originalAmountTxt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.originalAmountTxt.setText("₹ "+model.original_amount);
-            holder.discountPriceTxt.setText("₹ "+model.offer_amount);
+            if (model.original_amount != null && !"".equals(model.original_amount))
+                holder.originalAmountTxt.setText("₹ "+Utils.addComma(Integer.parseInt(model.original_amount)));
+            if (model.offer_amount != null && !"".equals(model.offer_amount))
+                holder.discountPriceTxt.setText("₹ "+Utils.addComma(Integer.parseInt(model.offer_amount)));
             holder.discountOfferTxt.setText("OFF "+model.offer_percentage+"%");
 
             holder.offerSwitch.setOnClickListener(v -> {

@@ -39,11 +39,6 @@
         android:icon="@drawable/payment"/>
 
     <item
-        android:id="@+id/billing"
-        android:title="Billing History"
-        android:icon="@drawable/billing"/>
-
-    <item
         android:id="@+id/uploadImage"
         android:title="Upload Image In User App"
         android:icon="@drawable/receipt"/>

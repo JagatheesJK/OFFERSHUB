@@ -150,13 +150,11 @@ public class OtpActivity extends BaseActivity {
                     Toast.makeText(OtpActivity.this, "Invalid code", Toast.LENGTH_SHORT).show();
                 }
             }
-            hideProgress();
         });
     }
 
     public class RegisterAPIAsync extends AsyncTask<String, String, String> {
-        Activity activity;
-        int check;
+
         String name; String mobile;String device_token; boolean isRegister;
         public RegisterAPIAsync(String name, String mobile,String device_token,boolean isRegister) {
             this.name = name;
@@ -206,9 +204,11 @@ public class OtpActivity extends BaseActivity {
                                 Toast.makeText(OtpActivity.this, ""+root.getString("message"), Toast.LENGTH_SHORT).show();
                             }
                         }
+                        hideProgress();
                     } catch (Exception e) {
                         Log.e("Check_JKData", "RegisterAPIAsync onResponse Catch : "+e.getMessage());
                         Log.e("Check_Moorthy","res" +response.body().toString());
+                        hideProgress();
                     }
                 }
 
@@ -223,7 +223,7 @@ public class OtpActivity extends BaseActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            hideProgress();
+//            hideProgress();
         }
     }
 }

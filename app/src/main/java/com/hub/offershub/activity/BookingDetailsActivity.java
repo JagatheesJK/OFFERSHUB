@@ -14,6 +14,7 @@ import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityBookingDetailsBinding;
 import com.hub.offershub.dialogfragment.PaymentDialogFragment;
 import com.hub.offershub.model.BookModel;
+import com.hub.offershub.utils.Utils;
 
 import org.json.JSONException;
 
@@ -59,13 +60,15 @@ public class BookingDetailsActivity extends BaseActivity {
                 binding.mobileEye.setVisibility(View.VISIBLE);
                 binding.remainingNumberTxt.setVisibility(("Free".equals(model.subscription_status)) ? View.VISIBLE : View.GONE);
             }
-            binding.dateTxt.setText(model.user_ordered_date);
+            if (model.user_ordered_date != null && !"".equals(model.user_ordered_date))
+                binding.dateTxt.setText(Utils.convertDateFormat(model.user_ordered_date));
 
             if (1 == model.offer_type) {
                 Log.e("Check_JK", "Type : "+model.offer_type+" IF ");
                 binding.amountLinear.setVisibility(View.VISIBLE);
                 binding.discountLinear.setVisibility(View.GONE);
-                binding.offerPrice.setText("₹ "+model.amount);
+                if (model.amount != null && !"".equals(model.amount))
+                    binding.offerPrice.setText("₹ "+Utils.addComma(Integer.parseInt(model.amount)));
                 binding.offerPrice.setTextColor(getColor(R.color.black));
             } else if (2 == model.offer_type) {
                 Log.e("Check_JK", "Type : "+model.offer_type+" ELSE IF ");
@@ -80,8 +83,10 @@ public class BookingDetailsActivity extends BaseActivity {
             }
 
             binding.originalAmountTxt.setPaintFlags(binding.originalAmountTxt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            binding.originalAmountTxt.setText("₹ "+model.original_amount);
-            binding.discountPriceTxt.setText("₹ "+model.offer_amount);
+            if (model.original_amount != null && !"".equals(model.original_amount))
+                binding.originalAmountTxt.setText("₹ "+ Utils.addComma(Integer.parseInt(model.original_amount)));
+            if (model.offer_amount != null && !"".equals(model.offer_amount))
+                binding.discountPriceTxt.setText("₹ "+Utils.addComma(Integer.parseInt(model.offer_amount)));
             binding.discountOfferTxt.setText("OFF "+model.offer_percentage+"%");
 
             if ("0".equals(model.userorder_status)) {

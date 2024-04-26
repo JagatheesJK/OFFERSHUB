@@ -31,8 +31,10 @@ import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentShopDashboardBinding;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.ShopDashboardModel;
+import com.hub.offershub.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,14 +68,14 @@ public class ShopDashboardFragment extends BaseFragment {
     }
 
     private void initUI() {
-        binding.totalFavotiteTxt.setText(""+shopDashboardModel.data.totalfavorite);
-        binding.totalOffersVisitTxt.setText(""+shopDashboardModel.data.offervisitcount);
-        binding.totalShopVisitTxt.setText(""+shopDashboardModel.data.shopvisitcount);
-        binding.contactVisitTxt.setText(""+shopDashboardModel.data.contactvisitcount);
-        binding.mapVisitTxt.setText(""+shopDashboardModel.data.mapvisitcount);
-        binding.totalOrderCountTxt.setText(""+shopDashboardModel.data.totalorders);
-        binding.repeatUserVisitTxt.setText(""+shopDashboardModel.data.repeatedusers);
-        binding.totalUserVisitTxt.setText(""+shopDashboardModel.data.totalusers);
+        binding.totalFavotiteTxt.setText(""+ Utils.addComma(shopDashboardModel.data.totalfavorite));
+        binding.totalOffersVisitTxt.setText(""+Utils.addComma(shopDashboardModel.data.offervisitcount));
+        binding.totalShopVisitTxt.setText(""+Utils.addComma(shopDashboardModel.data.shopvisitcount));
+        binding.contactVisitTxt.setText(""+Utils.addComma(shopDashboardModel.data.contactvisitcount));
+        binding.mapVisitTxt.setText(""+Utils.addComma(shopDashboardModel.data.mapvisitcount));
+        binding.totalOrderCountTxt.setText(""+Utils.addComma(shopDashboardModel.data.totalorders));
+        binding.repeatUserVisitTxt.setText(""+Utils.addComma(shopDashboardModel.data.repeatedusers));
+        binding.totalUserVisitTxt.setText(""+Utils.addComma(shopDashboardModel.data.totalusers));
 
         ratingData();
     }
@@ -148,17 +150,26 @@ public class ShopDashboardFragment extends BaseFragment {
         List<BarEntry> entries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
+        Collections.reverse(shopDashboardModel.agechart);
+
         for (int i = 0; i < shopDashboardModel.agechart.size() ; i++) {
             // Add data to entries list
             entries.add(new BarEntry(i, shopDashboardModel.agechart.get(i).value));
             labels.add(shopDashboardModel.agechart.get(i).age);
         }
 
-        BarDataSet barDataSet = new BarDataSet(entries, "ghvhg");
+        BarDataSet barDataSet = new BarDataSet(entries, "");
 
         // Customize dataset as needed
         barDataSet.setColor(getActivity().getColor(R.color.colorFeatured));
         barDataSet.setValueTextColor(Color.RED);
+        barDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // Format value as integer
+                return String.valueOf((int) value);
+            }
+        });
 
         BarData barData = new BarData(barDataSet);
         horizontalBarChart.setData(barData);

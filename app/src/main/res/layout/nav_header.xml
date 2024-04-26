@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="FREE"
-            android:textSize="11sp"
+            android:textSize="10sp"
             android:textColor="@color/white"
             android:background="@drawable/bg_rounded_solid_white"
             android:backgroundTint="@color/accept_green"

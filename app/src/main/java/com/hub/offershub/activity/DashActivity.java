@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -79,6 +82,19 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             userNameTxt.setText(""+model.shop_name);
             userDesTxt.setText(""+ AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.MOBILE));
             subcriptionStatusTxt.setText(""+ model.subscription_status);
+            if ("Free".equals(model.subscription_status)) {
+                subcriptionStatusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                        getResources(), R.color.yellow, null)));
+                subcriptionStatusTxt.setTextColor(Color.WHITE);
+            } else if ("Paid".equals(model.subscription_status)) {
+                subcriptionStatusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                        getResources(), R.color.green, null)));
+                subcriptionStatusTxt.setTextColor(Color.WHITE);
+            } else {
+                subcriptionStatusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                        getResources(), R.color.white, null)));
+                subcriptionStatusTxt.setTextColor(Color.RED);
+            }
             commonMethods.imageLoaderView(DashActivity.this, navUserImg, model.image_url);
         }
     }

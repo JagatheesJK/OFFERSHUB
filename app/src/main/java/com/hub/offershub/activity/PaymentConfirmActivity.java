@@ -37,6 +37,7 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         binding = ActivityPaymentConfirmBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Checkout.preload(getApplicationContext());
 
         init();
         setListener();
@@ -201,5 +202,11 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
     public void onBackPressed() {
         if (!isPaymentSuccess)
             super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Checkout.clearUserData(PaymentConfirmActivity.this);
     }
 }

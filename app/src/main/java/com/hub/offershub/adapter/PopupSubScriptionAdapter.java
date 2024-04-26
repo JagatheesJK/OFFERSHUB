@@ -14,6 +14,7 @@ import com.hub.offershub.R;
 import com.hub.offershub.listener.onPlanSelectListener;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 import com.hub.offershub.utils.CommonMethods;
+import com.hub.offershub.utils.Utils;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class PopupSubScriptionAdapter extends RecyclerView.Adapter<PopupSubScrip
                 selectedModel = model;
             if (model.isActive == 1) {
                 holder.plantitle.setText(model.packageName);
-                holder.planAmt.setText("₹ "+model.price);
+                holder.planAmt.setText("₹ "+ Utils.addComma(model.price));
                 holder.planDays.setText(model.days+" days");
                 holder.planRadio.setChecked(selectedPosition == position);
             }

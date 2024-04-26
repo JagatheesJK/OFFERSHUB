@@ -15,6 +15,7 @@ import com.hub.offershub.R;
 import com.hub.offershub.adapter.ViewMorePlanAdapter;
 import com.hub.offershub.databinding.FragmentViewMorePlanDialogBinding;
 import com.hub.offershub.model.SubscriptionPackageResponse;
+import com.hub.offershub.utils.Utils;
 
 public class ViewMorePlanDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
@@ -53,7 +54,7 @@ public class ViewMorePlanDialogFragment extends BottomSheetDialogFragment implem
     private void init() {
         binding.planNameTxt.setText(""+planModel.packageName);
         binding.planCode.setText(""+planModel.packageCode);
-        binding.planAmt.setText("₹ "+planModel.price);
+        binding.planAmt.setText("₹ "+ Utils.addComma(planModel.price));
         binding.planDays.setText(" / "+planModel.days+" days");
 
         binding.closeBtn.setOnClickListener(v -> {

@@ -19,6 +19,7 @@ import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentNotifyBinding;
 import com.hub.offershub.listener.NotifyListener;
 import com.hub.offershub.model.BookModel;
+import com.hub.offershub.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,7 +85,7 @@ public class NotifyFragment extends BaseFragment implements View.OnClickListener
             if (NotifyFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (bookModel != null) {
                     if(bookModel.status.equals("success")) {
-                        binding.totalNotifyCountTxt.setText("Total Orders : "+bookModel.count);
+                        binding.totalNotifyCountTxt.setText("Total Orders : "+ Utils.addComma(bookModel.count));
                         binding.totalNotifyCountTxt.setVisibility((bookModel.count > 0) ? View.VISIBLE : View.GONE);
                         if (bookModel.data != null) {
                             if (page_no == 0)

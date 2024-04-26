@@ -21,6 +21,7 @@ import com.hub.offershub.databinding.FragmentBookingListBinding;
 import com.hub.offershub.listener.BookingListener;
 import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.utils.Utils;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public class BookingListFragment extends BaseFragment implements View.OnClickLis
                 if (bookModel != null) {
                     if ("success".equals(bookModel.status)) {
                         if (bookModel.data != null) {
-                            binding.totalOrderCountTxt.setText("Total Orders : "+bookModel.count);
+                            binding.totalOrderCountTxt.setText("Total Orders : "+ Utils.addComma(bookModel.count));
                             binding.totalOrderCountTxt.setVisibility((bookModel.count > 0) ? View.VISIBLE : View.GONE);
                             if (page_no == 0)
                                 list.clear();

@@ -31,8 +31,10 @@ import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentOfferDashboardBinding;
 import com.hub.offershub.model.OfferDashboardModel;
 import com.hub.offershub.model.OfferModel;
+import com.hub.offershub.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,11 +68,11 @@ public class OfferDashboardFragment extends BaseFragment {
     }
 
     private void initUI() {
-        binding.totalOffersVisitTxt.setText(""+offerDashboardModel.data.offervisitcount);
-        binding.totalFavotiteTxt.setText(""+offerDashboardModel.data.totalfavorite);
-        binding.totalOrdersTxt.setText(""+offerDashboardModel.data.totalorders);
-        binding.repeatUserVisitTxt.setText(""+offerDashboardModel.data.repeatedusers);
-        binding.totalUsersTxt.setText(""+offerDashboardModel.data.totalusers);
+        binding.totalOffersVisitTxt.setText(""+ Utils.addComma(offerDashboardModel.data.offervisitcount));
+        binding.totalFavotiteTxt.setText(""+Utils.addComma(offerDashboardModel.data.totalfavorite));
+        binding.totalOrdersTxt.setText(""+Utils.addComma(offerDashboardModel.data.totalorders));
+        binding.repeatUserVisitTxt.setText(""+Utils.addComma(offerDashboardModel.data.repeatedusers));
+        binding.totalUsersTxt.setText(""+Utils.addComma(offerDashboardModel.data.totalusers));
 //        binding.totalOrderCountTxt.setText(""+offerDashboardModel.data.totalorders);
     }
 
@@ -144,6 +146,8 @@ public class OfferDashboardFragment extends BaseFragment {
         List<BarEntry> entries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
+        Collections.reverse(offerDashboardModel.agechart);
+
         for (int i = 0; i < offerDashboardModel.agechart.size() ; i++) {
             // Add data to entries list
             entries.add(new BarEntry(i, offerDashboardModel.agechart.get(i).value));
@@ -155,6 +159,13 @@ public class OfferDashboardFragment extends BaseFragment {
         // Customize dataset as needed
         barDataSet.setColor(getActivity().getColor(R.color.colorFeatured));
         barDataSet.setValueTextColor(Color.RED);
+        barDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // Format value as integer
+                return String.valueOf((int) value);
+            }
+        });
 
         BarData barData = new BarData(barDataSet);
         horizontalBarChart.setData(barData);

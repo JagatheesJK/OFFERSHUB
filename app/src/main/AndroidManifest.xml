@@ -38,9 +38,6 @@
             android:name=".activity.BookingDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.FeedbackActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.EditDetailsActivity"
             android:exported="false" />
         <activity
