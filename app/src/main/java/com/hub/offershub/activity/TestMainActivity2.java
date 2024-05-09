@@ -37,10 +37,16 @@ import com.hub.offershub.fragment.NotifyFragment;
 import com.hub.offershub.listener.ExitListener;
 import com.hub.offershub.listener.PermissionListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 public class TestMainActivity2 extends BaseActivity implements NavigationBarView.OnItemSelectedListener,
         PermissionListener, ExitListener {
 
     private ActivityTestMain2Binding binding;
+    private int notifyCount = 0;
+    private BadgeDrawable badgeDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +58,19 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
         init();
 
         initApiClient();
-
     }
 
     private void init() {
+        notifyCount = getIntent().getIntExtra("notifyCount", 0);
+        Log.e("Check_JKNotify", "TestMain notifyCount : "+notifyCount);
         binding.bottomNavigationView.setOnItemSelectedListener(this);
         binding.bottomNavigationView.setSelectedItemId(R.id.bottom_nav_home);
 
-        BadgeDrawable badgeDrawable = binding.bottomNavigationView.getOrCreateBadge(R.id.bottom_nav_notify);
+        badgeDrawable = binding.bottomNavigationView.getOrCreateBadge(R.id.bottom_nav_notify);
         badgeDrawable.setVisible(true);
         // Set the background color of the badge
         badgeDrawable.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPromo));
-        badgeDrawable.setNumber(5); // Set the number you want to display on the badge
+        badgeDrawable.setNumber(notifyCount);
     }
 
     @Override
@@ -194,5 +201,30 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
                 }
             }
         });
+    }
+
+    private int notifyValue = 0;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusNotifyTrigger(String notifyCount) {
+        if (notifyCount != null && !"".equals(notifyCount))
+            notifyValue = Integer.parseInt(notifyCount);
+        else
+            notifyValue = 0;
+
+        badgeDrawable.setNumber(notifyValue);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(TestMainActivity2.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(TestMainActivity2.this);
     }
 }

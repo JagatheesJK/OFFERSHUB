@@ -43,16 +43,20 @@ public class CategoryResponse {
     public class Category {
         private int id;
         private String categoryname;
-        private int offerCount;
-        private String imageUrl;
+        private String description;
+        private int type;
+        private String url;
+        private String created_on;
         private int isActive;
 
         // Constructor
-        public Category(int id, String categoryName, int offerCount, String imageUrl, int isActive) {
+        public Category(int id, String categoryname, String description, int type, String url, String created_on, int isActive) {
             this.id = id;
-            this.categoryname = categoryName;
-            this.offerCount = offerCount;
-            this.imageUrl = imageUrl;
+            this.categoryname = categoryname;
+            this.description = description;
+            this.type = type;
+            this.url = url;
+            this.created_on = created_on;
             this.isActive = isActive;
         }
 
@@ -65,12 +69,20 @@ public class CategoryResponse {
             return categoryname;
         }
 
-        public int getOfferCount() {
-            return offerCount;
+        public String getDescription() {
+            return description;
+        }
+
+        public int getType() {
+            return type;
         }
 
         public String getImageUrl() {
-            return imageUrl;
+            return url;
+        }
+
+        public String getCreated_on() {
+            return created_on;
         }
 
         public int getIsActive() {

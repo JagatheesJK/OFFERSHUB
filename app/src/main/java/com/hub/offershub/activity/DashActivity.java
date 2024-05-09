@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.hub.offershub.AppApplication;
@@ -24,13 +23,13 @@ import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityDashBinding;
+import com.hub.offershub.fragment.AboutUsFragment;
 import com.hub.offershub.fragment.BookingListFragment;
 import com.hub.offershub.fragment.FeedbackFragment;
 import com.hub.offershub.fragment.OfferListFragment;
 import com.hub.offershub.fragment.PaymentFragment;
 import com.hub.offershub.fragment.RatingFragment;
 import com.hub.offershub.fragment.ShopDashboardFragment;
-import com.hub.offershub.fragment.ShopDetailsFragment;
 import com.hub.offershub.model.BusinessModel;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
@@ -114,6 +113,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_shop_dash -> fragment = ShopDashboardFragment.newInstance(model);
             case R.id.nav_home -> {
                 Intent intent = new Intent(DashActivity.this, TestMainActivity2.class);
+                intent.putExtra("notifyCount", AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.NOTIFY_COUNT, 0));
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -123,7 +123,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_rating_review -> fragment = RatingFragment.newInstance(model.id);
             case R.id.nav_faq -> fragment = FeedbackFragment.newInstance(model.id);
             case R.id.paymant -> fragment = PaymentFragment.newInstance();
-//            case R.id.about -> fragment = PaymentFragment.newInstance();
+            case R.id.about -> fragment = AboutUsFragment.newInstance();
         }
 
         if (fragment != null) {
@@ -149,6 +149,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     public void onPaymentSuccess(String s, PaymentData paymentData) {
         Log.e("Check_pay ","onPaymentSuccess "+s);
         Intent intent = new Intent(DashActivity.this, TestMainActivity2.class);
+        intent.putExtra("notifyCount", AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.NOTIFY_COUNT, 0));
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

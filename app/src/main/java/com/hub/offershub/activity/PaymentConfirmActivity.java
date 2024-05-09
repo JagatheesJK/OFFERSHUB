@@ -99,6 +99,7 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.doneBtn:
                 Intent intent = new Intent(PaymentConfirmActivity.this, TestMainActivity2.class);
+                intent.putExtra("notifyCount", AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.NOTIFY_COUNT, 0));
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();

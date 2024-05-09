@@ -49,7 +49,7 @@ public class BookingDetailsActivity extends BaseActivity {
            // Glide.with(BookingDetailsActivity.this).load().into(binding.offerImg);
             binding.userNameTxt.setText(model.name);
             binding.offerNameTxt.setText(model.offer_name);
-            binding.remainingNumberTxt.setText("Remaining " + (5 - model.mobilecount) + " numbers");
+            binding.remainingNumberTxt.setText("Remaining " + (10 - model.mobilecount) + " numbers");
             commonMethods.imageLoaderView(this, binding.offerImg, model.image_url);
             if(1 == model.is_mobilenumber_viewed) {
                 binding.userMobileTxt.setText(""+model.fullmobile);
@@ -121,7 +121,7 @@ public class BookingDetailsActivity extends BaseActivity {
                 if (!paymentDialogFragment.isAdded())
                     paymentDialogFragment.show(getSupportFragmentManager(), PaymentDialogFragment.TAG);
             } else if ("Free".equals(model.subscription_status)) {
-                if (model.mobilecount < 5) {
+                if (model.mobilecount < 10) {
                     binding.remainingNumberTxt.setVisibility(View.GONE);
                     commonViewModel.orderDetails_mobilenumber_View(makeRequest(true, 0), myProgressDialog);
                 } else {

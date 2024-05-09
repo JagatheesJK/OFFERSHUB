@@ -102,14 +102,19 @@ public class InActiveOfferFragment extends BaseFragment implements View.OnClickL
                                 list.clear();
                             binding.empty.emptyConstraint.setVisibility(View.GONE);
                             binding.offerShimmerLayout.setVisibility(View.GONE);
+                            binding.offerShimmerLayout.stopShimmer();
                             binding.offerRecycler.setVisibility(View.VISIBLE);
                             list.addAll(offerModel.data);
                             setNotify();
                         } else {
+                            binding.offerShimmerLayout.setVisibility(View.GONE);
+                            binding.offerShimmerLayout.stopShimmer();
                             binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                             binding.offerRecycler.setVisibility(View.GONE);
                         }
                     } else {
+                        binding.offerShimmerLayout.setVisibility(View.GONE);
+                        binding.offerShimmerLayout.stopShimmer();
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.offerRecycler.setVisibility(View.GONE);
                     }

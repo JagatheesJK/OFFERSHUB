@@ -65,17 +65,18 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OfferModel.Data model = list.get(position);
         if (model != null) {
-            if (selectedPosition != position) {
+            /*if (selectedPosition != position) {
                 if (selectedPosition == RecyclerView.NO_POSITION)
                     selectedPosition = (model.is_show_mainpage == 1) ? position : RecyclerView.NO_POSITION;
-            }
+            }*/
             Log.e("Check_JK", "Type selectedPosition : "+selectedPosition+" position : "+position);
             holder.statusTxt.setVisibility(isActive ? View.GONE : View.VISIBLE);
             holder.switchLinear.setVisibility(isActive ? View.VISIBLE : View.GONE);
             holder.offerNameTxt.setText(""+model.offer_name);
             holder.offerDescTxt.setText(""+model.offer_desc);
             holder.offerType.setText("Type : "+model.offer_type_name);
-            holder.offerSwitch.setChecked(selectedPosition == position);
+//            holder.offerSwitch.setChecked(selectedPosition == position);
+            holder.offerSwitch.setChecked((model.is_show_mainpage == 1));
             if (1 == model.offer_type) {
                 Log.e("Check_JK", "Type : "+model.offer_type+" IF ");
                 holder.amountLinear.setVisibility(View.VISIBLE);
@@ -130,14 +131,18 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             holder.offerSwitch.setOnClickListener(v -> {
                 if (!"Expired".equals(businessModel.subscription_status)) {
                     holder.offerSwitch.setChecked(true);
-                    if (selectedPosition != position) {
+                    if ((model.is_show_mainpage == 1))
+                        priority = "0";
+                    else
+                        priority = "1";
+                    /*if (selectedPosition != position) {
                         this.selectedPosition = position;
                         priority = "1";
                     } else {
                         selectedPosition = RecyclerView.NO_POSITION;
                         priority = "0";
                     }
-                    notifyDataSetChanged();
+                    notifyDataSetChanged();*/
                 } else {
                     holder.offerSwitch.setChecked(false);
                 }

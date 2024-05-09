@@ -136,14 +136,19 @@ public class ActiveBusinessFragment extends BaseFragment implements View.OnClick
                                 list.clear();
                             binding.empty.emptyConstraint.setVisibility(View.GONE);
                             binding.businessShimmerLayout.setVisibility(View.GONE);
+                            binding.businessShimmerLayout.stopShimmer();
                             binding.businessRecycler.setVisibility(View.VISIBLE);
                             list.addAll(businessModel.data);
                             setNotify();
                         } else {
+                            binding.businessShimmerLayout.setVisibility(View.GONE);
+                            binding.businessShimmerLayout.stopShimmer();
                             binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                             binding.businessRecycler.setVisibility(View.GONE);
                         }
                     } else {
+                        binding.businessShimmerLayout.setVisibility(View.GONE);
+                        binding.businessShimmerLayout.stopShimmer();
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.businessRecycler.setVisibility(View.GONE);
                     }

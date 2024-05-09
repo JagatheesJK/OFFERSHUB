@@ -21,6 +21,8 @@ import com.hub.offershub.listener.NotifyListener;
 import com.hub.offershub.model.BookModel;
 import com.hub.offershub.utils.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +87,9 @@ public class NotifyFragment extends BaseFragment implements View.OnClickListener
             if (NotifyFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (bookModel != null) {
                     if(bookModel.status.equals("success")) {
+                        // For Notify Count in TestMainActivity2
+                        EventBus.getDefault().post(""+bookModel.count);
+                        AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.NOTIFY_COUNT, bookModel.count);
                         binding.totalNotifyCountTxt.setText("Total Orders : "+ Utils.addComma(bookModel.count));
                         binding.totalNotifyCountTxt.setVisibility((bookModel.count > 0) ? View.VISIBLE : View.GONE);
                         if (bookModel.data != null) {
@@ -99,6 +104,8 @@ public class NotifyFragment extends BaseFragment implements View.OnClickListener
                             binding.notifyRecycler.setVisibility(View.GONE);
                         }
                     } else {
+                        EventBus.getDefault().post(""+0);
+                        AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.NOTIFY_COUNT, 0);
                         binding.totalNotifyCountTxt.setVisibility(View.GONE);
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.notifyRecycler.setVisibility(View.GONE);

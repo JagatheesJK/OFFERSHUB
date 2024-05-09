@@ -103,7 +103,7 @@ public interface API {
     @GET("getMasterAmenities")
     Call<Amenity> getMasterAmenities();
 
-    @GET("categoryListWithCount")
+    @GET("shopCategory")
     Call<CategoryResponse> getCategory();
 
     @POST("deleteOffer")

@@ -2,20 +2,13 @@ package com.hub.offershub;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hub.offershub.model.CategoryResponse;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +24,7 @@ public class PrefsHelper {
     public static final String MOBILE = "mobile";
     public static final String DEVICE_TOKEN = "device_token";
     public static final String CATEGORY = "category";
-
+    public static final String NOTIFY_COUNT = "notify_count";
 
     public static PrefsHelper getPrefsHelper(Context context) {
         if (instance == null) {
@@ -111,10 +104,10 @@ public class PrefsHelper {
         if (sharedPreferences.contains(CATEGORY)) {
             String jsonValue = sharedPreferences.getString(CATEGORY, null);
             Gson gson = new Gson();
-            Type type = new TypeToken < List < CategoryResponse.Category >> () {}.getType();
+            Type type = new TypeToken<List<CategoryResponse.Category>>(){}.getType();
 
-            Map<String, Integer> data = new HashMap<>();
-            List<CategoryResponse.Category> categoryList =gson.fromJson(jsonValue, type);
+            Map<String, Integer> data = new LinkedHashMap<>();
+            List<CategoryResponse.Category> categoryList = gson.fromJson(jsonValue, type);
             // Populate the HashMap with Category objects
             for (CategoryResponse.Category category : categoryList) {
                 data.put(category.getCategoryName(), category.getId());

@@ -104,14 +104,19 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
                                 list.clear();
                             binding.empty.emptyConstraint.setVisibility(View.GONE);
                             binding.offerShimmerLayout.setVisibility(View.GONE);
+                            binding.offerShimmerLayout.stopShimmer();
                             binding.offerRecycler.setVisibility(View.VISIBLE);
                             list.addAll(offerModel.data);
                             setNotify();
                         } else {
+                            binding.offerShimmerLayout.setVisibility(View.GONE);
+                            binding.offerShimmerLayout.stopShimmer();
                             binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                             binding.offerRecycler.setVisibility(View.GONE);
                         }
                     } else {
+                        binding.offerShimmerLayout.setVisibility(View.GONE);
+                        binding.offerShimmerLayout.stopShimmer();
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.offerRecycler.setVisibility(View.GONE);
                     }
@@ -127,7 +132,11 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
                     try {
                         Log.e("Check_Offer", "ActiveOffer getDeleteData Status : "+jsonObject.getString("status"));
                         if(jsonObject.getString("status").equals("success")) {
-                            adapter.removeData(deleteModel, deletePosition);
+//                            adapter.removeData(deleteModel, deletePosition);
+                            list.clear();
+                            page_no = 0;
+                            commonViewModel.getActiveOffers(makeRequest(), myProgressDialog);
+                            hideProgress();
                             Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -145,9 +154,12 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
             if (ActiveOfferFragment.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                 if (jsonObject != null) {
                     try {
-                        Log.e("Check_Offer", "ActiveOffer getDeleteData Status : "+jsonObject.getString("status"));
+                        Log.e("Check_JKOfferTest", "ActiveOffer getOfferPriorityData Status : "+jsonObject.getString("status"));
                         if(jsonObject.getString("status").equals("success")) {
-
+                            list.clear();
+                            page_no = 0;
+                            commonViewModel.getActiveOffers(makeRequest(), myProgressDialog);
+                            hideProgress();
                         } else {
 
                         }
@@ -195,9 +207,9 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
             if (!paymentDialogFragment.isAdded())
                 paymentDialogFragment.show(getChildFragmentManager(), PaymentDialogFragment.TAG);
         } else {
+            showProgress();
             commonViewModel.offerPriority(makePriorityRequest(model.offer_id, priority), myProgressDialog);
         }
-//        loadFragment(new ShopDetailsFragment());
     }
 
     @Override
@@ -221,6 +233,7 @@ public class ActiveOfferFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onOfferRemove(Object obj, int position) {
         deleteModel = (OfferModel.Data) obj;
+        showProgress();
         deletePosition = position;
         commonViewModel.getDeleteOffer(makeDeleteRequest(deleteModel.offer_id), myProgressDialog);
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -55,6 +56,14 @@ public class SignActivity extends BaseActivity {
 
         binding.registerTxt.setOnClickListener(v -> {
             startActivity(new Intent(SignActivity.this, RegisterActivity.class));
+        });
+
+        binding.termsTxt.setOnClickListener(v -> {
+            openUrlInDefaultBrowser("http://offershubindia.in/businessterms.html");
+        });
+
+        binding.privacyTxt.setOnClickListener(v -> {
+            openUrlInDefaultBrowser("http://offershubindia.in/businessprivacy.html");
         });
     }
 
@@ -130,5 +139,15 @@ public class SignActivity extends BaseActivity {
         super.onDestroy();
         if (commonViewModel != null)
             commonViewModel.getMutableLoginCheck().removeObservers(SignActivity.this);
+    }
+
+    public void openUrlInDefaultBrowser(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            startActivity(intent);
+        } catch (Exception ex) {
+            Toast.makeText(SignActivity.this,"Not supported",Toast.LENGTH_SHORT).show();
+        }
     }
 }

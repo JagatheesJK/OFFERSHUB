@@ -1,6 +1,5 @@
 package com.hub.offershub.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 
@@ -31,7 +30,7 @@ public class AccountFragment extends BaseFragment {
         binding.logout.setOnClickListener(v -> {
             Utils.logout(getActivity(), AppApplication.getInstance().prefsHelper);
         });
-        binding.userNameTxt.setText(""+AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.ID));
+        binding.userNameTxt.setText(""+AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.NAME));
         return binding.getRoot();
     }
 }

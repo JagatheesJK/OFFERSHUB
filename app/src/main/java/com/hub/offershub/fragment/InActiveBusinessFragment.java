@@ -131,6 +131,7 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
                         if (businessModel.data != null) {
                             binding.empty.emptyConstraint.setVisibility(View.GONE);
                             binding.businessShimmerLayout.setVisibility(View.GONE);
+                            binding.businessShimmerLayout.stopShimmer();
                             binding.businessRecycler.setVisibility(View.VISIBLE);
                             if (page_no == 0) {
                                 if (list.size() > 0)
@@ -139,10 +140,14 @@ public class InActiveBusinessFragment extends BaseFragment implements View.OnCli
                             list.addAll(businessModel.data);
                             setNotify();
                         } else {
+                            binding.businessShimmerLayout.setVisibility(View.GONE);
+                            binding.businessShimmerLayout.stopShimmer();
                             binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                             binding.businessRecycler.setVisibility(View.GONE);
                         }
                     } else {
+                        binding.businessShimmerLayout.setVisibility(View.GONE);
+                        binding.businessShimmerLayout.stopShimmer();
                         binding.empty.emptyConstraint.setVisibility(View.VISIBLE);
                         binding.businessRecycler.setVisibility(View.GONE);
                     }

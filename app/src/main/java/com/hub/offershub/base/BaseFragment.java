@@ -59,6 +59,8 @@ public class BaseFragment extends Fragment {
         queryDialogFragment = new QueryDialogFragment();
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         paymentDialogFragment = new PaymentDialogFragment();
     }
 
@@ -217,14 +219,22 @@ public class BaseFragment extends Fragment {
     }
 
     public void showProgress() {
-        if (!progressDialog.isShowing()) {
-            progressDialog.show();
+        try {
+            if (!progressDialog.isShowing()) {
+                progressDialog.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void hideProgress() {
-        if (progressDialog.isShowing()) {
-            progressDialog.dismiss();
+        try {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

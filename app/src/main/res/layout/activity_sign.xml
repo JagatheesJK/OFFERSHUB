@@ -101,6 +101,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/termsTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Terms of use"
@@ -109,6 +110,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/privacyTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Privacy &amp; Policy"

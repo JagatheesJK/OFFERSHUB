@@ -575,7 +575,7 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
     public void getCategory(PrefsHelper prefsHelper, MyProgressDialog myProgressDialog) {
-        Log.e("Check_JK", "getCategory");
+        Log.e("Check_JKCategory", "getCategory");
         new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
@@ -590,6 +590,7 @@ public class CommonViewModel extends AndroidViewModel {
                 call.enqueue(new Callback<CategoryResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<CategoryResponse> call, @NonNull Response<CategoryResponse> response) {
+                        Log.e("Check_JKCategory", "getCategory onResponse : "+new Gson().toJson(response.body()));
                         if (response.body() != null) {
                             prefsHelper.saveSettings(PrefsHelper.CATEGORY, response.body().getData());
                             mutableCategory.postValue(response.body());
@@ -599,7 +600,7 @@ public class CommonViewModel extends AndroidViewModel {
 
                     @Override
                     public void onFailure(@NonNull Call<CategoryResponse> call, @NonNull Throwable t) {
-                        Log.e("Check_JK", "getCategory Error Message : " + t.getMessage());
+                        Log.e("Check_JKCategory", "getCategory Error Message : " + t.getMessage());
                     }
                 });
                 return null;
