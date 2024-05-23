@@ -20,7 +20,7 @@
 
     <item
         android:id="@+id/nav_booking_details"
-        android:title="Booking Details"
+        android:title="Order / Enquiry"
         android:icon="@drawable/booking"/>
 
     <item

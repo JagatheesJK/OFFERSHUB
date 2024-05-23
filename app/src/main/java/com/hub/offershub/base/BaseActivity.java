@@ -57,6 +57,8 @@ public class BaseActivity extends AppCompatActivity {
 
     private void init() {
         progressDialog = new ProgressDialog(BaseActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         commonViewModel = new ViewModelProvider(BaseActivity.this).get(CommonViewModel.class);
         commonMethods = new CommonMethods();
         exitDialogFragment = new ExitDialogFragment();

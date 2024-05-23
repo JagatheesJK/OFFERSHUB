@@ -234,6 +234,6 @@ public class BookingDetailsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        binding.title.setText("Booking Details");
+        binding.title.setText("Order/Enquiry Details");
     }
 }

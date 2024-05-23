@@ -97,6 +97,9 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void init() {
+        fileList.add(null);
+        fileList.add(null);
+        fileList.add(null);
         initUI();
     }
 
@@ -121,13 +124,13 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void initUI() {
-        offerID = offerModel.offer_id;
             if (isShop) {
                 binding.shopconstraint.setVisibility(View.VISIBLE);
                 binding.offerImageConstraint.setVisibility(View.GONE);
                 getShopImages();
                 commonViewModel.getShopImages(makeShopRequest(businessModel.id), myProgressDialog);
             } else {
+                offerID = offerModel.offer_id;
                 binding.shopconstraint.setVisibility(View.GONE);
                 binding.offerImageConstraint.setVisibility(View.VISIBLE);
                 Log.e("Check_JKImage", "getOfferImages 1 "+offerID);
@@ -283,7 +286,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 binding.offerImgStatus1.setVisibility(View.GONE);
                 try {
                     if (fileList.size() > 0)
-                        fileList.remove(0);
+                        fileList.add(0, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -297,7 +300,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 binding.offerImgStatus2.setVisibility(View.GONE);
                 try {
                     if (fileList.size() > 0)
-                        fileList.remove(1);
+                        fileList.add(1, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -311,7 +314,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 binding.offerImgStatus3.setVisibility(View.GONE);
                 try {
                     if (fileList.size() > 0)
-                        fileList.remove(2);
+                        fileList.add(2, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -639,9 +642,10 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                 String path = getPath(getActivity(), cameraUri);
                 if (path != null) {
                     file = new File(path);
-                    fileList.add(file);
+//                    fileList.add(file);
                     if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
-                        fileList.remove(file);
+//                        fileList.remove(file);
+                        file = null;
                         Toast.makeText(getActivity(), "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -661,6 +665,14 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                             return false;
                         }
                     }).into((editImage.equals("offerImg1")) ? binding.editofferImg1 : (editImage.equals("offerImg2")) ? binding.editofferImg2 : (editImage.equals("offerImg3")) ? binding.editofferImg3 : binding.editImg);
+
+                    if(editImage.equals("offerImg1")) {
+                        fileList.add(0, file);
+                    } else if (editImage.equals("offerImg2")) {
+                        fileList.add(1, file);
+                    } else if (editImage.equals("offerImg3")) {
+                        fileList.add(2, file);
+                    }
                 } else {
                     Toast.makeText(getActivity(), "path is null", Toast.LENGTH_SHORT).show();
                 }
@@ -672,9 +684,10 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                         String path = getPath(getActivity(), uri);
                         if (path != null) {
                             file = new File(path);
-                            fileList.add(file);
+//                            fileList.add(file);
                             if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
-                                fileList.remove(file);
+//                                fileList.remove(file);
+                                file = null;
                                 Toast.makeText(getActivity(), "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -696,6 +709,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                             }).into((editImage.equals("offerImg1")) ? binding.editofferImg1 : (editImage.equals("offerImg2")) ? binding.editofferImg2 : (editImage.equals("offerImg3")) ? binding.editofferImg3 : binding.editImg);
 
                             if(editImage.equals("offerImg1")) {
+                                fileList.add(0, file);
                                 binding.addofferImg1.setVisibility(View.GONE);
                                 binding.uploadOfferLinear1.setVisibility(View.VISIBLE);
                                 binding.offerClose1.setVisibility(View.VISIBLE);
@@ -705,6 +719,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                 binding.offerImgStatus1.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
                                 binding.editofferProgressBar1.setVisibility(View.GONE);
                             } else if (editImage.equals("offerImg2")) {
+                                fileList.add(1, file);
                                 binding.addofferImg2.setVisibility(View.GONE);
                                 binding.uploadOfferLinear2.setVisibility(View.VISIBLE);
                                 binding.offerClose2.setVisibility(View.VISIBLE);
@@ -714,6 +729,7 @@ public class EditImageFragment extends BaseFragment implements View.OnClickListe
                                 binding.offerImgStatus2.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
                                 binding.editofferProgressBar2.setVisibility(View.GONE);
                             } else if (editImage.equals("offerImg3")) {
+                                fileList.add(2, file);
                                 binding.addofferImg3.setVisibility(View.GONE);
                                 binding.uploadOfferLinear3.setVisibility(View.VISIBLE);
                                 binding.offerClose3.setVisibility(View.VISIBLE);
