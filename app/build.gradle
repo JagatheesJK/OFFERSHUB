@@ -11,14 +11,16 @@ plugins {
 android {
     signingConfigs {
         debug {
-            storeFile file('/Users/jagathees/Jaga/DJ Projects/OFFERSHUB/keystore/key.jks')
+//            storeFile file('/Users/jagathees/Jaga/DJ Projects/OFFERSHUB/keystore/key.jks')
+            storeFile file('/Users/jagathees/Jaga/DJ Projects/OFFERSHUB/keystore/offershub.jks')
 //            storeFile file('/Users/moorthy/Moorthy-Projects/DJ Projects/OFFERSHUB/keystore/key.jks')
             storePassword '123456'
             keyPassword '123456'
             keyAlias 'offershub'
         }
         release {
-            storeFile file('/Users/jagathees/Jaga/DJ Projects/OFFERSHUB/keystore/key.jks')
+//            storeFile file('/Users/jagathees/Jaga/DJ Projects/OFFERSHUB/keystore/key.jks')
+            storeFile file('/Users/jagathees/Jaga/DJ Projects/OFFERSHUB/keystore/offershub.jks')
 //            storeFile file('/Users/moorthy/Moorthy-Projects/DJ Projects/OFFERSHUB/keystore/key.jks')
             storePassword '123456'
             keyAlias 'offershub'
@@ -31,7 +33,7 @@ android {
     defaultConfig {
         applicationId "com.hub.offershub"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
