@@ -6,8 +6,10 @@ public class Constants {
 
     public static final long MAXIMUM_FILE_SIZE = 2000;
 
-    public static final String razorpay_key_id = "rzp_test_DFcGRd3WOMFLva";
-    public static final String razorpay_key_secret = "Vc6k3zygzuEn7aMbyGTk7UUJ";
+    public static final String razorpay_test_key_id = "rzp_test_DFcGRd3WOMFLva";
+    public static final String razorpay_test_key_secret = "Vc6k3zygzuEn7aMbyGTk7UUJ";
+    public static final String razorpay_key_id = "rzp_live_f2HsJM8rgFXbwv";
+    public static final String razorpay_key_secret = "1wftwYnfi1RUqcxPCErZA9yv";
 
     public static final String RAZORPAY_NAME = "name";
     public static final String RAZORPAY_DECRIPTION = "description";
