@@ -3,6 +3,7 @@ package com.hub.offershub.activity;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -19,6 +20,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivitySignBinding;
 import com.hub.offershub.utils.WindowUtils;
+import com.permissionx.guolindev.PermissionX;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +37,7 @@ public class SignActivity extends BaseActivity {
         WindowUtils.hideWindowStatusBar(getWindow());
         binding = ActivitySignBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getPermission();
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.d("TAG", "getInstanceId failed", task.getException());
@@ -110,6 +113,8 @@ public class SignActivity extends BaseActivity {
     private Map<String, Object> makeRequest(String mobile) {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("mobile", Long.parseLong(mobile));
+        requestData.put("type", "login");
+        requestData.put("device_token", token);
         return requestData;
     }
 
@@ -149,5 +154,17 @@ public class SignActivity extends BaseActivity {
         } catch (Exception ex) {
             Toast.makeText(SignActivity.this,"Not supported",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void getPermission() {
+        PermissionX.init(SignActivity.this)
+                .permissions(Manifest.permission.POST_NOTIFICATIONS)
+                .request((allGranted, grantedList, deniedList) -> {
+                    if (allGranted) {
+
+                    } else {
+
+                    }
+                });
     }
 }

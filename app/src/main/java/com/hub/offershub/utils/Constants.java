@@ -25,4 +25,5 @@ public class Constants {
     public static final String RAZORPAY_CONTACT = "prefill.contact";
     public static final String RAZORPAY_RECEIPT = "receipt";
     public static final String RAZORPAY_PAYMENT_CAPTURE = "payment_capture";
+    public static boolean ISAPPFORGROUNT = false;
 }

@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityPaymentConfirmBinding;
+import com.hub.offershub.model.PushNotifyModel;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.Utils;
@@ -24,6 +26,9 @@ import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 public class PaymentConfirmActivity extends BaseActivity implements View.OnClickListener, PaymentResultListener {
@@ -209,5 +214,20 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
     protected void onDestroy() {
         super.onDestroy();
         Checkout.clearUserData(PaymentConfirmActivity.this);
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(PaymentConfirmActivity.this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
+        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
+        Utils.showNotification(this, pushNotifyModel);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(PaymentConfirmActivity.this);
     }
 }

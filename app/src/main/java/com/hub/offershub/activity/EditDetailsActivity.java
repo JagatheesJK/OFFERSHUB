@@ -6,9 +6,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.gson.Gson;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityEditDetailsBinding;
@@ -17,6 +19,12 @@ import com.hub.offershub.fragment.EditImageFragment;
 import com.hub.offershub.fragment.EditLocationFragment;
 import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.OfferModel;
+import com.hub.offershub.model.PushNotifyModel;
+import com.hub.offershub.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,5 +102,25 @@ public class EditDetailsActivity extends BaseActivity implements View.OnClickLis
         public int getItemCount() {
             return labelData.size();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
+        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
+        Utils.showNotification(this, pushNotifyModel);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(EditDetailsActivity.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(EditDetailsActivity.this);
     }
 }

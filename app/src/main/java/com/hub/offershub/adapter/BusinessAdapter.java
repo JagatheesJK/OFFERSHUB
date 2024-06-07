@@ -69,7 +69,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             holder.addressTxt.setText(""+addr1+addr2+city+state);
             holder.categoryTxt.setText(""+model.categoryname);
             holder.rateTxt.setText(""+model.avg_rating+" ("+model.total_rate+")");
-            holder.statusTxt.setText(""+model.adminverifystatus);
+//            holder.statusTxt.setText(""+model.adminverifystatus);
             long remainingDays = getCalculatedDate(model.subscription_end_date, getCurrentDate());
             if (!"Expired".equals(model.subscription_status) && remainingDays <= 10) {
                 holder.subcriptionEndDateTxt.setVisibility(View.VISIBLE);
@@ -116,6 +116,29 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             } else {
                 holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
                         ctx.getResources(), R.color.green, null)));
+            }
+
+            if ("Active".equals(model.shopstatus)) {
+                holder.statusTxt.setText(""+model.adminverifystatus);
+                if ("Pending".equals(model.adminverifystatus)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.yellow, null)));
+                } else if ("Rejected".equals(model.adminverifystatus)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.red, null)));
+                } else {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.green, null)));
+                }
+            } else {
+                holder.statusTxt.setText(""+model.shopstatus);
+                if ("Edited".equals(model.shopstatus)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.blue, null)));
+                } else if ("Deleted".equals(model.shopstatus)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.red, null)));
+                }
             }
 
             holder.itemView.setOnClickListener(v -> {

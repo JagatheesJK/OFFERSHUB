@@ -9,13 +9,18 @@ import android.view.View;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Lifecycle;
 
+import com.google.gson.Gson;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityBookingDetailsBinding;
 import com.hub.offershub.dialogfragment.PaymentDialogFragment;
 import com.hub.offershub.model.BookModel;
+import com.hub.offershub.model.PushNotifyModel;
 import com.hub.offershub.utils.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 
 import java.util.HashMap;
@@ -235,5 +240,25 @@ public class BookingDetailsActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         binding.title.setText("Order/Enquiry Details");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
+        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
+        Utils.showNotification(this, pushNotifyModel);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(BookingDetailsActivity.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(BookingDetailsActivity.this);
     }
 }

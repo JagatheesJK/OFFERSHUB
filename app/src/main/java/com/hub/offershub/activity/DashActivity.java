@@ -16,8 +16,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
@@ -31,8 +33,14 @@ import com.hub.offershub.fragment.PaymentFragment;
 import com.hub.offershub.fragment.RatingFragment;
 import com.hub.offershub.fragment.ShopDashboardFragment;
 import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.model.PushNotifyModel;
+import com.hub.offershub.utils.Utils;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class DashActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, PaymentResultWithDataListener {
 
@@ -106,11 +114,15 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
         return super.onOptionsItemSelected(item);
     }
 
+    boolean isSuccess = false;
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         switch (item.getItemId()) {
-            case R.id.nav_shop_dash -> fragment = ShopDashboardFragment.newInstance(model);
+            case R.id.nav_shop_dash -> {
+                isSuccess = true;
+                fragment = ShopDashboardFragment.newInstance(model);
+            }
             case R.id.nav_home -> {
                 Intent intent = new Intent(DashActivity.this, TestMainActivity2.class);
                 intent.putExtra("notifyCount", AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.NOTIFY_COUNT, 0));
@@ -118,22 +130,54 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 finish();
             }
-            case R.id.nav_offer -> fragment = OfferListFragment.newInstance(model);
-            case R.id.nav_booking_details -> fragment = BookingListFragment.newInstance(model);
-            case R.id.nav_rating_review -> fragment = RatingFragment.newInstance(model.id);
-            case R.id.nav_faq -> fragment = FeedbackFragment.newInstance(model.id);
-            case R.id.paymant -> fragment = PaymentFragment.newInstance();
-            case R.id.about -> fragment = AboutUsFragment.newInstance();
+            case R.id.nav_offer -> {
+                if (model != null) {
+                    Log.e("Check_JKBadge", "Offer ShopStatus : "+model.shopstatus);
+                    Log.e("Check_JKBadge", "Offer AdminStatus : "+model.adminverifystatus);
+                    if ("Active".equals(model.shopstatus) && "Verified".equals(model.adminverifystatus)) {
+                        isSuccess = true;
+                        fragment = OfferListFragment.newInstance(model);
+                    } else {
+                        isSuccess = false;
+                        Toast.makeText(this, "Shop status is InActive", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            case R.id.nav_booking_details -> {
+                isSuccess = true;
+                fragment = BookingListFragment.newInstance(model);
+            }
+            case R.id.nav_rating_review -> {
+                isSuccess = true;
+                fragment = RatingFragment.newInstance(model.id);
+            }
+            case R.id.nav_faq -> {
+                isSuccess = true;
+                fragment = FeedbackFragment.newInstance(model.id);
+            }
+            case R.id.paymant -> {
+                isSuccess = true;
+                fragment = PaymentFragment.newInstance();
+            }
+            case R.id.about -> {
+                isSuccess = true;
+                fragment = AboutUsFragment.newInstance();
+            }
         }
+        if (isSuccess) {
+            loadFragment(fragment);
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        return true;
+    }
 
+    private void loadFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.addToBackStack(null);
             transaction.replace(R.id.fragment_container, fragment);
             transaction.commit();
         }
-        binding.drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
@@ -159,5 +203,25 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     public void onPaymentError(int i, String s, PaymentData paymentData) {
         Log.e("Check_pay ","onPaymentError "+s);
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
+        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
+        Utils.showNotification(this, pushNotifyModel);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(DashActivity.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(DashActivity.this);
     }
 }

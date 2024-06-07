@@ -42,4 +42,8 @@
             <li><b>Comprehensive Insights:</b> Offers detailed insights and much more.</li>
         </ul>
     </string>
+
+    <!--message notification channel info-->
+    <string name="message_channel_name">MessageChannel</string>
+    <string name="message_channel_description">This channel will take care of incoming chats</string>
 </resources>

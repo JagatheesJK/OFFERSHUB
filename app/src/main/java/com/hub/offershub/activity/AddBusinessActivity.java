@@ -67,6 +67,7 @@ import com.hub.offershub.listener.ImageChooseListener;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
+import com.hub.offershub.model.PushNotifyModel;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.Utils;
 import com.hub.offershub.utils.compress.CompressImage;
@@ -76,6 +77,9 @@ import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
 import com.skydoves.powerspinner.SpinnerAnimation;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 
 import java.io.File;
@@ -802,5 +806,25 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         // after all validation return true.
         return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
+        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
+        Utils.showNotification(this, pushNotifyModel);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(AddBusinessActivity.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(AddBusinessActivity.this);
     }
 }

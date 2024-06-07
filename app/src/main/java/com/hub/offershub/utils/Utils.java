@@ -1,12 +1,23 @@
 package com.hub.offershub.utils;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.hub.offershub.PrefsHelper;
+import com.hub.offershub.R;
 import com.hub.offershub.activity.SignActivity;
+import com.hub.offershub.activity.TestMainActivity2;
+import com.hub.offershub.model.PushNotifyModel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -70,5 +81,38 @@ public class Utils {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public static void showNotification(Context context, PushNotifyModel pushNotifyModel) {
+        Log.e("Check_JKNotify","showNotification");
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Create the notification channel for Android O and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    pushNotifyModel.channelID,
+                    "Default Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Create an intent that will be fired when the user taps the notification
+        Intent intent = new Intent(context, TestMainActivity2.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Use a custom layout for the notification
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, pushNotifyModel.channelID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
+                .setContentTitle(pushNotifyModel.title)
+                .setContentText(pushNotifyModel.message)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+//                .setCustomContentView(createCustomContentView(title, message));
+
+        notificationManager.notify(0, notificationBuilder.build());
+        Log.e("Check_JKNotify","showNotification notificationBuilder : "+notificationBuilder.getNotification());
     }
 }

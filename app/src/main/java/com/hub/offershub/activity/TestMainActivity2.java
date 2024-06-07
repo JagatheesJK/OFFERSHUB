@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.gson.Gson;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityTestMain2Binding;
@@ -36,6 +37,8 @@ import com.hub.offershub.fragment.HomeFragment;
 import com.hub.offershub.fragment.NotifyFragment;
 import com.hub.offershub.listener.ExitListener;
 import com.hub.offershub.listener.PermissionListener;
+import com.hub.offershub.model.PushNotifyModel;
+import com.hub.offershub.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,10 +70,14 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
         binding.bottomNavigationView.setSelectedItemId(R.id.bottom_nav_home);
 
         badgeDrawable = binding.bottomNavigationView.getOrCreateBadge(R.id.bottom_nav_notify);
-        badgeDrawable.setVisible(true);
         // Set the background color of the badge
         badgeDrawable.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPromo));
         badgeDrawable.setNumber(notifyCount);
+        if (notifyCount > 0) {
+            badgeDrawable.setVisible(true);
+        } else {
+            badgeDrawable.setVisible(false);
+        }
     }
 
     @Override
@@ -226,5 +233,11 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(TestMainActivity2.this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
+        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
+        Utils.showNotification(this, pushNotifyModel);
     }
 }
