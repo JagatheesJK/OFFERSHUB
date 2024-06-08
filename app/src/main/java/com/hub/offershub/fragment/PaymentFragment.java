@@ -18,10 +18,14 @@ import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentPaymentBinding;
 import com.hub.offershub.dialogfragment.ViewMorePlanDialogFragment;
 import com.hub.offershub.listener.onPlanSelectListener;
+import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 import com.hub.offershub.utils.customLinearManager.CustomLinearLayoutManagerWithSmoothScroller;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +36,12 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
     private CustomLinearLayoutManagerWithSmoothScroller linearLayoutManager;
     SubScriptionAdapter adapter;
     public String mobileRandom;
+    private static BusinessModel.Data businessModel;
+    private SubscriptionPackageResponse.SubscriptionPackage model;
 
-    public static PaymentFragment newInstance() {
+    public static PaymentFragment newInstance(BusinessModel.Data model) {
         PaymentFragment fragment = new PaymentFragment();
+        businessModel = model;
         return fragment;
     }
 
@@ -77,7 +84,8 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
             case R.id.continueBtn:
                 if (adapter != null) {
                     Intent i = new Intent(getActivity(), PaymentConfirmActivity.class);
-                    i.putExtra("model", adapter.getSelectedModel());
+                    i.putExtra("model", model);
+                    i.putExtra("businessModel", businessModel);
                     startActivity(i);
                 }
                 break;
@@ -122,5 +130,24 @@ public class PaymentFragment extends BaseFragment  implements View.OnClickListen
     public void onResume() {
         super.onResume();
         getActivity().setTitle("Payment");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusTrigger(SubscriptionPackageResponse.SubscriptionPackage subscriptionPackage) {
+        model = subscriptionPackage;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(PaymentFragment.this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(PaymentFragment.this);
     }
 }

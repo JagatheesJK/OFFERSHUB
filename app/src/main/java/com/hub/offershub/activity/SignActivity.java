@@ -127,6 +127,7 @@ public class SignActivity extends BaseActivity {
                             Intent intent = new Intent(SignActivity.this, OtpActivity.class);
                             intent.putExtra("mobile", mobile);
                             intent.putExtra("token", token);
+                            intent.putExtra("type", "login");
                             startActivity(intent);
                         } else {
                             Toast.makeText(this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();

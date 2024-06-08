@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
@@ -33,14 +32,8 @@ import com.hub.offershub.fragment.PaymentFragment;
 import com.hub.offershub.fragment.RatingFragment;
 import com.hub.offershub.fragment.ShopDashboardFragment;
 import com.hub.offershub.model.BusinessModel;
-import com.hub.offershub.model.PushNotifyModel;
-import com.hub.offershub.utils.Utils;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 public class DashActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, PaymentResultWithDataListener {
 
@@ -157,7 +150,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             }
             case R.id.paymant -> {
                 isSuccess = true;
-                fragment = PaymentFragment.newInstance();
+                fragment = PaymentFragment.newInstance(model);
             }
             case R.id.about -> {
                 isSuccess = true;
@@ -202,26 +195,5 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onPaymentError(int i, String s, PaymentData paymentData) {
         Log.e("Check_pay ","onPaymentError "+s);
-
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
-        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
-        Utils.showNotification(this, pushNotifyModel);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(DashActivity.this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(DashActivity.this);
     }
 }

@@ -81,6 +81,7 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mutableLoginCheck = new MutableLiveData<>();
     private final MutableLiveData<SubscriptionPackageResponse> mutableSubscriptionData = new MutableLiveData<>();
     private final MutableLiveData<BookModel> mutableNotifyData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutablePaymentSuccess = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -1642,6 +1643,38 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void getPaymentSuccess(Map<String, Object> requestData) {
+//        Log.e("Check_JK", "getPaymentSuccess ID : "+requestData.get("shop_id"));
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.getPaymentSuccess(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+//                        Log.e("Check_JK", "getPaymentSuccess onResponse : "+response.body().toString());
+                        if (response.body() != null) {
+                            try {
+                                JSONObject root = new JSONObject(response.body().toString());
+                                mutablePaymentSuccess.postValue(root);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else
+                            mutablePaymentSuccess.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+//                        Log.e("Check_JK", "getPaymentSuccess Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -1783,6 +1816,10 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<BookModel> getMutableNotifyData() {
         return mutableNotifyData;
+    }
+
+    public MutableLiveData<JSONObject> getMutablePaymentSuccess() {
+        return mutablePaymentSuccess;
     }
 
     public void showDialog(MyProgressDialog myProgressDialog) {

@@ -23,8 +23,11 @@ import com.hub.offershub.R;
 import com.hub.offershub.activity.TestMainActivity2;
 import com.hub.offershub.model.PushNotifyModel;
 import com.hub.offershub.utils.Constants;
+import com.hub.offershub.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -39,6 +42,13 @@ public class FirebaseService extends FirebaseMessagingService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
+    }
+
+    @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
     }
@@ -50,27 +60,19 @@ public class FirebaseService extends FirebaseMessagingService {
 
         init();
 
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            String title = remoteMessage.getData().get("title");
-            String body = remoteMessage.getData().get("body");
-            Log.e("Check_JKNotify", "onMessageReceived title : "+title);
-            Log.e("Check_JKNotify", "onMessageReceived body : "+body);
-        }
-
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             String title = remoteMessage.getNotification().getTitle();
             String body = remoteMessage.getNotification().getBody();
-            Log.e("Check_JKNotify", "onMessageReceived Notify title : "+title);
-            Log.e("Check_JKNotify", "onMessageReceived Notify body : "+body);
-            Log.e("Check_JKNotify", "onMessageReceived Body : "+remoteMessage.getNotification().getBody());
             defaultNotification(title, body, messageChannelId);
         } else {
             // Handle foreground notifications if data-only message
-            String title = remoteMessage.getData().get("title");
-            String body = remoteMessage.getData().get("body");
-            defaultNotification(title, body, messageChannelId);
+            // Check if message contains a data payload.
+            if (remoteMessage.getData().size() > 0) {
+                String title = remoteMessage.getData().get("title");
+                String body = remoteMessage.getData().get("body");
+                defaultNotification(title, body, messageChannelId);
+            }
         }
     }
 
@@ -105,10 +107,10 @@ public class FirebaseService extends FirebaseMessagingService {
 
     private void defaultNotification(String title, String message, String channelID) {
         PushNotifyModel pushNotifyModel = new PushNotifyModel(title, message, channelID);
-        Log.e("Check_JKNotify","defaultNotification Back : "+ Constants.ISAPPFORGROUNT);
+//        Log.e("Check_JKNotify","defaultNotification Back : "+ Constants.ISAPPFORGROUNT);
         if (Constants.ISAPPFORGROUNT) {
             int notificationId = getId();
-            Log.e("Check_JKNotify", "defaultNotification notificationId : "+notificationId);
+//            Log.e("Check_JKNotify", "defaultNotification notificationId : "+notificationId);
             RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.notify_layout);
             remoteViews.setTextViewText(R.id.notifyTitle, title);
             remoteViews.setTextViewText(R.id.notifyBody, message);
@@ -133,9 +135,21 @@ public class FirebaseService extends FirebaseMessagingService {
             notify.flags |= Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(notificationId, notify);
         } else {
-            Log.e("Check_JKNotify","defaultNotification pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
+//            Log.e("Check_JKNotify","defaultNotification pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
             if(pushNotifyModel != null)
                 EventBus.getDefault().post(pushNotifyModel);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
+        Utils.showNotification(this, pushNotifyModel);
     }
 }

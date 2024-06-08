@@ -23,9 +23,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.gson.Gson;
 import com.hub.offershub.AppApplication;
-import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.adapter.ImageAdapter;
 import com.hub.offershub.base.BaseActivity;
@@ -33,7 +31,6 @@ import com.hub.offershub.databinding.ActivityAddOfferBinding;
 import com.hub.offershub.listener.ImageChooseListener;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.model.AddOfferDataRequestBody;
-import com.hub.offershub.model.PushNotifyModel;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.Utils;
 import com.hub.offershub.utils.compress.CompressImage;
@@ -41,9 +38,6 @@ import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
 import com.skydoves.powerspinner.SpinnerAnimation;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 
 import java.io.File;
@@ -237,32 +231,6 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
                 }
                 hideProgress();
             }
-            /*else if (requestCode == GALLERY_REQUEST_CODE) {
-                if (data != null) {
-                    binding.offerAddImg.setVisibility(View.GONE);
-                    binding.offerImgRecycler.setVisibility(View.VISIBLE);
-                    if (data.getClipData() != null) {
-                        // Multiple images selected
-                        int count = data.getClipData().getItemCount();
-                        int totalSize = 0;
-                        if (count <= 2)
-                            totalSize = count;
-                        else
-                            totalSize = 3;
-                        for (int i = 0; i < totalSize; i++) {
-                            Uri imageUri = data.getClipData().getItemAt(i).getUri();
-                            // Handle each selected image URI
-//                            if (selectedImages.size() > 3)
-//                                selectedImages.clear();
-                            selectedImages.add(imageUri);
-                            setNotifyData();
-                        }
-                    }
-                } else {
-                    Toast.makeText(AddOfferActivity.this, "data is null", Toast.LENGTH_SHORT).show();
-                }
-                hideProgress();
-            }*/
         }
     }
 
@@ -438,25 +406,5 @@ public class AddOfferActivity extends BaseActivity implements View.OnClickListen
         }
         // after all validation return true.
         return true;
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
-        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
-        Utils.showNotification(this, pushNotifyModel);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(AddOfferActivity.this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(AddOfferActivity.this);
     }
 }

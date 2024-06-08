@@ -8,14 +8,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.lifecycle.Lifecycle;
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.google.gson.Gson;
 import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityPaymentConfirmBinding;
-import com.hub.offershub.model.PushNotifyModel;
+import com.hub.offershub.model.BusinessModel;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.Utils;
@@ -26,16 +27,18 @@ import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PaymentConfirmActivity extends BaseActivity implements View.OnClickListener, PaymentResultListener {
 
     private ActivityPaymentConfirmBinding binding;
     private SubscriptionPackageResponse.SubscriptionPackage model;
     public String mobileRandom;
+    private BusinessModel.Data businessModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
 
         init();
         setListener();
+        getPaymentSuccessData();
 
         binding.waitingCard.setVisibility(View.VISIBLE);
 
@@ -56,6 +60,7 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
     private void init() {
         mobileRandom = "6"+generateRandomNumbers(9);
         model = getIntent().getParcelableExtra("model");
+        businessModel = getIntent().getParcelableExtra("businessModel");
     }
 
     private void initUI(String transID) {
@@ -73,11 +78,11 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onPaymentSuccess(String s) {
+        showProgress(getString(R.string.please_wait));
         isPaymentSuccess = true;
         Log.e("Check_JKPayment", "onPaymentSuccess s : "+s);
         initUI(s);
-        binding.successCard.setVisibility(View.VISIBLE);
-        binding.waitingCard.setVisibility(View.GONE);
+        commonViewModel.getPaymentSuccess(makeRequest());
     }
 
     @Override
@@ -168,7 +173,7 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
     private void initializeRazorPay(SubscriptionPackageResponse.SubscriptionPackage model, String orderId, String method) {
         Checkout checkout = new Checkout();
         checkout.setKeyID(Constants.razorpay_key_id);
-        checkout.setImage(R.drawable.def_logo);
+        checkout.setImage(R.mipmap.ic_launcher);
         Checkout.preload(this);
         //double quotes added for crash fixed
         Log.e("Order Id:", ""+orderId);
@@ -214,20 +219,35 @@ public class PaymentConfirmActivity extends BaseActivity implements View.OnClick
     protected void onDestroy() {
         super.onDestroy();
         Checkout.clearUserData(PaymentConfirmActivity.this);
-        if (EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(PaymentConfirmActivity.this);
+        if (commonViewModel != null)
+            commonViewModel.getMutablePaymentSuccess().removeObservers(PaymentConfirmActivity.this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
-        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
-        Utils.showNotification(this, pushNotifyModel);
+    private Map<String, Object> makeRequest() {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("shop_id", businessModel.id);
+        requestData.put("subscription_id", model.id);
+        return requestData;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(PaymentConfirmActivity.this);
+    private void getPaymentSuccessData() {
+        commonViewModel.getMutablePaymentSuccess().observe(PaymentConfirmActivity.this, jsonObject -> {
+            if (getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (jsonObject != null) {
+                    try {
+                        if(jsonObject.getString("status").equals("success")) {
+                            binding.successCard.setVisibility(View.VISIBLE);
+                            binding.waitingCard.setVisibility(View.GONE);
+                        } else {
+
+                        }
+                        Toast.makeText(PaymentConfirmActivity.this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                hideProgress();
+            }
+        });
     }
 }

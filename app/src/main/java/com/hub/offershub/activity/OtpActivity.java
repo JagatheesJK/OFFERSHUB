@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -22,16 +21,11 @@ import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityOtpBinding;
-import com.hub.offershub.model.PushNotifyModel;
 import com.hub.offershub.retrofit.API;
 import com.hub.offershub.retrofit.RetrofitClient;
 import com.hub.offershub.base.Constants;
-import com.hub.offershub.utils.Utils;
 import com.permissionx.guolindev.PermissionX;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -43,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OtpActivity extends BaseActivity {
-    String name="",mobile="", token = "", otp = "", type = "";
+    String name="",mobile="", token = "", otp = "", type = "login";
     boolean isRegister = false;
 
     Context context;
@@ -58,7 +52,7 @@ public class OtpActivity extends BaseActivity {
         getPermission();
 
         context = this;
-        mobile=getIntent().getStringExtra("mobile");
+        mobile = getIntent().getStringExtra("mobile");
         token = getIntent().getStringExtra("token");
         name = getIntent().getStringExtra("name");
         type = getIntent().getStringExtra("type");
@@ -194,24 +188,15 @@ public class OtpActivity extends BaseActivity {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
-        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
-        Utils.showNotification(this, pushNotifyModel);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(OtpActivity.this);
+        Log.e("Check_JKNotify", "OTP onStart");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(OtpActivity.this);
         if (commonViewModel != null) {
             commonViewModel.getMutableLoginCheck().removeObservers(OtpActivity.this);
         }

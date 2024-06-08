@@ -15,6 +15,8 @@ import com.hub.offershub.listener.onPlanSelectListener;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 import com.hub.offershub.utils.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapter.ViewHolder> {
@@ -56,6 +58,7 @@ public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapte
             if (selectedPosition != position) {
                 selectedPosition = position;
                 selectedModel = model;
+                EventBus.getDefault().post(model);
                 notifyDataSetChanged(); // Notify adapter to update checked state
             }
         });
@@ -68,10 +71,6 @@ public class SubScriptionAdapter extends RecyclerView.Adapter<SubScriptionAdapte
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    public SubscriptionPackageResponse.SubscriptionPackage getSelectedModel() {
-        return selectedModel;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

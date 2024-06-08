@@ -67,7 +67,6 @@ import com.hub.offershub.listener.ImageChooseListener;
 import com.hub.offershub.listener.PermissionListener;
 import com.hub.offershub.model.AddShopDataRequestBody;
 import com.hub.offershub.model.Amenity;
-import com.hub.offershub.model.PushNotifyModel;
 import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.Utils;
 import com.hub.offershub.utils.compress.CompressImage;
@@ -77,9 +76,6 @@ import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
 import com.skydoves.powerspinner.SpinnerAnimation;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 
 import java.io.File;
@@ -121,7 +117,6 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
         });
 
         binding.amenitiesrecyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // Set number of columns to 3
-
 
         adapter = new AmenityAdapter(amenities, null);
         binding.amenitiesrecyclerView.setAdapter(adapter);
@@ -202,7 +197,6 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             public void afterTextChanged(Editable editable) {
                 // This method is called to notify you that somewhere within editable, the text has been changed
                 String input = editable.toString();
-
                 if (input.length() < 6) {
                     binding.pincodeEd.setError("Enter Valid PinCode");
                 } else if ( input.length() == 6) {
@@ -213,6 +207,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             }
         });
     }
+
     Integer selectedValue;
     private void setUpRecycler() {
         gridLayoutManager = new GridLayoutManager(this, 3);
@@ -284,6 +279,7 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
             binding.addShopSubmit.setEnabled(true);
         });
     }
+
     private File file;
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -353,88 +349,6 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     Toast.makeText(getApplicationContext(), "data is null", Toast.LENGTH_SHORT).show();
                 }
-
-
-                /*if (data != null) {
-                    binding.shopAddImg.setVisibility(View.GONE);
-                    //binding.shopImgRecycler.setVisibility(View.VISIBLE);
-                    if (data.getClipData() != null) {
-                        // Multiple images selected
-                        int count = data.getClipData().getItemCount();
-                        int totalSize = 0;
-                        if (count <= 2)
-                            totalSize = count;
-                        else
-                            totalSize = 3;
-                        for (int i = 0; i < totalSize; i++) {
-                            Uri imageUri = data.getClipData().getItemAt(i).getUri();
-                            // Handle each selected image URI
-//                            if (selectedImages.size() > 3)
-//                                selectedImages.clear();
-                            if (imageUri != null) {
-                                String path = getPath(AddBusinessActivity.this, imageUri);
-                                if (path != null) {
-                                    file = new File(path);
-                                }
-                            }
-                           *//* selectedImages.add(imageUri);
-                            setNotifyData();*//*
-                            if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
-                                Toast.makeText(AddBusinessActivity.this, "Please Select file below 2MB", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            showProgress(getString(R.string.please_wait));
-                            binding.shopAddImg.setVisibility(View.GONE);
-                            Glide.with(AddBusinessActivity.this).load(file).listener(new RequestListener<Drawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                    hideProgress();
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    hideProgress();
-                                    binding.shopImg.setVisibility(View.VISIBLE);
-                                    return false;
-                                }
-                            }).into(binding.shopImg);
-                        }
-                    }
-                    *//*Uri uri = data.getData();
-                    if (uri != null) {
-                        String path = getPath(AddBusinessActivity.this, uri);
-                        if (path != null) {
-                            file = new File(path);
-                            if (getImageSizeInKb(file) > Constants.MAXIMUM_FILE_SIZE) {
-                                Toast.makeText(AddBusinessActivity.this, "Please Select file below 5MB", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            compressImage();
-                            showProgress(getString(R.string.please_wait));
-                            binding.shopAddImg.setVisibility(View.GONE);
-                            Glide.with(AddBusinessActivity.this).load(file.getAbsolutePath()).listener(new RequestListener<Drawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                    hideProgress();
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    hideProgress();
-                                    return false;
-                                }
-                            }).into(binding.shopImg);
-                        } else {
-                            Toast.makeText(AddBusinessActivity.this, "path is null", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(AddBusinessActivity.this, "uri is null", Toast.LENGTH_SHORT).show();
-                    }*//*
-                } else {
-                    Toast.makeText(AddBusinessActivity.this, "data is null", Toast.LENGTH_SHORT).show();
-                }*/
                 hideProgress();
             }
         }
@@ -806,25 +720,5 @@ public class AddBusinessActivity extends BaseActivity implements View.OnClickLis
 
         // after all validation return true.
         return true;
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
-        Log.e("Check_JKNotify","onEventBusTrigger pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
-        Utils.showNotification(this, pushNotifyModel);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(AddBusinessActivity.this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(AddBusinessActivity.this);
     }
 }

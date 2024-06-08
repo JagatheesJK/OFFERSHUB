@@ -197,4 +197,9 @@ public interface API {
     Call<BookModel> getNotify(
             @Body Map<String, Object> body
     );
+
+    @POST("paymentSuccess")
+    Call<JsonElement> getPaymentSuccess(
+            @Body Map<String, Object> body
+    );
 }
