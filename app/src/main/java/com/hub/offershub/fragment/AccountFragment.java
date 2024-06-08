@@ -11,6 +11,7 @@ import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentAccountBinding;
+import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.Utils;
 
 public class AccountFragment extends BaseFragment {
@@ -27,6 +28,7 @@ public class AccountFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentAccountBinding.inflate(getLayoutInflater());
+        Constants.IsTabCheck = 3;
         binding.logout.setOnClickListener(v -> {
             Utils.logout(getActivity(), AppApplication.getInstance().prefsHelper);
         });

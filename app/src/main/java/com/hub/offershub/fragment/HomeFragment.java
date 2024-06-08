@@ -20,6 +20,7 @@ import com.hub.offershub.R;
 import com.hub.offershub.activity.AddBusinessActivity;
 import com.hub.offershub.adapter.PagerAdapter;
 import com.hub.offershub.databinding.FragmentHomeBinding;
+import com.hub.offershub.utils.Constants;
 
 public class HomeFragment extends Fragment {
 
@@ -56,6 +57,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void init() {
+        Constants.IsTabCheck = 1;
         binding.pager.setAdapter(new ViewPagerFragmentAdapter(getActivity()));
 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);

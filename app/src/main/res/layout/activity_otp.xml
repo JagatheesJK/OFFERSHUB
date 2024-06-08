@@ -82,16 +82,31 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/resendOtpTxt"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/resendLinear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Resend OTP"
+        android:orientation="horizontal"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="20sp"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/verifyLinear"/>
+        app:layout_constraintTop_toBottomOf="@+id/verifyLinear">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/resendOtpTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resend OTP"
+            android:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/resendOtpTimerTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(59)"
+            android:layout_marginStart="4dp"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

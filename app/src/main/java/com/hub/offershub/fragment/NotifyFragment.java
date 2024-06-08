@@ -19,6 +19,7 @@ import com.hub.offershub.base.BaseFragment;
 import com.hub.offershub.databinding.FragmentNotifyBinding;
 import com.hub.offershub.listener.NotifyListener;
 import com.hub.offershub.model.BookModel;
+import com.hub.offershub.utils.Constants;
 import com.hub.offershub.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,6 +60,7 @@ public class NotifyFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void init() {
+        Constants.IsTabCheck = 2;
         if (commonViewModel != null) {
             commonViewModel.getNotify(makeRequest(), myProgressDialog);
             getNotifyData();

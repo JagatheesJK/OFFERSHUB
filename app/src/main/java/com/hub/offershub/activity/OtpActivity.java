@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -29,6 +31,8 @@ import com.permissionx.guolindev.PermissionX;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +46,7 @@ public class OtpActivity extends BaseActivity {
 
     Context context;
     private ActivityOtpBinding binding;
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,7 @@ public class OtpActivity extends BaseActivity {
         sendOtp("+91" + mobile);
         getLoginCheckData();
 
-        resendTimer();
+        startCountdownTimer();
         binding.pinView.requestFocus();
         binding.verifyBtn.setOnClickListener(v -> {
             String code = binding.pinView.getText().toString();
@@ -83,7 +88,7 @@ public class OtpActivity extends BaseActivity {
 
         binding.resendOtpTxt.setOnClickListener(v -> {
             showProgress(getString(R.string.please_wait));
-            resendTimer();
+            startCountdownTimer();
             commonViewModel.loginCheck(makeRequest(mobile), myProgressDialog);
         });
     }
@@ -95,13 +100,33 @@ public class OtpActivity extends BaseActivity {
         }, 2000);
     }
 
-    private void resendTimer() {
+    private void startCountdownTimer() {
         binding.resendOtpTxt.setEnabled(false);
         binding.resendOtpTxt.setAlpha(0.8f);
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            binding.resendOtpTxt.setEnabled(true);
-            binding.resendOtpTxt.setAlpha(1f);
-        }, 60000);
+        binding.resendOtpTimerTxt.setVisibility(View.VISIBLE);
+        countDownTimer = new CountDownTimer(60000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                // Used for formatting digit to be in 2 digits only
+                NumberFormat f = new DecimalFormat("00");
+                long hour = (millisUntilFinished / 3600000) % 24;
+                long min = (millisUntilFinished / 60000) % 60;
+                long sec = (millisUntilFinished / 1000) % 60;
+                binding.resendOtpTimerTxt.setText("(" + f.format(sec) + ")");
+            }
+            // When the task is over it will print 00:00:00 there
+            public void onFinish() {
+                binding.resendOtpTxt.setEnabled(true);
+                binding.resendOtpTxt.setAlpha(1f);
+                binding.resendOtpTimerTxt.setVisibility(View.GONE);
+                cancelCountdownTimer();
+            }
+        }.start();
+    }
+
+    private void cancelCountdownTimer() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
     }
 
     private Map<String, Object> makeRequest(String mobile) {
@@ -200,6 +225,7 @@ public class OtpActivity extends BaseActivity {
         if (commonViewModel != null) {
             commonViewModel.getMutableLoginCheck().removeObservers(OtpActivity.this);
         }
+        cancelCountdownTimer();
     }
 
     private void getLoginCheckData() {

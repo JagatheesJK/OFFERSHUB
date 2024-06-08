@@ -1,5 +1,8 @@
 package com.hub.offershub.activity;
 
+import static com.hub.offershub.utils.Constants.IsTabCheck;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -58,6 +61,21 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
         init();
 
         initApiClient();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (IsTabCheck != 1) {
+                    binding.bottomNavigationView.getMenu().findItem(R.id.bottom_nav_home).setChecked(true);
+                    loadFragment(HomeFragment.newInstance());
+                } else {
+                    if (!exitDialogFragment.isAdded()) {
+                        exitDialogFragment.setExitListener(TestMainActivity2.this);
+                        exitDialogFragment.show(getSupportFragmentManager(), ExitDialogFragment.TAG);
+                    }
+                }
+            }
+        });
     }
 
     private void init() {
@@ -117,14 +135,14 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
 
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
 //        super.onBackPressed();
         if (!exitDialogFragment.isAdded()) {
             exitDialogFragment.setExitListener(this);
             exitDialogFragment.show(getSupportFragmentManager(), ExitDialogFragment.TAG);
         }
-    }
+    }*/
 
     @Override
     public void onExitCancel() {
@@ -133,7 +151,7 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
 
     @Override
     public void onExitYes() {
-        super.onBackPressed();
+        finish();
     }
 
     void initApiClient() {

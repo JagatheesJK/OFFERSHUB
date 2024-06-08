@@ -26,4 +26,5 @@ public class Constants {
     public static final String RAZORPAY_RECEIPT = "receipt";
     public static final String RAZORPAY_PAYMENT_CAPTURE = "payment_capture";
     public static boolean ISAPPFORGROUNT = false;
+    public static int IsTabCheck = 0;
 }
