@@ -15,7 +15,7 @@
 
     <item
         android:id="@+id/nav_offer"
-        android:title="Offers"
+        android:title="Add Offers"
         android:icon="@drawable/offer"/>
 
     <item
@@ -38,10 +38,15 @@
         android:title="Payment"
         android:icon="@drawable/payment"/>
 
-    <item
+    <!--<item
         android:id="@+id/uploadImage"
         android:title="Upload Image In User App"
-        android:icon="@drawable/receipt"/>
+        android:icon="@drawable/receipt"/>-->
+
+    <item
+        android:id="@+id/shareApp"
+        android:title="Share"
+        android:icon="@drawable/share"/>
 
     <item
         android:id="@+id/about"

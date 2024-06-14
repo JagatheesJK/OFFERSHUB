@@ -1,22 +1,30 @@
 package com.hub.offershub.activity;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.credentials.Credential;
-import com.google.android.gms.auth.api.credentials.Credentials;
 import com.google.android.gms.auth.api.credentials.CredentialsApi;
-import com.google.android.gms.auth.api.credentials.HintRequest;
+import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityRegisterBinding;
+import com.hub.offershub.utils.Utils;
+import com.permissionx.guolindev.PermissionX;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,13 +34,32 @@ public class RegisterActivity extends BaseActivity {
     private ActivityRegisterBinding binding;
     private String token = "" , mobile ="" ,name = "";
     private static final int CREDENTIAL_PICKER_REQUEST = 120;
+    private SignInClient signInClient;
+
+    // Declare the ActivityResultLauncher
+    private final ActivityResultLauncher<IntentSenderRequest> phoneNumberHintLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                try {
+                                    String phoneNumber = signInClient.getPhoneNumberFromIntent(data);
+                                    binding.mobileEd.setText("" + Utils.extractTenDigitPhoneNumber(phoneNumber));
+                                } catch (ApiException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        signInClient = Identity.getSignInClient(this);
+        getPermission();
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.d("TAG", "getInstanceId failed", task.getException());
@@ -49,14 +76,35 @@ public class RegisterActivity extends BaseActivity {
             if (CheckAllFields()) {
                 mobile = binding.mobileEd.getText().toString().trim();
                 name = binding.regNameEd.getText().toString();
-                commonViewModel.loginCheck(makeRequest(mobile), myProgressDialog);
+                PermissionX.init(RegisterActivity.this)
+                        .permissions(Manifest.permission.POST_NOTIFICATIONS)
+                        .request((allGranted, grantedList, deniedList) -> {
+                            if (allGranted) {
+                                commonViewModel.loginCheck(makeRequest(mobile), myProgressDialog);
+                            } else {
+                                Utils.openNotifySettingScreen(this);
+                            }
+                        });
             }
         });
 
     }
 
     private void getMobileNumber() {
-        HintRequest hintRequest = new HintRequest.Builder()
+        GetPhoneNumberHintIntentRequest request = GetPhoneNumberHintIntentRequest.builder().build();
+        Task<PendingIntent> hintIntent = signInClient.getPhoneNumberHintIntent(request);
+        hintIntent.addOnSuccessListener(pendingIntent -> {
+            try {
+                // Use the ActivityResultLauncher to launch the intent
+                IntentSenderRequest intentSenderRequest = new IntentSenderRequest.Builder(pendingIntent).build();
+                phoneNumberHintLauncher.launch(intentSenderRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).addOnFailureListener(e -> e.printStackTrace());
+
+
+       /* HintRequest hintRequest = new HintRequest.Builder()
                 .setPhoneNumberIdentifierSupported(true)
                 .build();
 
@@ -65,7 +113,7 @@ public class RegisterActivity extends BaseActivity {
             startIntentSenderForResult(intent.getIntentSender(), CREDENTIAL_PICKER_REQUEST, null, 0, 0, 0, new Bundle());
         } catch (IntentSender.SendIntentException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
@@ -141,5 +189,17 @@ public class RegisterActivity extends BaseActivity {
         super.onDestroy();
         if (commonViewModel != null)
             commonViewModel.getMutableLoginCheck().removeObservers(RegisterActivity.this);
+    }
+
+    public void getPermission() {
+        PermissionX.init(RegisterActivity.this)
+                .permissions(Manifest.permission.POST_NOTIFICATIONS)
+                .request((allGranted, grantedList, deniedList) -> {
+                    if (allGranted) {
+
+                    } else {
+                        Utils.openNotifySettingScreen(this);
+                    }
+                });
     }
 }

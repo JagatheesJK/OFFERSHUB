@@ -1,33 +1,16 @@
 package com.hub.offershub.firebase;
 
-import static android.app.Notification.DEFAULT_SOUND;
-import static android.app.Notification.DEFAULT_VIBRATE;
-
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.hub.offershub.R;
-import com.hub.offershub.activity.TestMainActivity2;
-import com.hub.offershub.model.PushNotifyModel;
-import com.hub.offershub.utils.Constants;
-import com.hub.offershub.utils.Utils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -39,13 +22,6 @@ public class FirebaseService extends FirebaseMessagingService {
 
     private int getId() {
         return atomicInteger.incrementAndGet();
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this);
     }
 
     @Override
@@ -64,14 +40,14 @@ public class FirebaseService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             String title = remoteMessage.getNotification().getTitle();
             String body = remoteMessage.getNotification().getBody();
-            defaultNotification(title, body, messageChannelId);
+            NotificationHelper.showNotification(this, title, body, messageChannelId, getId());
         } else {
             // Handle foreground notifications if data-only message
             // Check if message contains a data payload.
             if (remoteMessage.getData().size() > 0) {
                 String title = remoteMessage.getData().get("title");
                 String body = remoteMessage.getData().get("body");
-                defaultNotification(title, body, messageChannelId);
+                NotificationHelper.showNotification(this, title, body, messageChannelId, getId());
             }
         }
     }
@@ -93,63 +69,5 @@ public class FirebaseService extends FirebaseMessagingService {
                 notificationManager.createNotificationChannel(channel);
             }
         }
-    }
-
-    private RemoteViews getCustomDesign(String title, String message) {
-        RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(),
-                R.layout.notify_layout);
-        remoteViews.setTextViewText(R.id.notifyTitle, title);
-        remoteViews.setTextViewText(R.id.notifyBody, message);
-        remoteViews.setImageViewResource(R.id.notifyIcon,
-                R.mipmap.ic_launcher_foreground);
-        return remoteViews;
-    }
-
-    private void defaultNotification(String title, String message, String channelID) {
-        PushNotifyModel pushNotifyModel = new PushNotifyModel(title, message, channelID);
-//        Log.e("Check_JKNotify","defaultNotification Back : "+ Constants.ISAPPFORGROUNT);
-        if (Constants.ISAPPFORGROUNT) {
-            int notificationId = getId();
-//            Log.e("Check_JKNotify", "defaultNotification notificationId : "+notificationId);
-            RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.notify_layout);
-            remoteViews.setTextViewText(R.id.notifyTitle, title);
-            remoteViews.setTextViewText(R.id.notifyBody, message);
-
-            Intent intent = new Intent(this, TestMainActivity2.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
-
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(this, channelID)
-                    .setTicker(this.getString(R.string.app_name))
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                    .setCustomContentView(remoteViews)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .setDefaults(DEFAULT_SOUND | DEFAULT_VIBRATE)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH);
-
-            NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            Notification notify = notification.build();
-            notify.flags |= Notification.FLAG_AUTO_CANCEL;
-            notificationManager.notify(notificationId, notify);
-        } else {
-//            Log.e("Check_JKNotify","defaultNotification pushNotifyModel : "+new Gson().toJson(pushNotifyModel));
-            if(pushNotifyModel != null)
-                EventBus.getDefault().post(pushNotifyModel);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventBusTrigger(PushNotifyModel pushNotifyModel) {
-        Utils.showNotification(this, pushNotifyModel);
     }
 }

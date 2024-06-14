@@ -32,6 +32,7 @@ import com.hub.offershub.fragment.PaymentFragment;
 import com.hub.offershub.fragment.RatingFragment;
 import com.hub.offershub.fragment.ShopDashboardFragment;
 import com.hub.offershub.model.BusinessModel;
+import com.hub.offershub.utils.Utils;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
 
@@ -127,13 +128,15 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
                 if (model != null) {
                     Log.e("Check_JKBadge", "Offer ShopStatus : "+model.shopstatus);
                     Log.e("Check_JKBadge", "Offer AdminStatus : "+model.adminverifystatus);
-                    if ("Active".equals(model.shopstatus) && "Verified".equals(model.adminverifystatus)) {
+                    isSuccess = true;
+                    fragment = OfferListFragment.newInstance(model);
+                    /*if ("Active".equals(model.shopstatus) && "Verified".equals(model.adminverifystatus)) {
                         isSuccess = true;
                         fragment = OfferListFragment.newInstance(model);
                     } else {
                         isSuccess = false;
                         Toast.makeText(this, "Shop status is InActive", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                 }
             }
             case R.id.nav_booking_details -> {
@@ -151,6 +154,10 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.paymant -> {
                 isSuccess = true;
                 fragment = PaymentFragment.newInstance(model);
+            }
+            case R.id.shareApp -> {
+                isSuccess = true;
+                Utils.downloadAndSaveImage(this);
             }
             case R.id.about -> {
                 isSuccess = true;

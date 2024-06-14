@@ -3,16 +3,20 @@ package com.hub.offershub;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.hub.offershub.activity.OtpActivity;
+import com.hub.offershub.utils.Constants;
 
 public class AppApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
     public PrefsHelper prefsHelper;
     static AppApplication app;
+
+    private int activityReferences = 0;
+    private boolean isActivityChangingConfigurations = false;
 
     public static AppApplication getInstance() {
         return app;
@@ -22,6 +26,7 @@ public class AppApplication extends Application implements Application.ActivityL
         super.onCreate();
         app = this;
         init();
+        registerActivityLifecycleCallbacks(this);
     }
 
     private void init() {
@@ -36,7 +41,11 @@ public class AppApplication extends Application implements Application.ActivityL
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-
+        if (++activityReferences == 1 && !isActivityChangingConfigurations) {
+            // App enters foreground
+            Log.e("backroundforeground", "forground");
+            Constants.ISAPPFORGROUNT = true;
+        }
     }
 
     @Override
@@ -51,7 +60,12 @@ public class AppApplication extends Application implements Application.ActivityL
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-
+        isActivityChangingConfigurations = activity.isChangingConfigurations();
+        if (--activityReferences == 0 && !isActivityChangingConfigurations) {
+            // App enters background
+            Log.e("backround", "backround");
+            Constants.ISAPPFORGROUNT = false;
+        }
     }
 
     @Override

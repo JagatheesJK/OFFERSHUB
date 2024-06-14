@@ -26,6 +26,7 @@ import com.hub.offershub.databinding.ActivityOtpBinding;
 import com.hub.offershub.retrofit.API;
 import com.hub.offershub.retrofit.RetrofitClient;
 import com.hub.offershub.base.Constants;
+import com.hub.offershub.utils.Utils;
 import com.permissionx.guolindev.PermissionX;
 
 import org.json.JSONArray;
@@ -254,7 +255,7 @@ public class OtpActivity extends BaseActivity {
                     if (allGranted) {
 
                     } else {
-
+                        Utils.openNotifySettingScreen(this);
                     }
                 });
     }

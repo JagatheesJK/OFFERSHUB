@@ -13,6 +13,8 @@
     <string name="gallery">Gallery</string>>
     <string name="camera">Camera</string>
 
+    <string name="share_content">Discover amazing deals and exclusive offers with offersHub!  Your go-to app for the best discounts on everything you love. Download it now and start saving big! %s</string>
+
     <string name="please_wait">Please Wait</string>
 
     <array name="category">

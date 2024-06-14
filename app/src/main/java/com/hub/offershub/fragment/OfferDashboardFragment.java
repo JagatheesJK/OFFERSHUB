@@ -343,6 +343,17 @@ public class OfferDashboardFragment extends BaseFragment {
                         }
                         if (!offerDashboardModel.agechart.isEmpty()) {
                             binding.ageBarChartll.setVisibility(View.VISIBLE);
+                            try {
+                                if ((offerDashboardModel.agechart.get(0).value != 0) && (offerDashboardModel.agechart.get(1).value != 0) &&
+                                        (offerDashboardModel.agechart.get(2).value != 0) && (offerDashboardModel.agechart.get(3).value != 0) &&
+                                        (offerDashboardModel.agechart.get(4).value != 0) && (offerDashboardModel.agechart.get(5).value != 0)) {
+                                    binding.ageBarChartll.setVisibility(View.VISIBLE);
+                                } else {
+                                    binding.ageBarChartll.setVisibility(View.GONE);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             ageBarChart();
                         } else {
                             binding.ageBarChartll.setVisibility(View.GONE);

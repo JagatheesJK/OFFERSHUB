@@ -620,7 +620,7 @@
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
@@ -651,7 +651,7 @@
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
@@ -682,7 +682,8 @@
                         android:layout_marginTop="12dp"
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/genderTitleTxt"
@@ -791,7 +792,8 @@
                         android:layout_marginBottom="4dp"
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
@@ -1094,7 +1096,7 @@
                         android:paddingStart="12sp"
                         android:paddingEnd="12sp"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
