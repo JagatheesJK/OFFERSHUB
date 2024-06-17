@@ -25,6 +25,8 @@ public class PrefsHelper {
     public static final String DEVICE_TOKEN = "device_token";
     public static final String CATEGORY = "category";
     public static final String NOTIFY_COUNT = "notify_count";
+    public static final String FORCE_UPDATE = "force_update";
+    public static final String LITE_UPDATE = "lite_update";
 
     public static PrefsHelper getPrefsHelper(Context context) {
         if (instance == null) {

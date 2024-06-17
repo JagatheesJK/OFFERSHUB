@@ -12,11 +12,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
@@ -30,6 +32,13 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallState;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.gson.Gson;
 import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityTestMain2Binding;
@@ -38,18 +47,23 @@ import com.hub.offershub.fragment.AccountFragment;
 import com.hub.offershub.fragment.HomeFragment;
 import com.hub.offershub.fragment.NotifyFragment;
 import com.hub.offershub.listener.ExitListener;
+import com.hub.offershub.listener.InAppUpdateListener;
 import com.hub.offershub.listener.PermissionListener;
+import com.hub.offershub.utils.Constants;
+import com.hub.offershub.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class TestMainActivity2 extends BaseActivity implements NavigationBarView.OnItemSelectedListener,
-        PermissionListener, ExitListener {
+        PermissionListener, ExitListener, InAppUpdateListener {
 
     private ActivityTestMain2Binding binding;
     private int notifyCount = 0;
     private BadgeDrawable badgeDrawable;
+
+    private AppUpdateManager mAppUpdateManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +73,9 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
         setSupportActionBar(binding.toolbar);
         getAllPermission(this);
         init();
+
+        mAppUpdateManager = AppUpdateManagerFactory.create(TestMainActivity2.this);
+        Utils.setForceUpdate(TestMainActivity2.this, getCurrentVersionName(), installStateUpdatedListener, mAppUpdateManager, TestMainActivity2.this);
 
         initApiClient();
 
@@ -245,5 +262,51 @@ public class TestMainActivity2 extends BaseActivity implements NavigationBarView
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(TestMainActivity2.this);
+    }
+
+    private final InstallStateUpdatedListener installStateUpdatedListener = new InstallStateUpdatedListener() {
+        @Override
+        public void onStateUpdate(@NonNull InstallState installState) {
+            Log.e("Check_JKUpdateFun", "onStateUpdate : "+installState.installStatus());
+            if (installState.installStatus() == InstallStatus.DOWNLOADED) {
+                Utils.showCompleteUpdate(TestMainActivity2.this, mAppUpdateManager);
+            }  else if (installState.installStatus() == InstallStatus.PENDING) {
+                Utils.checkInAppUpdate(TestMainActivity2.this, Constants.IMMEDIATE, installStateUpdatedListener, mAppUpdateManager,TestMainActivity2.this);
+            } else if (installState.installStatus()==InstallStatus.INSTALLED) {
+                if (mAppUpdateManager != null) {
+                    mAppUpdateManager.unregisterListener(installStateUpdatedListener);
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("Check_JKUpdateFun", "onActivityResult");
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Utils.RC_APP_UPDATE)
+                Toast.makeText(this, "App updated", Toast.LENGTH_SHORT).show();
+        }
+        if (requestCode == Utils.RC_APP_UPDATE && resultCode != RESULT_OK) {
+            Toast.makeText(this, "Cancel ", Toast.LENGTH_SHORT).show();
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onInAppUpdateStatus(AppUpdateInfo appUpdateInfo) {
+        Log.e("Check_JKUpdateFun", "onInAppUpdateStatus appUpdateInfo : "+new Gson().toJson(appUpdateInfo));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (Constants.isUpdateType.equalsIgnoreCase(Constants.FLEXIBLE)) {
+            if (mAppUpdateManager != null) {
+                mAppUpdateManager.unregisterListener(installStateUpdatedListener);
+            }
+        }
     }
 }

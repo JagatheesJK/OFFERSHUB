@@ -95,7 +95,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                 holder.offerPrice.setText("Flat "+model.flat_percentage+"%");
                 holder.offerPrice.setTextColor(ctx.getColor(R.color.green));
             }
-            holder.statusTxt.setText(""+model.adminverifystatus);
+//            holder.statusTxt.setText(""+model.adminverifystatus);
             holder.statusTxt.setBackgroundResource(R.drawable.bg_rounded_8);
             holder.shimmerFrameLayout.startShimmer();
             Glide.with(ctx).load(model.image_url).listener(new RequestListener<Drawable>() {
@@ -111,16 +111,30 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                     return false;
                 }
             }).error(R.drawable.def_logo).into(holder.offerImg);
-            if ("Pending".equals(model.adminverifystatus)) {
-                holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                        ctx.getResources(), R.color.yellow, null)));
-            } else if ("Rejected".equals(model.adminverifystatus)) {
-                holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                        ctx.getResources(), R.color.red, null)));
+
+            if ("Active".equals(model.shopstatus)) {
+                holder.statusTxt.setText(""+model.adminverifystatus);
+                if ("Pending".equals(model.adminverifystatus)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.yellow, null)));
+                } else if ("Rejected".equals(model.adminverifystatus)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.red, null)));
+                } else {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.green, null)));
+                }
             } else {
-                holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                        ctx.getResources(), R.color.green, null)));
+                holder.statusTxt.setText(""+model.shopstatus);
+                if ("Edited".equals(model.shopstatus)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.blue, null)));
+                } else if ("Deleted".equals(model.shopstatus)) {
+                    holder.statusTxt.setBackgroundTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                            ctx.getResources(), R.color.red, null)));
+                }
             }
+
             holder.originalAmountTxt.setPaintFlags(holder.originalAmountTxt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             if (model.original_amount != null && !"".equals(model.original_amount))
                 holder.originalAmountTxt.setText("₹ "+Utils.addComma(Integer.parseInt(model.original_amount)));

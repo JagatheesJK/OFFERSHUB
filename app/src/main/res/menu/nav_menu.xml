@@ -53,4 +53,23 @@
         android:title="About us"
         android:icon="@drawable/receipt"/>
 
+    <group android:id="@+id/adminGrp">
+        <item
+            android:id="@+id/shops"
+            android:title="Shops"
+            android:icon="@drawable/receipt"/>
+        <item
+            android:id="@+id/offers"
+            android:title="Offers"
+            android:icon="@drawable/receipt"/>
+        <item
+            android:id="@+id/shopImages"
+            android:title="Shop Images"
+            android:icon="@drawable/receipt"/>
+        <item
+            android:id="@+id/offerImages"
+            android:title="Offer Images"
+            android:icon="@drawable/receipt"/>
+    </group>
+
 </menu>

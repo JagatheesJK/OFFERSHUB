@@ -14,6 +14,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -25,6 +26,8 @@ import com.hub.offershub.R;
 import com.hub.offershub.base.BaseActivity;
 import com.hub.offershub.databinding.ActivityDashBinding;
 import com.hub.offershub.fragment.AboutUsFragment;
+import com.hub.offershub.fragment.AdminOfferFragment;
+import com.hub.offershub.fragment.AdminShopFragment;
 import com.hub.offershub.fragment.BookingListFragment;
 import com.hub.offershub.fragment.FeedbackFragment;
 import com.hub.offershub.fragment.OfferListFragment;
@@ -79,7 +82,13 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initUI() {
+        Menu menu = binding.navBar.getMenu();
         if (model != null) {
+            if ("9500892557".equals(""+AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.MOBILE))) {
+                menu.setGroupVisible(R.id.adminGrp, true);
+            } else {
+                menu.setGroupVisible(R.id.adminGrp, false);
+            }
             userNameTxt.setText(""+model.shop_name);
             userDesTxt.setText(""+ AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.MOBILE));
             subcriptionStatusTxt.setText(""+ model.subscription_status);
@@ -162,6 +171,22 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.about -> {
                 isSuccess = true;
                 fragment = AboutUsFragment.newInstance();
+            }
+            case R.id.shops -> {
+                isSuccess = true;
+                fragment = AdminShopFragment.newInstance(true);
+            }
+            case R.id.offers -> {
+                isSuccess = true;
+                fragment = AdminOfferFragment.newInstance(true);
+            }
+            case R.id.shopImages -> {
+                isSuccess = true;
+                fragment = AdminShopFragment.newInstance(false);
+            }
+            case R.id.offerImages -> {
+                isSuccess = true;
+                fragment = AdminOfferFragment.newInstance(false);
             }
         }
         if (isSuccess) {

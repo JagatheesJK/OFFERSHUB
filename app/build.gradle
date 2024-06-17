@@ -34,8 +34,8 @@ android {
         applicationId "com.hub.offershub"
         minSdk 24
         targetSdk 34
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -131,6 +131,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // Event Bus
     implementation 'org.greenrobot:eventbus:3.3.1'
-
+    //force update
+    implementation 'com.google.android.play:core:1.10.3'
 
 }

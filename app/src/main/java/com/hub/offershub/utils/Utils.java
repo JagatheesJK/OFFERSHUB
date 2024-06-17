@@ -6,10 +6,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,11 +22,20 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.activity.SignActivity;
 import com.hub.offershub.activity.TestMainActivity2;
+import com.hub.offershub.listener.InAppUpdateListener;
 import com.hub.offershub.model.PushNotifyModel;
 
 import java.io.File;
@@ -38,6 +50,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+    public static final int RC_APP_UPDATE = 1001;
+
     public static void logout(Context context, PrefsHelper prefsHelper) {
         FirebaseAuth.getInstance().signOut();
         prefsHelper.clearAllPref();
@@ -230,6 +244,134 @@ public class Utils {
         } else {
             return digits.toString(); // Return what we have if less than 10 digits
         }
+    }
+
+    public static boolean setForceUpdate(Activity activity, String currentversion, InstallStateUpdatedListener listener, AppUpdateManager mAppUpdateManager, InAppUpdateListener inAppUpdateListener) {
+        boolean isCheck = true;
+//        Constants.FORCEUPDATE = prefsHelper.getForceUpdate();
+//        Constants.LITEUPDATE = prefsHelper.getLiteUpdate();
+        if (Constants.FORCEUPDATE != null && Constants.LITEUPDATE != null) {
+            String forceUpdate = Constants.FORCEUPDATE;
+            String liteUpdate = Constants.LITEUPDATE;
+            Log.e("Check_JKUpdateFun", "setForceUpdate forceUpdate : "+forceUpdate);
+            Log.e("Check_JKUpdateFun", "setForceUpdate liteUpdate : "+liteUpdate);
+            if (!"".equals(forceUpdate) && !"".equals(liteUpdate)) {
+                if (checkForUpdate(currentversion, forceUpdate)) {
+                    checkInAppUpdate(activity, Constants.IMMEDIATE, listener, mAppUpdateManager, inAppUpdateListener);
+                    isCheck = true;
+                } else if (checkForUpdate(currentversion, liteUpdate)) {
+                    checkInAppUpdate(activity, Constants.FLEXIBLE, listener, mAppUpdateManager, inAppUpdateListener);
+                    isCheck = true;
+                } else {
+                    isCheck = false;
+                    //Toast.makeText(activity, "App all already updated!", Toast.LENGTH_SHORT).show();
+                }
+            } else
+                isCheck = false;
+        }
+
+        return isCheck;
+    }
+
+    public static void checkInAppUpdate(Activity activity, String type, InstallStateUpdatedListener listener, AppUpdateManager mAppUpdateManager, InAppUpdateListener inAppUpdateListener) {
+        Constants.isUpdateType = type;
+        Log.e("Check_JKUpdateFun", "checkInAppUpdate type : "+type);
+        if (type.equalsIgnoreCase("Flexible")) {
+            mAppUpdateManager.getAppUpdateInfo().addOnSuccessListener(new com.google.android.play.core.tasks.OnSuccessListener<AppUpdateInfo>() {
+                @Override
+                public void onSuccess(AppUpdateInfo appUpdateInfo) {
+                    Log.e("Check_JKUpdateFun", "checkInAppUpdate onSuccess : "+new Gson().toJson(appUpdateInfo));
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                            appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                        try {
+                            mAppUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE,
+                                    activity, RC_APP_UPDATE);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.d("Check_JKUpdate", "exception flexible is " + e);
+                        }
+                    } else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                        //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                        showCompleteUpdate(activity, mAppUpdateManager);
+                    } else {
+                        Log.e("Check_JKUpdate", "checkForAppUpdateAvailability: something else");
+                    }
+                }
+            }).addOnFailureListener(new com.google.android.play.core.tasks.OnFailureListener() {
+                @Override
+                public void onFailure(Exception e) {
+                    Log.d("Check_JKUpdateFun", "update flexible failure is " + e);
+                }
+            });
+            mAppUpdateManager.registerListener(listener);
+        } else if (type.equalsIgnoreCase("Immediate")) {
+            mAppUpdateManager.getAppUpdateInfo().addOnSuccessListener(new com.google.android.play.core.tasks.OnSuccessListener<AppUpdateInfo>() {
+                @Override
+                public void onSuccess(AppUpdateInfo appUpdateInfo) {
+                    Log.e("Check_JKUpdateFun", "checkInAppUpdate onSuccess : "+new Gson().toJson(appUpdateInfo));
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE ||
+                            appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS &&
+                                    appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                        try {
+                            mAppUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,
+                                    activity, RC_APP_UPDATE);
+
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.d("Check_JKUpdate", "exception immediate is " + e);
+                        }
+                    }
+                    else if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
+                        inAppUpdateListener.onInAppUpdateStatus(appUpdateInfo);
+
+                    }
+                }
+            }).addOnFailureListener(new com.google.android.play.core.tasks.OnFailureListener() {
+                @Override
+                public void onFailure(Exception e) {
+                    Log.e("Check_JKUpdateFun", "update immediate failure is " + e);
+                }
+            });
+        }
+    }
+
+    public static boolean checkForUpdate(String existingVersion, String newVersion) {
+        Log.e("Check_JKUpdateFun", "checkForUpdate existingVersion : "+existingVersion+" newVersion : "+newVersion);
+        if (existingVersion.isEmpty() || newVersion.isEmpty()) {
+            return false;
+        }
+
+        existingVersion = existingVersion.replaceAll("\\.", "");
+        newVersion = newVersion.replaceAll("\\.", "");
+
+        int existingVersionLength = existingVersion.length();
+        int newVersionLength = newVersion.length();
+
+        StringBuilder versionBuilder = new StringBuilder();
+        if (newVersionLength > existingVersionLength) {
+            versionBuilder.append(existingVersion);
+            for (int i = existingVersionLength; i < newVersionLength; i++) {
+                versionBuilder.append("0");
+            }
+            existingVersion = versionBuilder.toString();
+        } else if (existingVersionLength > newVersionLength) {
+            versionBuilder.append(newVersion);
+            for (int i = newVersionLength; i < existingVersionLength; i++) {
+                versionBuilder.append("0");
+            }
+            newVersion = versionBuilder.toString();
+        }
+        return Integer.parseInt(newVersion) > Integer.parseInt(existingVersion);
+    }
+
+    public static void showCompleteUpdate(Activity activity, AppUpdateManager manager) {
+        Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), "New app is ready!",
+                Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Install", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                manager.completeUpdate();
+            }
+        });
+        snackbar.show();
     }
 
 }

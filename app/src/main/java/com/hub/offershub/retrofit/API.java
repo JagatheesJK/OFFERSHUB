@@ -1,6 +1,10 @@
 package com.hub.offershub.retrofit;
 
 import com.google.gson.JsonElement;
+import com.hub.offershub.model.AdminOfferImageModel;
+import com.hub.offershub.model.AdminOfferModel;
+import com.hub.offershub.model.AdminShopImageModel;
+import com.hub.offershub.model.AdminShopModel;
 import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
@@ -10,6 +14,7 @@ import com.hub.offershub.model.OfferDashboardModel;
 import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
+import com.hub.offershub.model.SettingModel;
 import com.hub.offershub.model.ShopDashboardModel;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 
@@ -202,4 +207,51 @@ public interface API {
     Call<JsonElement> getPaymentSuccess(
             @Body Map<String, Object> body
     );
+
+    @GET("shopsPending")
+    Call<AdminShopModel> getAdminShops();
+
+    @GET("shopsRejected")
+    Call<AdminShopModel> getAdminShopsRejected();
+
+    @GET("offerPending")
+    Call<AdminOfferModel> getAdminOfferPending();
+
+    @GET("offerRejected")
+    Call<AdminOfferModel> getAdminOfferRejected();
+
+    @POST("shopsPending_approval")
+    Call<JsonElement> getAdminShopPendingApproval(
+            @Body Map<String, Object> body
+    );
+
+    @POST("offerPending_approval")
+    Call<JsonElement> getAdminOfferPendingApproval(
+            @Body Map<String, Object> body
+    );
+
+    @GET("shopsImagePending")
+    Call<AdminShopImageModel> getShopsImagePending();
+
+    @GET("shopsImageRejected")
+    Call<AdminShopImageModel> getShopsImageRejected();
+
+    @POST("shopsImage_approval")
+    Call<JsonElement> getAdminShopImagePendingApproval(
+            @Body Map<String, Object> body
+    );
+
+    @POST("offerImage_approval")
+    Call<JsonElement> getAdminOfferImagePendingApproval(
+            @Body Map<String, Object> body
+    );
+
+    @GET("offerImagePending")
+    Call<AdminOfferImageModel> getOfferImagePending();
+
+    @GET("offerImageRejected")
+    Call<AdminOfferImageModel> getOfferImageRejected();
+
+    @GET("settingsConfig")
+    Call<SettingModel> getSettingConfig();
 }

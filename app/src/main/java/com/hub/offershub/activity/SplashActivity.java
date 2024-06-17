@@ -37,6 +37,8 @@ public class SplashActivity extends BaseActivity {
         setContentView(binding.getRoot());
         commonViewModel = new CommonViewModel(AppApplication.getInstance());
         commonViewModel.getCategory(AppApplication.getInstance().prefsHelper, myProgressDialog);
+        commonViewModel.getSettingsConfig(myProgressDialog);
+        getSettingConfig();
 
         Animation.startZoomEffect(binding.splashImg);
         enterDelay();
@@ -108,7 +110,24 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (commonViewModel != null)
+        if (commonViewModel != null) {
             commonViewModel.getMutableNotifyData().removeObservers(SplashActivity.this);
+            commonViewModel.getMutableSettingData().removeObservers(SplashActivity.this);
+        }
+    }
+
+    private void getSettingConfig() {
+        commonViewModel.getMutableSettingData().observe(SplashActivity.this, settingModel -> {
+            if (SplashActivity.this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                if (settingModel != null) {
+                    try {
+                        AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.FORCE_UPDATE, settingModel.force_update);
+                        AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.LITE_UPDATE, settingModel.lite_update);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 }

@@ -13,6 +13,10 @@ import com.google.gson.JsonElement;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.model.AddOfferDataRequestBody;
 import com.hub.offershub.model.AddShopDataRequestBody;
+import com.hub.offershub.model.AdminOfferImageModel;
+import com.hub.offershub.model.AdminOfferModel;
+import com.hub.offershub.model.AdminShopImageModel;
+import com.hub.offershub.model.AdminShopModel;
 import com.hub.offershub.model.Amenity;
 import com.hub.offershub.model.BookModel;
 import com.hub.offershub.model.BusinessModel;
@@ -22,6 +26,7 @@ import com.hub.offershub.model.OfferDashboardModel;
 import com.hub.offershub.model.OfferImageModel;
 import com.hub.offershub.model.OfferModel;
 import com.hub.offershub.model.RatingModel;
+import com.hub.offershub.model.SettingModel;
 import com.hub.offershub.model.ShopDashboardModel;
 import com.hub.offershub.model.SubscriptionPackageResponse;
 import com.hub.offershub.retrofit.API;
@@ -82,6 +87,21 @@ public class CommonViewModel extends AndroidViewModel {
     private final MutableLiveData<SubscriptionPackageResponse> mutableSubscriptionData = new MutableLiveData<>();
     private final MutableLiveData<BookModel> mutableNotifyData = new MutableLiveData<>();
     private final MutableLiveData<JSONObject> mutablePaymentSuccess = new MutableLiveData<>();
+    private final MutableLiveData<SettingModel> mutableSettingData = new MutableLiveData<>();
+
+    // Admin
+    private final MutableLiveData<AdminShopModel> mutableAdminShopData = new MutableLiveData<>();
+    private final MutableLiveData<AdminShopModel> mutableAdminShopsRejected = new MutableLiveData<>();
+    private final MutableLiveData<AdminOfferModel> mutableAdminOfferPendingData = new MutableLiveData<>();
+    private final MutableLiveData<AdminOfferModel> mutableAdminOfferRejectData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableAdminShopPendingApprovalData = new MutableLiveData<>();
+    private final MutableLiveData<AdminShopImageModel> mutableAdminShopImageData = new MutableLiveData<>();
+    private final MutableLiveData<AdminShopImageModel> mutableAdminShopImageRejected = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableAdminShopImagePendingApprovalData = new MutableLiveData<>();
+    private final MutableLiveData<AdminOfferImageModel> mutableAdminOfferImagePendingData = new MutableLiveData<>();
+    private final MutableLiveData<AdminOfferImageModel> mutableAdminOfferImageRejected = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableAdminOfferImagePendingApprovalData = new MutableLiveData<>();
+    private final MutableLiveData<JSONObject> mutableAdminOfferPendingApprovalData = new MutableLiveData<>();
 
     public CommonViewModel(@NonNull Application application) {
         super(application);
@@ -1675,6 +1695,551 @@ public class CommonViewModel extends AndroidViewModel {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void getAdminShop(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminShop");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<AdminShopModel> call = apiInterface.getAdminShops();
+                call.enqueue(new Callback<AdminShopModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AdminShopModel> call, @NonNull Response<AdminShopModel> response) {
+                        Log.e("Check_JKAdmin", "getAdminShop onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableAdminShopData.postValue(response.body());
+                        } else
+                            mutableAdminShopData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<AdminShopModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminShop Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminShopsRejected(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminShopsRejected");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<AdminShopModel> call = apiInterface.getAdminShopsRejected();
+                call.enqueue(new Callback<AdminShopModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AdminShopModel> call, @NonNull Response<AdminShopModel> response) {
+                        Log.e("Check_JKAdmin", "getAdminShopsRejected onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableAdminShopsRejected.postValue(response.body());
+                        } else
+                            mutableAdminShopsRejected.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<AdminShopModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminShopsRejected Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminShopPendingApproval(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminShopPendingApproval");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.getAdminShopPendingApproval(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKAdmin", "getAdminShopPendingApproval onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableAdminShopPendingApprovalData.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                mutableAdminShopPendingApprovalData.postValue(null);
+                            }
+                        } else
+                            mutableAdminShopPendingApprovalData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminShopPendingApproval Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminShopImages(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminShop");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<AdminShopImageModel> call = apiInterface.getShopsImagePending();
+                call.enqueue(new Callback<AdminShopImageModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AdminShopImageModel> call, @NonNull Response<AdminShopImageModel> response) {
+                        Log.e("Check_JKAdmin", "getAdminShop onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableAdminShopImageData.postValue(response.body());
+                        } else
+                            mutableAdminShopImageData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<AdminShopImageModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminShop Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminShopImagesRejected(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminShopImagesRejected");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<AdminShopImageModel> call = apiInterface.getShopsImageRejected();
+                call.enqueue(new Callback<AdminShopImageModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AdminShopImageModel> call, @NonNull Response<AdminShopImageModel> response) {
+                        Log.e("Check_JKAdmin", "getAdminShopImagesRejected onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableAdminShopImageRejected.postValue(response.body());
+                        } else
+                            mutableAdminShopImageRejected.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<AdminShopImageModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminShopImagesRejected Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminShopImagePendingApproval(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminShopImagePendingApproval");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.getAdminShopImagePendingApproval(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKAdmin", "getAdminShopImagePendingApproval onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableAdminShopImagePendingApprovalData.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                mutableAdminShopImagePendingApprovalData.postValue(null);
+                            }
+                        } else
+                            mutableAdminShopImagePendingApprovalData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminShopImagePendingApproval Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminOfferPending(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminOfferPending");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<AdminOfferModel> call = apiInterface.getAdminOfferPending();
+                call.enqueue(new Callback<AdminOfferModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AdminOfferModel> call, @NonNull Response<AdminOfferModel> response) {
+                        Log.e("Check_JKAdmin", "getAdminOfferPending onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableAdminOfferPendingData.postValue(response.body());
+                        } else
+                            mutableAdminOfferPendingData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<AdminOfferModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminOfferPending Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminOfferImagesPending(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminOfferImagesPending");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<AdminOfferImageModel> call = apiInterface.getOfferImagePending();
+                call.enqueue(new Callback<AdminOfferImageModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AdminOfferImageModel> call, @NonNull Response<AdminOfferImageModel> response) {
+                        Log.e("Check_JKAdmin", "getAdminOfferImagesPending onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableAdminOfferImagePendingData.postValue(response.body());
+                        } else
+                            mutableAdminOfferImagePendingData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<AdminOfferImageModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminOfferImagesPending Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminOfferImagesRejected(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminOfferImagesRejected");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<AdminOfferImageModel> call = apiInterface.getOfferImageRejected();
+                call.enqueue(new Callback<AdminOfferImageModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AdminOfferImageModel> call, @NonNull Response<AdminOfferImageModel> response) {
+                        Log.e("Check_JKAdmin", "getAdminOfferImagesRejected onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableAdminOfferImageRejected.postValue(response.body());
+                        } else
+                            mutableAdminOfferImageRejected.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<AdminOfferImageModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminOfferImagesRejected Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminOfferRejected(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminOfferRejected");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<AdminOfferModel> call = apiInterface.getAdminOfferRejected();
+                call.enqueue(new Callback<AdminOfferModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AdminOfferModel> call, @NonNull Response<AdminOfferModel> response) {
+                        Log.e("Check_JKAdmin", "getAdminOfferRejected onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableAdminOfferRejectData.postValue(response.body());
+                        } else
+                            mutableAdminOfferRejectData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<AdminOfferModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminOfferRejected Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminOfferPendingApproval(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminOfferPendingApproval");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.getAdminOfferPendingApproval(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKAdmin", "getAdminOfferPendingApproval onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableAdminOfferPendingApprovalData.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                mutableAdminOfferPendingApprovalData.postValue(null);
+                            }
+                        } else
+                            mutableAdminOfferPendingApprovalData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminOfferPendingApproval Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getAdminOfferImagePendingApproval(Map<String, Object> requestData, MyProgressDialog myProgressDialog) {
+        Log.e("Check_JKAdmin", "getAdminOfferImagePendingApproval");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<JsonElement> call = apiInterface.getAdminOfferImagePendingApproval(requestData);
+                call.enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        Log.e("Check_JKAdmin", "getAdminOfferImagePendingApproval onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            try {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                mutableAdminOfferImagePendingApprovalData.postValue(object);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                mutableAdminOfferImagePendingApprovalData.postValue(null);
+                            }
+                        } else
+                            mutableAdminOfferImagePendingApprovalData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        Log.e("Check_JKAdmin", "getAdminOfferImagePendingApproval Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    public void getSettingsConfig(MyProgressDialog myProgressDialog) {
+        Log.e("Check_JK", "getSettingsConfig");
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Log.e("Check_JKUpdate", "getSettingsConfig onPreExecute");
+                showDialog(myProgressDialog);
+            }
+
+            @Override
+            protected String doInBackground(String... strings) {
+                API apiInterface = RetrofitClient.getApiClient().create(API.class);
+                Call<SettingModel> call = apiInterface.getSettingConfig();
+                call.enqueue(new Callback<SettingModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<SettingModel> call, @NonNull Response<SettingModel> response) {
+                        Log.e("Check_JK", "getSettingsConfig onResponse : "+new Gson().toJson(response.body()));
+                        if (response.body() != null) {
+                            mutableSettingData.postValue(response.body());
+                        } else
+                            mutableSettingData.postValue(null);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<SettingModel> call, @NonNull Throwable t) {
+                        Log.e("Check_JK", "getSettingsConfig Error Message : " + t.getMessage());
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                closeDialog(myProgressDialog);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
     public MutableLiveData<BusinessModel> getMutableActiveBusiness() {
         return mutableActiveBusiness;
     }
@@ -1820,6 +2385,58 @@ public class CommonViewModel extends AndroidViewModel {
 
     public MutableLiveData<JSONObject> getMutablePaymentSuccess() {
         return mutablePaymentSuccess;
+    }
+
+    public MutableLiveData<AdminShopModel> getMutableAdminShopData() {
+        return mutableAdminShopData;
+    }
+
+    public MutableLiveData<AdminShopModel> getMutableAdminShopsRejected() {
+        return mutableAdminShopsRejected;
+    }
+
+    public MutableLiveData<AdminOfferModel> getMutableAdminOfferPendingData() {
+        return mutableAdminOfferPendingData;
+    }
+
+    public MutableLiveData<AdminOfferModel> getMutableAdminOfferRejectData() {
+        return mutableAdminOfferRejectData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableAdminShopPendingApprovalData() {
+        return mutableAdminShopPendingApprovalData;
+    }
+
+    public MutableLiveData<AdminShopImageModel> getMutableAdminShopImageData() {
+        return mutableAdminShopImageData;
+    }
+
+    public MutableLiveData<AdminShopImageModel> getMutableAdminShopImageRejected() {
+        return mutableAdminShopImageRejected;
+    }
+
+    public MutableLiveData<JSONObject> getMutableAdminShopImagePendingApprovalData() {
+        return mutableAdminShopImagePendingApprovalData;
+    }
+
+    public MutableLiveData<AdminOfferImageModel> getMutableAdminOfferImagePendingData() {
+        return mutableAdminOfferImagePendingData;
+    }
+
+    public MutableLiveData<AdminOfferImageModel> getMutableAdminOfferImageRejected() {
+        return mutableAdminOfferImageRejected;
+    }
+
+    public MutableLiveData<JSONObject> getMutableAdminOfferImagePendingApprovalData() {
+        return mutableAdminOfferImagePendingApprovalData;
+    }
+
+    public MutableLiveData<JSONObject> getMutableAdminOfferPendingApprovalData() {
+        return mutableAdminOfferPendingApprovalData;
+    }
+
+    public MutableLiveData<SettingModel> getMutableSettingData() {
+        return mutableSettingData;
     }
 
     public void showDialog(MyProgressDialog myProgressDialog) {

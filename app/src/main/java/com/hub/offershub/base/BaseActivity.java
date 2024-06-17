@@ -9,8 +9,8 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hub.offershub.R;
 import com.hub.offershub.dialogfragment.ExitDialogFragment;
 import com.hub.offershub.dialogfragment.PaymentDialogFragment;
@@ -48,6 +50,7 @@ public class BaseActivity extends AppCompatActivity {
     public ExitDialogFragment exitDialogFragment;
     public MyProgressDialog myProgressDialog;
     public PaymentDialogFragment paymentDialogFragment;
+    private String newCurrentVersion;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -216,6 +219,17 @@ public class BaseActivity extends AppCompatActivity {
         Uri uri = Uri.fromParts("package", BaseActivity.this.getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
+    }
+
+    public String getCurrentVersionName() {
+        try {
+            newCurrentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            //currentVersion = Double.parseDouble(version);
+        } catch (PackageManager.NameNotFoundException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
+        Log.e("Check_JKUpdateFun", "getCurrentVersionName newCurrentVersion : "+newCurrentVersion);
+        return newCurrentVersion;
     }
 
 }
