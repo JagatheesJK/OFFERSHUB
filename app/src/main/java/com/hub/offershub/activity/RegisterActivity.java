@@ -60,6 +60,9 @@ public class RegisterActivity extends BaseActivity {
         setContentView(binding.getRoot());
         signInClient = Identity.getSignInClient(this);
         getPermission();
+        mobile = getIntent().getStringExtra("mobile");
+        if (mobile != null && !"".equals(mobile))
+            binding.mobileEd.setText("" + mobile);
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.d("TAG", "getInstanceId failed", task.getException());
@@ -67,7 +70,8 @@ public class RegisterActivity extends BaseActivity {
             }
             token = task.getResult();
             Log.e("token1", token);
-            getMobileNumber();
+            if (mobile == null || "".equals(mobile))
+                getMobileNumber();
         });
 
         getLoginCheckData();

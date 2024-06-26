@@ -70,7 +70,7 @@ public class DashActivity extends BaseActivity implements NavigationView.OnNavig
         init();
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ShopDashboardFragment.newInstance(model)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, OfferListFragment.newInstance(model)).commit();
             binding.navBar.setCheckedItem(R.id.nav_offer);
         }
     }

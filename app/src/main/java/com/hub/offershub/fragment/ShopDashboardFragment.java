@@ -370,14 +370,15 @@ public class ShopDashboardFragment extends BaseFragment {
                         if (!shopDashboardModel.agechart.isEmpty()) {
                             binding.ageBarChartll.setVisibility(View.VISIBLE);
                             try {
-                                if ((shopDashboardModel.agechart.get(0).value != 0) && (shopDashboardModel.agechart.get(1).value != 0) &&
-                                        (shopDashboardModel.agechart.get(2).value != 0) && (shopDashboardModel.agechart.get(3).value != 0) &&
-                                        (shopDashboardModel.agechart.get(4).value != 0) && (shopDashboardModel.agechart.get(5).value != 0)) {
-                                    binding.ageBarChartll.setVisibility(View.VISIBLE);
-                                } else {
+                                if ((shopDashboardModel.agechart.get(0).value == 0) && (shopDashboardModel.agechart.get(1).value == 0) &&
+                                        (shopDashboardModel.agechart.get(2).value == 0) && (shopDashboardModel.agechart.get(3).value == 0) &&
+                                        (shopDashboardModel.agechart.get(4).value == 0) && (shopDashboardModel.agechart.get(5).value == 0)) {
                                     binding.ageBarChartll.setVisibility(View.GONE);
+                                } else {
+                                    binding.ageBarChartll.setVisibility(View.VISIBLE);
                                 }
                             } catch (Exception e) {
+                                binding.ageBarChartll.setVisibility(View.GONE);
                                 e.printStackTrace();
                             }
                             ageBarChart();

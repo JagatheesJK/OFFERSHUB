@@ -79,7 +79,7 @@
             android:id="@+id/nxtBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Next"
+            android:text="Register"
             android:textColor="@color/white"
             android:background="@drawable/bg_rounded_solid_white_8"
             android:backgroundTint="@color/red"

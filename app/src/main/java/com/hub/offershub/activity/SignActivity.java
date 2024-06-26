@@ -176,6 +176,9 @@ public class SignActivity extends BaseActivity {
                             intent.putExtra("type", "login");
                             startActivity(intent);
                         } else {
+                            Intent i = new Intent(SignActivity.this, RegisterActivity.class);
+                            i.putExtra("mobile", mobile);
+                            startActivity(i);
                             Toast.makeText(this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
