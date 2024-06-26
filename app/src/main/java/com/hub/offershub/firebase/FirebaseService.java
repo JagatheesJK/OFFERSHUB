@@ -40,14 +40,16 @@ public class FirebaseService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             String title = remoteMessage.getNotification().getTitle();
             String body = remoteMessage.getNotification().getBody();
-            NotificationHelper.showNotification(this, title, body, messageChannelId, getId());
+            String type = remoteMessage.getNotification().getBody();
+            NotificationHelper.showNotification(this, title, body, type, messageChannelId, getId());
         } else {
             // Handle foreground notifications if data-only message
             // Check if message contains a data payload.
             if (remoteMessage.getData().size() > 0) {
                 String title = remoteMessage.getData().get("title");
                 String body = remoteMessage.getData().get("body");
-                NotificationHelper.showNotification(this, title, body, messageChannelId, getId());
+                String type = remoteMessage.getData().get("type");
+                NotificationHelper.showNotification(this, title, body, type, messageChannelId, getId());
             }
         }
     }

@@ -31,6 +31,7 @@ import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
+import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.R;
 import com.hub.offershub.activity.SignActivity;
@@ -248,8 +249,8 @@ public class Utils {
 
     public static boolean setForceUpdate(Activity activity, String currentversion, InstallStateUpdatedListener listener, AppUpdateManager mAppUpdateManager, InAppUpdateListener inAppUpdateListener) {
         boolean isCheck = true;
-//        Constants.FORCEUPDATE = prefsHelper.getForceUpdate();
-//        Constants.LITEUPDATE = prefsHelper.getLiteUpdate();
+        Constants.FORCEUPDATE = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.FORCE_UPDATE, "1.0.0");
+        Constants.LITEUPDATE = AppApplication.getInstance().prefsHelper.getPref(PrefsHelper.LITE_UPDATE, "1.0.0");
         if (Constants.FORCEUPDATE != null && Constants.LITEUPDATE != null) {
             String forceUpdate = Constants.FORCEUPDATE;
             String liteUpdate = Constants.LITEUPDATE;

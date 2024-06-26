@@ -252,6 +252,6 @@ public interface API {
     @GET("offerImageRejected")
     Call<AdminOfferImageModel> getOfferImageRejected();
 
-    @GET("settingsConfig")
+    @GET("settingsConfigBusiness")
     Call<SettingModel> getSettingConfig();
 }

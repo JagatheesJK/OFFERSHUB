@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.hub.offershub.AppApplication;
 import com.hub.offershub.PrefsHelper;
 import com.hub.offershub.model.AddOfferDataRequestBody;
 import com.hub.offershub.model.AddShopDataRequestBody;
@@ -2218,6 +2219,8 @@ public class CommonViewModel extends AndroidViewModel {
                     public void onResponse(@NonNull Call<SettingModel> call, @NonNull Response<SettingModel> response) {
                         Log.e("Check_JK", "getSettingsConfig onResponse : "+new Gson().toJson(response.body()));
                         if (response.body() != null) {
+                            AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.FORCE_UPDATE, response.body().force_update);
+                            AppApplication.getInstance().prefsHelper.savePref(PrefsHelper.LITE_UPDATE, response.body().lite_update);
                             mutableSettingData.postValue(response.body());
                         } else
                             mutableSettingData.postValue(null);

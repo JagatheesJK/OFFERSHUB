@@ -9,13 +9,14 @@ import android.graphics.BitmapFactory;
 import androidx.core.app.NotificationCompat;
 
 import com.hub.offershub.R;
-import com.hub.offershub.activity.TestMainActivity2;
+import com.hub.offershub.activity.SplashActivity;
+
 
 public class NotificationHelper {
 
-    public static void showNotification(Context context, String title, String message, String channelID, int ID) {
+    public static void showNotification(Context context, String title, String message, String type, String channelID, int ID) {
         // Create an intent that will be fired when the user taps the notification
-        Intent intent = new Intent(context, TestMainActivity2.class);
+        Intent intent = new Intent(context, SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
@@ -28,10 +29,11 @@ public class NotificationHelper {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
 //                .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
 //                .setCustomContentView(getCustomDesign(title, message));
+        if ("main".equals(type))
+            notificationBuilder.setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(ID, notificationBuilder.build());

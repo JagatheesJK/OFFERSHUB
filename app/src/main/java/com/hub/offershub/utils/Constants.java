@@ -28,8 +28,8 @@ public class Constants {
     public static boolean ISAPPFORGROUNT = false;
     public static int IsTabCheck = 0;
 
-    public static final String FORCEUPDATE = "1.0.0";
-    public static final String LITEUPDATE = "1.0.0";
+    public static String FORCEUPDATE = "1.0.0";
+    public static String LITEUPDATE = "1.0.0";
     public static String IMMEDIATE = "IMMEDIATE";
     public static String FLEXIBLE = "FLEXIBLE";
     public static String isUpdateType = "IMMEDIATE";
